@@ -12,7 +12,7 @@ CLI_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 cd "$CLI_DIR" # 保证后续命令都在当前项目下执行
 
 # shellcheck disable=SC1091
-source "./tools/sha_common.bash"
+source "./tool/sha_common.bash"
 
 ##########################################
 # app cmd script
@@ -35,7 +35,9 @@ build() {
 
 publish() {
   # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
-  uv publish -t "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
+  local api_key
+  api_key=$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)
+  uv publish -t "${api_key}"
 }
 
 ##########################################

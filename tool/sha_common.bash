@@ -58,9 +58,25 @@ _run() {
 # 每个项目的公共命令集
 ##################################################
 
+sync() (
+  uv sync
+  uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
+)
+
+resync() (
+  clean
+  _run rm -rf .venv
+  sync
+)
+
 clean() (
   _run rm -rf build dist ./*.egg-info
+  _run rm -rf .pytest_cache .mypy_cache .coverage
 )
+
+test() {
+  uv run pytest tests/
+}
 
 # shellcheck disable=SC2329 # 忽略This function is never invoked
 tools() {

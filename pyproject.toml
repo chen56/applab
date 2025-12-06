@@ -1,10 +1,17 @@
 [project]
 name = "qpa"
-version = "0.1.3"
+version = "0.1.4"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+[dependency-groups]
+dev = [
+    "keyring>=25.7.0",
+    "pytest>=9.0.1",
+]
+# test = [{"include-group"="dev"}]
 
 
 # `uv python install`的不是官网文件，而是这个项目打包的便携版: https://github.com/astral-sh/python-build-standalone/

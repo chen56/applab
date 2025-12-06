@@ -14,7 +14,7 @@ source "$TOOLS_DIR/sha_common.bash"
 ##################################################
 
 clean() (
-  _run rm -rf build dist
+  _run rm -rf build dist ./*.egg-info
 )
 
 # shellcheck disable=SC2329 # 忽略This function is never invoked

@@ -14,9 +14,6 @@ cd "$CLI_DIR" # 保证后续命令都在当前项目下执行
 # shellcheck disable=SC1091
 source "./tools/sha_common.bash"
 
-# shellcheck disable=SC1091
-source "./tools/sha_all_project_commands.bash"
-
 ##########################################
 # app cmd script
 # 独立于项目组的特殊命令
@@ -31,9 +28,15 @@ info() {
 #  echo "  $(curl ipinfo.io/ip 2>/dev/null)"
 }
 
+build() {
+  clean
+  uv build
+}
 
-
-
+publish() {
+  # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
+  uv publish -t "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
+}
 
 ##########################################
 # app 入口

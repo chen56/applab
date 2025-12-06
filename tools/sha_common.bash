@@ -50,3 +50,24 @@ _run() {
   echo "  🔵$caller_script:$caller_line ${FUNCNAME[1]}() ▶︎【$show_pwd$ $*】" >&2
   "$@"
 }
+
+
+
+
+##################################################
+# 每个项目的公共命令集
+##################################################
+
+clean() (
+  _run rm -rf build dist ./*.egg-info
+)
+
+# shellcheck disable=SC2329 # 忽略This function is never invoked
+tools() {
+  info() {
+    echo "本项目使用的命令框架：https://github.com/chen56/sha"
+  }
+  update() {
+    _install_sha
+  }
+}

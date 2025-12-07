@@ -250,7 +250,6 @@ dev = [
     { name = "pytest", specifier = ">=9.0.1" },
     { name = "ruff", specifier = ">=0.14.8" },
 ]
-docs = []
 
 [[package]]
 name = "ruff"

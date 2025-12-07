@@ -52,51 +52,6 @@ _run() {
 }
 
 
-
-
 ##################################################
 # 每个项目的公共命令集
 ##################################################
-
-sync() (
-  uv sync
-  uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
-)
-
-resync() (
-  clean
-  _run rm -rf .venv
-  sync
-)
-
-clean() (
-  _run rm -rf build dist ./*.egg-info
-  _run rm -rf .pytest_cache .mypy_cache .coverage
-  _run find . -name "__pycache__" -type d -exec rm -rf {} +
-)
-
-lint() {
-  uv run ruff check
-}
-
-lintfix() {
-  uv run ruff check --fix
-}
-
-format() {
-  uv run ruff format
-}
-
-test() {
-  uv run pytest tests/
-}
-
-# shellcheck disable=SC2329 # 忽略This function is never invoked
-tools() {
-  info() {
-    echo "本项目使用的命令框架：https://github.com/chen56/sha"
-  }
-  update() {
-    _install_sha
-  }
-}

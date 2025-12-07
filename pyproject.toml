@@ -3,9 +3,7 @@ name = "qpa"
 version = "0.1.4"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "Chen Peng" }
-]
+authors = [{ name = "Chen Peng" }]
 
 requires-python = ">=3.12"
 dependencies = []
@@ -54,26 +52,31 @@ dev = [
 # uv config set publish.repositories.testpypi.password "你的 TestPyPI Token"
 
 
-
-
 # --- Ruff 配置 ---
 [tool.ruff]
 # 告诉 Ruff 你的 Python 源代码在哪里
-src = ["src"] 
+src = ["src"]
 # 排除的文件或目录
-exclude = [
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    ".venv",
-]
+exclude = [".git", "__pycache__", "build", "dist", ".venv"]
 
 # 最大行长度
 line-length = 120
 
 [tool.ruff.lint]
 # C901: 忽略函数复杂度检查
-ignore = ["E501", "W293"]  
-# I: isort (导入排序), F: Pyflakes, E: Error (pycodestyle), B: Bugbear
-select = ["E", "W", "F"]   
+ignore = ["E501", "W293"]
+select = [
+    # "I", # I: isort (导入排序)
+    "E", # E: Error (pycodestyle)
+    "W", # W: Warning (pycodestyle)
+    "F", # F: Pyflakes
+    "B", # B: Bugbear
+]
+extend-select = [
+    "UP", # pyupgrade
+    "D",  # pydocstyle
+
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

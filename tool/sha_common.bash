@@ -72,7 +72,20 @@ resync() (
 clean() (
   _run rm -rf build dist ./*.egg-info
   _run rm -rf .pytest_cache .mypy_cache .coverage
+  _run find . -name "__pycache__" -type d -exec rm -rf {} +
 )
+
+lint() {
+  uv run ruff check
+}
+
+lintfix() {
+  uv run ruff check --fix
+}
+
+format() {
+  uv run ruff format
+}
 
 test() {
   uv run pytest tests/

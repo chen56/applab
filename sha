@@ -12,7 +12,7 @@ ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
 
 # shellcheck disable=SC1091
-source "./tool/sha_common.bash"
+source "./scripts/sha_common.bash"
 
 ##########################################
 # app cmd script
@@ -44,12 +44,13 @@ publish() {
 
 sync() (
   clean
-  _run rm -rf .venv
   uv sync
   uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
 )
 
 clean() (
+  _run rm -rf .venv
+  _run rm -rf .ruff_cache
   _run rm -rf build dist ./*.egg-info
   _run rm -rf .pytest_cache .mypy_cache .coverage
   _run find . \

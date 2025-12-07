@@ -43,14 +43,10 @@ publish() {
 }
 
 sync() (
-  uv sync
-  uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
-)
-
-resync() (
   clean
   _run rm -rf .venv
-  sync
+  uv sync
+  uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
 )
 
 clean() (

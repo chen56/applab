@@ -1,5 +1,5 @@
 [project]
-name = "qpa"
+name = "planc"
 version = "0.1.6"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
@@ -7,7 +7,7 @@ license = { text = "MIT" }
 description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Chen Peng" }]
-urls = { "homepage" = "https://github.com/chen56/qpa" }
+urls = { "homepage" = "https://github.com/chen56/planc" }
 
 requires-python = ">=3.12"
 dependencies = []
@@ -34,7 +34,7 @@ dev = ["keyring>=25.7.0", "pytest>=9.0.1", "ruff>=0.14.8"]
 #################################################################################
 [project.optional-dependencies]
 hello = [
-    "pandas>=2.0.0", # uv 可能会添加版本约束
+    "pandas>=2.0.0", # uv 可能会添加版本约束 puff
 ]
 hello2 = ["matplotlib>=3.7.0"]
 

@@ -1,6 +1,6 @@
-"""测试qpa.core模块的功能."""
+"""测试planc.core模块的功能."""
 
-from qpa import core
+from planc import core
 
 
 def test_say_hello():

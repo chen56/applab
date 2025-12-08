@@ -1,4 +1,4 @@
-"""qpa package.
+"""planc package.
 
 ...
 """

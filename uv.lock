@@ -683,7 +683,7 @@ wheels = [
 
 [[package]]
 name = "planc"
-version = "0.1.7"
+version = "0.0.1dev20251208200000"
 source = { editable = "." }
 
 [package.optional-dependencies]

@@ -1,6 +1,6 @@
 [project]
 name = "planc"
-version = "0.1.6"
+version = "0.1.7"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 

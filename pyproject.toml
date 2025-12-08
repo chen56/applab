@@ -1,6 +1,6 @@
 [project]
 name = "planc"
-version = "0.0.1dev20251208200000"
+version = "0.0.1dev20251208210149"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 
@@ -10,13 +10,14 @@ authors = [{ name = "Chen Peng" }]
 urls = { "homepage" = "https://github.com/chen56/planc" }
 
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "requests>=2.32.5",
+]
 
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
 build-backend = "uv_build"
-
 
 #################################################################################
 # 配置依赖组（Dependency Groups）
@@ -32,22 +33,18 @@ dev = ["keyring>=25.7.0", "pytest>=9.0.1", "ruff>=0.14.8"]
 # 终端用户（End-User） 可选功能依赖。
 # 会 包含在发布的包元数据中（例如 .whl 文件），用户可通过 pip install package[xxx] 安装。
 #################################################################################
-[project.optional-dependencies]
-hello = [
-    "pandas>=2.0.0", # uv 可能会添加版本约束 puff
-]
-hello2 = ["matplotlib>=3.7.0"]
+# [project.optional-dependencies]
+# hello = [
+#     "pandas>=2.0.0", # uv 可能会添加版本约束 puff
+# ]
+# hello2 = ["matplotlib>=3.7.0"]
 
+# [tool.uv.sources]
+# planc-core = { path = "planc/planc_core" }
 
 #################################################################################
 # --- uv 配置 ---
 #################################################################################
-
-[[tool.uv.index]]
-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
-[[tool.uv.index]]
-url = "https://mirrors.aliyun.com/pypi/simple/"
-
 
 [tool.uv]
 # `uv python install`的不是官网文件，而是这个项目打包的便携版: https://github.com/astral-sh/python-build-standalone/
@@ -61,6 +58,19 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 # - UV_PYTHON_INSTALL_MIRROR=https://mirror.nju.edu.cn/github-release/astral-sh/python-build-standalone/ uv python install 3.12
 # pyproject.toml config ref: https://docs.astral.sh/uv/reference/settings/#python-install-mirror
 python-install-mirror = "https://registry.npmmirror.com/-/binary/python-build-standalone/"
+managed = true
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple/"
+
+[tool.uv.workspace]
+members = [
+    "planc/*",
+]
+
+
 
 
 #################################################################################
@@ -78,7 +88,12 @@ line-length = 120
 
 [tool.ruff.lint]
 # C901: 忽略函数复杂度检查
-ignore = ["E501", "W293"]
+ignore = [
+    "D100",  # D100 Missing docstring in public module
+    "D103",  # D103 Missing docstring in public function
+    "E501",  # E501 Line too long
+    "W293",  # W293 Blank line contains whitespace
+]
 select = [
     # "I", # I: isort (导入排序)
     "E", # E: Error (pycodestyle)

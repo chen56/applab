@@ -51,7 +51,7 @@ sync() (
 clean() (
   _run rm -rf .venv
   _run rm -rf .ruff_cache
-  _run rm -rf build dist ./*.egg-info
+  _run rm -rf build dist ./**/*.egg-info
   _run rm -rf .pytest_cache .mypy_cache .coverage
   _run find . \
         -path "./.venv" -prune -o \

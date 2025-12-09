@@ -1,6 +1,6 @@
 [project]
 name = "planc-core"
-version = "0.0.1dev20251208210149"
+version = "0.0.1dev20251208230149"
 description = "Add your description here"
 readme = "README.md"
 dependencies = [

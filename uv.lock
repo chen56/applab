@@ -261,7 +261,7 @@ wheels = [
 
 [[package]]
 name = "planc"
-version = "0.0.1.dev20251208210149"
+version = "0.0.1.dev20251208230149"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },
@@ -286,7 +286,7 @@ dev = [
 
 [[package]]
 name = "planc-core"
-version = "0.0.1.dev20251208210149"
+version = "0.0.1.dev20251208230149"
 source = { editable = "planc/core" }
 dependencies = [
     { name = "requests" },

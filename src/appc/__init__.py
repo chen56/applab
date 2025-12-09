@@ -1,4 +1,4 @@
-"""planc package.
+"""appc package.
 
 ...
 """

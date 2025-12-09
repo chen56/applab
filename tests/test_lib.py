@@ -1,6 +1,6 @@
 """测试planc.core模块的功能."""
 
-from planc import core
+from appc import core
 
 
 def test_say_hello():

@@ -30,12 +30,15 @@ dev = [
     "keyring>=25.7.0", 
     "pytest>=9.0.1", 
     "ruff>=0.14.8",
-    "planc", # vscode mono子项目导航关键配置
+    "planc", # vscode mono子项目导航关键配置，需重启vscode
 ]
 
-[tool.uv.sources]
-planc = { workspace = true } # vscode mono子项目导航关键配置
 
+#################################################################################
+# 可以让uv把import的包变为可编辑状态，即uv.lock： source = { editable = "planc" }
+#################################################################################
+[tool.uv.sources]
+planc = { workspace = true } # mono子项目导航关键配置，需重启vscode
 
 #################################################################################
 # 可选依赖（Optional Dependencies）

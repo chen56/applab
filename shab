@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+
 set -o errtrace  # -E trap inherited in sub script
 set -o errexit   # -e
 set -o functrace # -T If set, any trap on DEBUG and RETURN are inherited by shell functions
@@ -8,26 +9,24 @@ set -o pipefail  # default pipeline status==last command status, If set, status=
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar
 
+
+
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
 
-# shellcheck disable=SC1091
 source "./scripts/sha_common.bash"
-# shellcheck disable=SC1091
 source "./scripts/sha_ext.bash"
 
 ##########################################
 # app cmd script
 # 独立于项目组的特殊命令
 ##########################################
+
 info() {
   echo "## workspaces:"
-  # shellcheck disable=SC2154
-  printf "  %s\n" "${__all_workspaces[@]}"
-  echo "## packages:"
-#  printf "  %s\n" "$(_dir_to_package_name "${__all_workspaces[@]}")"
-#  echo "## out ip:"
-#  echo "  $(curl ipinfo.io/ip 2>/dev/null)"
+  xxx() {
+    echo i am xxx
+  }
 }
 
 build() {

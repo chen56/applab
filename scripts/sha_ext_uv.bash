@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
 
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar

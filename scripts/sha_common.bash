@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
 
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar
@@ -16,8 +17,7 @@ if ! [[ -f "$ROOT_DIR/vendor/sha.bash" ]]; then
   _install_sha
 fi
 
-# 注意!!! `source "$ROOT_DIR/vendor/sha.bash"` 执行后定义的函数才被注册为sha命令
-# shellcheck disable=SC1091 # 忽略：Not following: ./vendor/sha.bash was not specified as input
+# shellcheck source=../vendor/sha.bash
 source "$ROOT_DIR/vendor/sha.bash"
 
 # 清晰的函数调用日志，替代 `set -x` 功能

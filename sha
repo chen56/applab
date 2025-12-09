@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+
 set -o errtrace  # -E trap inherited in sub script
 set -o errexit   # -e
 set -o functrace # -T If set, any trap on DEBUG and RETURN are inherited by shell functions
@@ -11,11 +12,8 @@ shopt -s globstar
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
 
-# shellcheck disable=SC1091
 source "./scripts/sha_common.bash"
-# shellcheck disable=SC1091
 source "./scripts/sha_ext.bash"
-# shellcheck disable=SC1091
 source "./scripts/sha_ext_uv.bash"
 
 ##########################################

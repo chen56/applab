@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
 
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar
@@ -17,7 +18,6 @@ info() {
 #  echo "  $(curl ipinfo.io/ip 2>/dev/null)"
 }
 
-# shellcheck disable=SC2329 # 忽略This function is never invoked
 tools() {
   info() {
     echo "本项目使用的命令框架：https://github.com/chen56/sha"

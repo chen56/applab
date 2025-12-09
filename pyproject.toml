@@ -57,7 +57,7 @@ planc = { workspace = true } # mono子项目导航关键配置，需重启vscode
 #################################################################################
 [tool.uv.workspace]
 members = [
-    "planc",
+    "pkgs/*",
 ]
 
 [tool.uv]

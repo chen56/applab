@@ -41,13 +41,16 @@ source "$ROOT_DIR/vendor/sha.bash"
 #   `caller 0`输出为`22 foo ./sake`，即调用_run函数的调用栈信息：行号、函数,脚本
 _run() {
   caller_script=$(caller 0 | awk '{print $3}')
+    # shellcheck disable=SC2001
+  caller_script=$(echo "$caller_script" | sed "s@^$HOME@~@" )
+
   caller_line=$(caller 0 | awk '{print $1}')
   # 把 /home/ubuntu/current_work_dir 替换为 ~/current_work_dir 短格式
   # 使用 @ 作为分隔符，避免与路径中的 / 冲突
   # shellcheck disable=SC2001
   show_pwd=$(echo "$PWD" | sed "s@^$HOME@~@" )
 
-  echo "  🔵$caller_script:$caller_line ${FUNCNAME[1]}() ▶︎【$show_pwd$ $*】" >&2
+  echo "  🔵 $caller_script:$caller_line ${FUNCNAME[1]}() ▶︎【$show_pwd$ $*】" >&2
   "$@"
 }
 

@@ -8,15 +8,17 @@ set -o pipefail  # default pipeline status==last command status, If set, status=
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar
 
-ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
+CURRENT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+cd "$CURRENT_DIR" # 保证后续命令都在当前项目下执行
+ROOT_DIR=$(cd "$CURRENT_DIR/.." && pwd)
+echo "ROOT_DIR=$ROOT_DIR"
 
 # shellcheck disable=SC1091
-source "./scripts/sha_common.bash"
+source "$ROOT_DIR/scripts/sha_common.bash"
 # shellcheck disable=SC1091
-source "./scripts/sha_ext.bash"
+source "$ROOT_DIR/scripts/sha_ext.bash"
 # shellcheck disable=SC1091
-source "./scripts/sha_ext_uv.bash"
+source "$ROOT_DIR/scripts/sha_ext_uv.bash"
 
 ##########################################
 # app cmd script

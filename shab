@@ -15,13 +15,58 @@ cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
 source "./scripts/sha_common.bash"
 # shellcheck disable=SC1091
 source "./scripts/sha_ext.bash"
-# shellcheck disable=SC1091
-source "./scripts/sha_ext_uv.bash"
 
 ##########################################
 # app cmd script
 # 独立于项目组的特殊命令
 ##########################################
+info() {
+  echo "## workspaces:"
+  # shellcheck disable=SC2154
+  printf "  %s\n" "${__all_workspaces[@]}"
+  echo "## packages:"
+#  printf "  %s\n" "$(_dir_to_package_name "${__all_workspaces[@]}")"
+#  echo "## out ip:"
+#  echo "  $(curl ipinfo.io/ip 2>/dev/null)"
+}
+
+build() {
+  clean
+  lint
+  format
+  uv build --all-packages "$@"
+}
+
+publish() {
+  # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
+  local api_key
+  api_key=$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)
+  uv publish -t "${api_key}"
+}
+
+sync() (
+  clean
+  uv sync
+  # uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
+)
+
+
+lint() {
+  uv run ruff check
+}
+
+lintfix() {
+  uv run ruff check --fix
+}
+
+format() {
+  uv run ruff format
+}
+
+test() {
+  uv run pytest
+}
+
 
 ##########################################
 # app 入口

@@ -32,7 +32,7 @@ build() {
   clean
   lint
   format
-  uv build
+  uv build "$@"
 }
 
 publish() {

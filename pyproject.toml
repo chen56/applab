@@ -26,7 +26,16 @@ build-backend = "uv_build"
 # - 相对较新（PEP 735），支持工具（如 uv、Poetry 的部分功能）正在普及。
 #################################################################################
 [dependency-groups]
-dev = ["keyring>=25.7.0", "pytest>=9.0.1", "ruff>=0.14.8"]
+dev = [
+    "keyring>=25.7.0", 
+    "pytest>=9.0.1", 
+    "ruff>=0.14.8",
+    "planc", # vscode mono子项目导航关键配置
+]
+
+[tool.uv.sources]
+planc = { workspace = true } # vscode mono子项目导航关键配置
+
 
 #################################################################################
 # 可选依赖（Optional Dependencies）
@@ -38,9 +47,6 @@ dev = ["keyring>=25.7.0", "pytest>=9.0.1", "ruff>=0.14.8"]
 #     "pandas>=2.0.0", # uv 可能会添加版本约束 puff
 # ]
 # test = ["matplotlib>=3.7.0"]
-
-# [tool.uv.sources]
-# planc-core = { path = "planc/planc_core" }
 
 #################################################################################
 # --- uv 配置 ---

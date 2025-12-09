@@ -5,12 +5,12 @@ requires-python = ">=3.12"
 [manifest]
 members = [
     "appc",
-    "planc-core",
+    "planc",
 ]
 
 [[package]]
 name = "appc"
-version = "0.0.1.dev20251208230149"
+version = "0.0.1.dev20251209110701"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },
@@ -285,9 +285,9 @@ wheels = [
 ]
 
 [[package]]
-name = "planc-core"
-version = "0.0.1.dev20251208230149"
-source = { editable = "planc/core" }
+name = "planc"
+version = "0.0.1.dev20251209110701"
+source = { editable = "planc" }
 dependencies = [
     { name = "requests" },
 ]

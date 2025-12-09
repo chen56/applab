@@ -1,6 +1,6 @@
 [project]
 name = "appc"
-version = "0.0.1dev20251208230149"
+version = "0.0.1dev20251209110701"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 
@@ -47,7 +47,7 @@ dev = ["keyring>=25.7.0", "pytest>=9.0.1", "ruff>=0.14.8"]
 #################################################################################
 [tool.uv.workspace]
 members = [
-    "planc/*",
+    "planc",
 ]
 
 [tool.uv]

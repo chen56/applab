@@ -89,8 +89,13 @@ exclude = [".git", "__pycache__", "build", "dist", ".venv"]
 # 最大行长度
 line-length = 120
 
+[tool.ruff.lint.per-file-ignores]
+"**/{tests,docs,tools}/**" = [
+    "D106", # Missing docstring in public nested class
+    "D102", # Missing docstring in public method
+]
+
 [tool.ruff.lint]
-# C901: 忽略函数复杂度检查
 ignore = [
     "D100", # D100 Missing docstring in public module
     "D101", # D101 Missing docstring in public class
@@ -99,6 +104,7 @@ ignore = [
     "E501", # E501 Line too long
     "W293", # W293 Blank line contains whitespace
 ]
+
 select = [
     # "I", # I: isort (导入排序)
     "E", # E: Error (pycodestyle)
@@ -134,7 +140,7 @@ stubPath = "src/stubs"
 reportMissingImports = "error"
 reportMissingTypeStubs = false
 
-pythonVersion = "3.12"    # 根环境默认用最新版本，兼容多平台特性
+pythonVersion = "3.12" # 根环境默认用最新版本，兼容多平台特性
 # 根环境默认平台（可任选，子环境覆盖），不配置按照当前运行平台
 # 目前pyright无法配置检查多个平台，可用用uv run pyright --pythonplatform Darwin 参数多次检查
 # pythonPlatform = "Darwin" 

@@ -10,36 +10,37 @@ shopt -s globstar
 
 build() {
   clean
-  lint
+  check
   format
-  uv build "$@"
+  _run uv build "$@"
 }
 
 publish() {
   # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
   local api_key
   api_key=$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)
-  uv publish -t "${api_key}"
+  _run uv publish -t "${api_key}"
 }
 
 sync() (
   clean
-  uv sync
+  _run uv sync
   # uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
 )
 
-lint() {
-  uv run ruff check
-}
-
-lintfix() {
-  uv run ruff check --fix
-}
 
 format() {
-  uv run ruff format
+  _run uv run ruff check --fix
+  _run uv run ruff format
 }
 
 test() {
-  uv run pytest tests/
+  _run uv run pytest tests/
+}
+
+check() {
+  _run uv run pyright --pythonplatform Darwin
+  _run uv run pyright --pythonplatform Linux
+  _run uv run pyright --pythonplatform Windows
+  _run uv run ruff check
 }

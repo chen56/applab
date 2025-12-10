@@ -7,18 +7,6 @@ shopt -s globstar
 # On Mac OS, readlink -f doesn't work, so use._real_path get the real path of the file
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
-_install_sha() (
-  mkdir -p "$ROOT_DIR/vendor"
-  set -x
-  curl -L -o "$ROOT_DIR/vendor/sha.bash" https://github.com/chen56/sha/raw/main/sha.bash
-)
-
-if ! [[ -f "$ROOT_DIR/vendor/sha.bash" ]]; then
-  _install_sha
-fi
-
-# shellcheck source=../vendor/sha.bash
-source "$ROOT_DIR/vendor/sha.bash"
 
 # 清晰的函数调用日志，替代 `set -x` 功能
 #
@@ -54,6 +42,17 @@ _run() {
   "$@"
 }
 
+_install_sha() {
+  _run mkdir -p "$ROOT_DIR/vendor"
+  _run curl -L -o "$ROOT_DIR/vendor/sha.bash" https://github.com/chen56/sha/raw/main/sha.bash
+}
+
+if ! [[ -f "$ROOT_DIR/vendor/sha.bash" ]]; then
+  _install_sha
+fi
+
+# shellcheck source=../vendor/sha.bash
+source "$ROOT_DIR/vendor/sha.bash"
 
 ##################################################
 # 每个项目的公共命令集

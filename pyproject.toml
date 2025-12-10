@@ -10,9 +10,7 @@ authors = [{ name = "Chen Peng" }]
 urls = { "homepage" = "https://github.com/chen56/appc" }
 
 requires-python = ">=3.12"
-dependencies = [
-    "requests>=2.32.5",
-]
+dependencies = ["requests>=2.32.5"]
 
 
 [build-system]
@@ -27,10 +25,11 @@ build-backend = "uv_build"
 #################################################################################
 [dependency-groups]
 dev = [
-    "keyring>=25.7.0", 
-    "pytest>=9.0.1", 
+    "keyring>=25.7.0",
+    "pytest>=9.0.1",
     "ruff>=0.14.8",
-    "planc", # vscode mono子项目导航关键配置，需重启vscode
+    "planc",            # vscode mono子项目导航关键配置，需重启vscode
+    "pyright>=1.1.407",
 ]
 
 
@@ -56,9 +55,7 @@ planc = { workspace = true } # mono子项目导航关键配置，需重启vscode
 # --- uv 配置 ---
 #################################################################################
 [tool.uv.workspace]
-members = [
-    "pkgs/*",
-]
+members = ["pkgs/*"]
 
 [tool.uv]
 # `uv python install`的不是官网文件，而是这个项目打包的便携版: https://github.com/astral-sh/python-build-standalone/
@@ -79,8 +76,6 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 url = "https://mirrors.aliyun.com/pypi/simple/"
 
 
-
-
 #################################################################################
 # --- Ruff 配置 ---
 #################################################################################
@@ -97,10 +92,12 @@ line-length = 120
 [tool.ruff.lint]
 # C901: 忽略函数复杂度检查
 ignore = [
-    "D100",  # D100 Missing docstring in public module
-    "D103",  # D103 Missing docstring in public function
-    "E501",  # E501 Line too long
-    "W293",  # W293 Blank line contains whitespace
+    "D100", # D100 Missing docstring in public module
+    "D101", # D101 Missing docstring in public class
+    "D103", # D103 Missing docstring in public function
+    "D415", # D415 missing-terminal-punctuation
+    "E501", # E501 Line too long
+    "W293", # W293 Blank line contains whitespace
 ]
 select = [
     # "I", # I: isort (导入排序)
@@ -117,3 +114,29 @@ extend-select = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google" # 使用 Google 风格的 docstring 约定
+
+
+#################################################################################
+# pyright
+#################################################################################
+[tool.pyright]
+include = [
+    "src",
+    "tests",
+    "pkgs/*/src",   # Mono 子项目
+    "pkgs/*/tests",
+]
+exclude = ["**/node_modules", "**/__pycache__"]
+ignore = ["src/oldstuff"]
+defineConstant = { DEBUG = true }
+stubPath = "src/stubs"
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+
+pythonVersion = "3.12"    # 根环境默认用最新版本，兼容多平台特性
+# 根环境默认平台（可任选，子环境覆盖），不配置按照当前运行平台
+# 目前pyright无法配置检查多个平台，可用用uv run pyright --pythonplatform Darwin 参数多次检查
+# pythonPlatform = "Darwin" 
+
+# 可用executionEnvironments 对特定目录指定特定平台

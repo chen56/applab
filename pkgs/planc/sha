@@ -18,7 +18,7 @@ source "$ROOT_DIR/scripts/sha_common.bash"
 # shellcheck disable=SC1091
 source "$ROOT_DIR/scripts/sha_ext.bash"
 # shellcheck disable=SC1091
-source "$ROOT_DIR/scripts/sha_ext_uv.bash"
+source "$ROOT_DIR/scripts/sha_ext_python.bash"
 
 ##########################################
 # app cmd script

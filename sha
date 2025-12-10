@@ -14,7 +14,7 @@ cd "$ROOT_DIR" # 保证后续命令都在当前项目下执行
 
 source "./scripts/sha_common.bash"
 source "./scripts/sha_ext.bash"
-source "./scripts/sha_ext_uv.bash"
+source "./scripts/sha_ext_python.bash"
 
 ##########################################
 # app cmd script

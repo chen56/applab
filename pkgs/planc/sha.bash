@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2317
+set -o errtrace  # -E trap inherited in sub script
+set -o errexit   # -e
+set -o functrace # -T If set, any trap on DEBUG and RETURN are inherited by shell functions
+set -o pipefail  # default pipeline status==last command status, If set, status=any command fail
+
+## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
+shopt -s globstar
+
+CURRENT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+cd "$CURRENT_DIR" # 保证后续命令都在当前项目下执行
+ROOT_DIR=$(cd "$CURRENT_DIR/../.." && pwd)
+echo "ROOT_DIR=$ROOT_DIR"
+
+# shellcheck disable=SC1091
+source "$ROOT_DIR/scripts/sha_common.bash"
+# shellcheck disable=SC1091
+source "$ROOT_DIR/scripts/sha_ext.bash"
+# shellcheck disable=SC1091
+source "$ROOT_DIR/scripts/sha_ext_python.bash"
+
+##########################################
+# app cmd script
+# 独立于项目组的特殊命令
+##########################################
+
+##########################################
+# app 入口
+##########################################
+# 守卫语句，本脚本如果作为lib导入使用则不再执行后续命令入口代码
+# - 当本脚本作为命令被执行时'$ ./sha', $0为'./sha,
+# - 当本脚本当作类库导入时即: '. ./sha'，$0值为bash/zsh等
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  return 0
+fi
+
+# 命令式执行的入口代码, 即'$ ./sha' 而不是'. ./sha'
+sha "$@"

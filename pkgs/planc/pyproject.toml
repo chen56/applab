@@ -4,6 +4,7 @@ version = "0.0.1dev20251209110701"
 description = "Add your description here"
 readme = "README.md"
 dependencies = [
+    "pydantic>=2.12.5",
     "requests>=2.32.5",
 ]
 

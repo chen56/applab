@@ -1,5 +1,6 @@
+
 import pytest
-from planc._dag import _topo_sort  # noqa: PyProtectedMember
+from planc._common import _topo_sort  # noqa: PyProtectedMember
 
 
 class TestBasic:

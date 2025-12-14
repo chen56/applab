@@ -1,4 +1,4 @@
-"""appc package.
+"""apphub package.
 
 ...
 """

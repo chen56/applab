@@ -1,5 +1,5 @@
 [project]
-name = "appc"
+name = "apphub"
 version = "0.0.1dev20251209110701"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
@@ -7,7 +7,7 @@ license = { text = "MIT" }
 description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Chen Peng" }]
-urls = { "homepage" = "https://github.com/chen56/appc" }
+urls = { "homepage" = "https://github.com/chen56/apphub" }
 
 requires-python = ">=3.12"
 dependencies = ["requests>=2.32.5"]

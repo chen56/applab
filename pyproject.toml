@@ -1,5 +1,5 @@
 [project]
-name = "apphub"
+name = "apphub-root"
 version = "0.0.1dev20251209110701"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
@@ -10,11 +10,11 @@ authors = [{ name = "Chen Peng" }]
 urls = { "homepage" = "https://github.com/chen56/apphub" }
 
 requires-python = ">=3.12"
-dependencies = ["requests>=2.32.5"]
-
+dependencies = []
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
+# uv_build默认就使用 src/ 布局，不需要额外配置
 build-backend = "uv_build"
 
 #################################################################################
@@ -23,14 +23,14 @@ build-backend = "uv_build"
 # - 不会包含在发布的包元数据中。它只在本地开发时使用。
 # - 相对较新（PEP 735），支持工具（如 uv、Poetry 的部分功能）正在普及。
 #################################################################################
-[dependency-groups]
-dev = [
-    "keyring>=25.7.0",
-    "pytest>=9.0.1",
-    "ruff>=0.14.8",
-    "planc",            # vscode mono子项目导航关键配置，需重启vscode
-    "pyright>=1.1.407",
-]
+#[dependency-groups]
+#dev = [
+#    "keyring>=25.7.0",
+#    "pytest>=9.0.1",
+#    "ruff>=0.14.8",
+#    "planc",            # vscode mono子项目导航关键配置，需重启vscode
+#    "pyright>=1.1.407",
+#]
 
 
 #################################################################################
@@ -61,6 +61,9 @@ members = [
 ]
 
 [tool.uv]
+# workspace 根“仅作为管理层/脚本层”，明确关闭它作为包的构建行为
+package = false
+
 # `uv python install`的不是官网文件，而是这个项目打包的便携版: https://github.com/astral-sh/python-build-standalone/
 # 镜像较少，参考: https://github.com/tuna/issues/issues/2125 
 # 已知镜像站点：

@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 members = [
     "apphub",
     "apphub-research",
+    "apphub-root",
     "planc",
 ]
 
@@ -43,7 +44,7 @@ wheels = [
 [[package]]
 name = "apphub"
 version = "0.0.1.dev20251209110701"
-source = { editable = "." }
+source = { editable = "pkgs/apphub" }
 dependencies = [
     { name = "requests" },
 ]
@@ -85,6 +86,11 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "keyring", specifier = ">=25.7.0" },
 ]
+
+[[package]]
+name = "apphub-root"
+version = "0.0.1.dev20251209110701"
+source = { virtual = "." }
 
 [[package]]
 name = "certifi"

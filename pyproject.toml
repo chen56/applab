@@ -65,7 +65,7 @@ members = [
 package = false
 
 # `uv python install`的不是官网文件，而是这个项目打包的便携版: https://github.com/astral-sh/python-build-standalone/
-# 镜像较少，参考: https://github.com/tuna/issues/issues/2125 
+# 镜像较少，参考: https://github.com/tuna/issues/issues/2125
 # 已知镜像站点：
 # - https://mirror.nju.edu.cn/github-release/astral-sh/python-build-standalone/
 # - https://registry.npmmirror.com/-/binary/python-build-standalone/
@@ -83,52 +83,47 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 
 
 #################################################################################
-# --- Ruff 配置 ---
+# --- Ruff 配置（更新为 NumPy 风格） ---
 #################################################################################
 
 [tool.ruff]
-# 告诉 Ruff 你的 Python 源代码在哪里
 src = ["src"]
-# 排除的文件或目录
 exclude = [".git", "__pycache__", "build", "dist", ".venv"]
-
-# 最大行长度
 line-length = 120
-
-[tool.ruff.lint.per-file-ignores]
-"**/{tests,docs,tools}/**" = [
-    "D106", # Missing docstring in a public nested class
-    "D102", # Missing docstring in a public method
-]
 
 [tool.ruff.lint]
 ignore = [
-    "D100", # D100 Missing docstring in public module
-    "D101", # D101 Missing docstring in public class
-    "D102", # D102 Missing docstring in public method
-    "D103", # D103 Missing docstring in public function
-    "D107", # D107 Missing docstring in public nested class
-    "D415", # D415 missing-terminal-punctuation
-    "E501", # E501 Line too long
-    "W293", # W293 Blank line contains whitespace
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D107", # Missing docstring in public nested class
+    "D205", # 1 blank line required after summary line
+    "D401", # First line should be imperative
+    "E501", # Line too long
+    "W293", # Blank line contains whitespace
 ]
 
 select = [
-    # "I", # I: isort (导入排序)
-    "E", # E: Error (pycodestyle)
-    "W", # W: Warning (pycodestyle)
-    "F", # F: Pyflakes
-    "B", # B: Bugbear
+    "E",  # pycodestyle Errors
+    "W",  # pycodestyle Warnings
+    "F",  # Pyflakes
+    "B",  # Bugbear
 ]
 extend-select = [
     "UP", # pyupgrade
     "D",  # pydocstyle
+]
 
+[tool.ruff.lint.per-file-ignores]
+"**/{tests,docs,tools}/**" = [
+    "D102", # Missing docstring in a public method
+    "D106", # Missing docstring in a public nested class
 ]
 
 [tool.ruff.lint.pydocstyle]
-convention = "google" # 使用 Google 风格的 docstring 约定
-
+convention = "numpy" # 使用 NumPy 风格的 docstring 约定
 
 #################################################################################
 # pyright
@@ -151,6 +146,6 @@ reportMissingTypeStubs = false
 pythonVersion = "3.12" # 根环境默认用最新版本，兼容多平台特性
 # 根环境默认平台（可任选，子环境覆盖），不配置按照当前运行平台
 # 目前pyright无法配置检查多个平台，可用用uv run pyright --pythonplatform Darwin 参数多次检查
-# pythonPlatform = "Darwin" 
+# pythonPlatform = "Darwin"
 
 # 可用executionEnvironments 对特定目录指定特定平台

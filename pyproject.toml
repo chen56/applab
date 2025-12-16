@@ -105,7 +105,9 @@ line-length = 120
 ignore = [
     "D100", # D100 Missing docstring in public module
     "D101", # D101 Missing docstring in public class
+    "D102", # D102 Missing docstring in public method
     "D103", # D103 Missing docstring in public function
+    "D107", # D107 Missing docstring in public nested class
     "D415", # D415 missing-terminal-punctuation
     "E501", # E501 Line too long
     "W293", # W293 Blank line contains whitespace

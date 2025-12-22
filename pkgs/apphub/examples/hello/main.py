@@ -1,1 +1,60 @@
-{"metadata":{"kernelspec":{"language":"python","display_name":"Python 3","name":"python3"},"language_info":{"name":"python","version":"3.12.12","mimetype":"text/x-python","codemirror_mode":{"name":"ipython","version":3},"pygments_lexer":"ipython3","nbconvert_exporter":"python","file_extension":".py"},"kaggle":{"accelerator":"none","dataSources":[],"dockerImageVersionId":31234,"isInternetEnabled":false,"language":"python","sourceType":"script","isGpuEnabled":false}},"nbformat_minor":4,"nbformat":4,"cells":[{"cell_type":"code","source":"# %% [code]\nfrom __future__ import annotations\n\n\nclass Project:\n    def __init__(self, name: str = \"default\"):\n        self.name = name\n\n\nclass TencentCloudProvider:\n    def __init__(self, project: Project):\n        self.project = project\n\n    def apply(self, spec):\n        pass\n\n\nclass App:\n    pass\n\n\nclass DockerState:\n    def __init__(self, spec: Docker):\n        self.config = spec\n\n\nclass Docker(App):\n    def __init__(self, name: str = \"docker\"):\n        self.name = name\n\n    def apply(self) -> DockerState:\n        print(\"apply docker\")\n        return DockerState(self)\n\n\n\nproject = Project(name=\"examples\")\nprovider = TencentCloudProvider(project=project)\ndocker: DockerState = provider.apply(Docker(zone=\"tencentcloud/ap-shanghai-1\"))\nprint(docker.config.name)\nprovider.remove(docker)\n\n# save\n# apphub provider list\n# apphub provider info qcloud\n# apphub provider login qcloud\n# apphub zone list --provider qcloud\n# apphub install docker --provider qcloud --zone ap-shanghai-1\n# apphub app list --provider qcloud --zone ap-shanghai-1\n# apphub app list --provider qcloud","metadata":{"_uuid":"f3c8e8bc-18ec-440f-96da-b796d87212dd","_cell_guid":"92972240-b9bf-484c-9055-d4b64ad482b2","trusted":true,"collapsed":false,"jupyter":{"outputs_hidden":false},"execution":{"iopub.status.busy":"2025-12-22T09:01:15.824548Z","iopub.execute_input":"2025-12-22T09:01:15.824908Z","iopub.status.idle":"2025-12-22T09:01:15.846034Z","shell.execute_reply.started":"2025-12-22T09:01:15.824865Z","shell.execute_reply":"2025-12-22T09:01:15.844495Z"}},"outputs":[{"traceback":["\u001b[0;31m---------------------------------------------------------------------------\u001b[0m","\u001b[0;31mTypeError\u001b[0m                                 Traceback (most recent call last)","\u001b[0;32m/tmp/ipykernel_55/874941145.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     37\u001b[0m \u001b[0mproject\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mProject\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m\"examples\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     38\u001b[0m \u001b[0mprovider\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTencentCloudProvider\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mproject\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mproject\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 39\u001b[0;31m \u001b[0mdocker\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mDockerState\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mprovider\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mapply\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mDocker\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mzone\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m\"tencentcloud/ap-shanghai-1\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     40\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdocker\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconfig\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     41\u001b[0m \u001b[0mprovider\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mremove\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdocker\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n","\u001b[0;31mTypeError\u001b[0m: Docker.__init__() got an unexpected keyword argument 'zone'"],"ename":"TypeError","evalue":"Docker.__init__() got an unexpected keyword argument 'zone'","output_type":"error"}],"execution_count":1}]}
+from __future__ import annotations
+
+
+class Project:
+    def __init__(self, name: str = "default"):
+        self.name = name
+
+
+class TencentCloudProvider:
+    def __init__(self, project: Project):
+        self.project = project
+
+    def apply(self, spec):
+        return DockerState(spec)
+
+    def remove(self, *, docker: DockerState):
+        pass
+
+
+class App:
+    pass
+
+
+class DockerState:
+    def __init__(self, spec: Docker):
+        self.config = spec
+
+
+class Docker(App):
+    def __init__(self, *, name: str = "docker", zone: str):
+        self.name = name
+        self.zone = zone
+
+    def apply(self) -> DockerState:
+        print("apply docker")
+        return DockerState(self)
+
+
+project = Project(name="examples")
+provider = TencentCloudProvider(project=project)
+docker: DockerState = provider.apply(Docker(zone="tencentcloud/ap-shanghai-1"))
+print(docker.config.name)
+provider.remove(docker=docker)
+
+# apphub provider list
+# apphub provider info qcloud
+# apphub provider login qcloud
+# apphub zone list --provider qcloud
+# apphub install docker --provider qcloud --zone ap-shanghai-1
+# apphub app list --provider qcloud --zone ap-shanghai-1
+# apphub app list --provider qcloud
+
+
+# apphub providers list
+# apphub provider qcloud info
+# apphub provider qcloud login
+# apphub zone list --provider qcloud
+# apphub install docker --provider qcloud --zone ap-shanghai-1
+# apphub app list --provider qcloud --zone ap-shanghai-1
+# apphub app list --provider qcloud

@@ -39,6 +39,7 @@ build-backend = "uv_build"
 #################################################################################
 [tool.uv.sources]
 planc = { workspace = true } # mono子项目导航关键配置，需重启vscode
+apphub = { workspace = true } # mono子项目导航关键配置，需重启vscode
 
 #################################################################################
 # 可选依赖（Optional Dependencies）

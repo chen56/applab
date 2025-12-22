@@ -10,7 +10,11 @@ authors = [{ name = "Chen Peng" }]
 urls = { "homepage" = "https://github.com/chen56/apphub" }
 
 requires-python = ">=3.12"
-dependencies = ["requests>=2.32.5"]
+dependencies = [
+    "cyclopts>=4.4.0",
+    "requests>=2.32.5",
+    "tencentcloud-sdk-python-common>=3.1.12",
+]
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
@@ -31,3 +35,7 @@ dev = [
     "planc",            # vscode mono子项目导航关键配置，需重启vscode
     "pyright>=1.1.407",
 ]
+
+
+[project.scripts]
+apphub = "apphub.cli:main"

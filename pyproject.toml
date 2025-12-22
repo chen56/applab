@@ -145,6 +145,11 @@ reportMissingImports = "error"
 reportMissingTypeStubs = false
 
 pythonVersion = "3.12" # 根环境默认用最新版本，兼容多平台特性
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+]
 # 根环境默认平台（可任选，子环境覆盖），不配置按照当前运行平台
 # 目前pyright无法配置检查多个平台，可用用uv run pyright --pythonplatform Darwin 参数多次检查
 # pythonPlatform = "Darwin"

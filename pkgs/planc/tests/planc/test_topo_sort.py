@@ -1,4 +1,3 @@
-
 import pytest
 from planc._common import _topo_sort  # noqa: PyProtectedMember
 

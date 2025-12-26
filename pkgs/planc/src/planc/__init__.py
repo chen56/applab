@@ -3,7 +3,7 @@
 ...
 """
 
-__version__ = "0.0.1dev20251209110701"
+__version__ = "0.0.1dev20251226222400"
 
 from enum import Enum
 

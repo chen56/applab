@@ -2,6 +2,7 @@
 Tencent Cloud Provider
 [tencentcloud-sdk-python](https://github.com/TencentCloud/tencentcloud-sdk-python)
 """
+
 import json
 
 from pydantic import BaseModel, ConfigDict
@@ -9,10 +10,10 @@ from pydantic import Field, TypeAdapter, ValidationError
 from typing import Annotated
 
 from tencentcloud.common import credential, retry
+
 PositiveInt = Annotated[int, Field(gt=0)]
 
-__all__ = [
-]
+__all__ = []
 
 
 class A:
@@ -29,23 +30,15 @@ from typing import Optional, Annotated
 
 class TencentCredentialParams(BaseModel):
     model_config = ConfigDict(
-        extra='forbid',# 'forbid'：不允许提供额外数据。
+        extra="forbid",  # 'forbid'：不允许提供额外数据。
     )
 
     x: str = "ss"
     secret_id: str = Field(
-        ...,
-        description="Tencent Cloud SecretId",
-        json_schema_extra={
-            "env": "TENCENTCLOUD_SECRET_ID"
-        }
+        ..., description="Tencent Cloud SecretId", json_schema_extra={"env": "TENCENTCLOUD_SECRET_ID"}
     )
     secret_key: str = Field(
-        ...,
-        description="Tencent Cloud SecretKey",
-        json_schema_extra={
-            "env": "TENCENTCLOUD_SECRET_KEY"
-        }
+        ..., description="Tencent Cloud SecretKey", json_schema_extra={"env": "TENCENTCLOUD_SECRET_KEY"}
     )
 
 

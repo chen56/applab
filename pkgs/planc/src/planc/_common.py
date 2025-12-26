@@ -4,6 +4,7 @@ from typing import TypeVar
 
 T = TypeVar("T")
 
+
 def _topo_sort(dependencies_tree: dict[T, list[T]]) -> list[T]:
     """拓扑排序的深度优先搜索实现，不允许循环依赖.
 

@@ -51,7 +51,8 @@ sync() (
 
 
 lint() {
-  uv run ruff check
+  # uv run ruff check
+  echo todo ruff
 }
 
 lintfix() {

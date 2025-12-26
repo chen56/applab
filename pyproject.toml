@@ -1,13 +1,13 @@
 [project]
-name = "apphub-root"
-version = "0.0.1dev20251209110701"
+name = "applab-root"
+version = "0.0.1dev20251226222400"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 
 description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Chen Peng" }]
-urls = { "homepage" = "https://github.com/chen56/apphub" }
+urls = { "homepage" = "https://github.com/chen56/applab" }
 
 requires-python = ">=3.12"
 dependencies = []
@@ -23,23 +23,22 @@ build-backend = "uv_build"
 # - 不会包含在发布的包元数据中。它只在本地开发时使用。
 # - 相对较新（PEP 735），支持工具（如 uv、Poetry 的部分功能）正在普及。
 #################################################################################
-#[dependency-groups]
-#dev = [
-#    "keyring>=25.7.0",
-#    "pytest>=9.0.1",
-#    "ruff>=0.14.8",
-#    "planc",            # vscode mono子项目导航关键配置，需重启vscode
-#    "pyright>=1.1.407",
-#]
-
+[dependency-groups]
+dev = [
+   "keyring>=25.7.0",
+   "pytest>=9.0.1",
+   "ruff>=0.14.8",
+   "pyright>=1.1.407",
+]
 
 #################################################################################
 # 可以让uv把import的包变为可编辑状态，即uv.lock： source = { editable = "planc" }
 # 类似此效果：uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
 #################################################################################
 [tool.uv.sources]
+# 类似 my-package = { path = "../", editable = true }
 planc = { workspace = true } # mono子项目导航关键配置，需重启vscode
-apphub = { workspace = true } # mono子项目导航关键配置，需重启vscode
+applab = { workspace = true } # mono子项目导航关键配置，需重启vscode
 
 #################################################################################
 # 可选依赖（Optional Dependencies）
@@ -146,10 +145,6 @@ reportMissingTypeStubs = false
 
 pythonVersion = "3.12" # 根环境默认用最新版本，兼容多平台特性
 
-[dependency-groups]
-dev = [
-    "ipykernel>=7.1.0",
-]
 # 根环境默认平台（可任选，子环境覆盖），不配置按照当前运行平台
 # 目前pyright无法配置检查多个平台，可用用uv run pyright --pythonplatform Darwin 参数多次检查
 # pythonPlatform = "Darwin"

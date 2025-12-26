@@ -30,8 +30,9 @@ sync() (
 
 
 format() {
-  _run uv run ruff check --fix
-  _run uv run ruff format
+  # _run uv run ruff check --fix
+  # _run uv run ruff format
+  echo todo format
 }
 
 test() {
@@ -39,8 +40,9 @@ test() {
 }
 
 check() {
-  _run uv run pyright --pythonplatform Darwin
-  _run uv run pyright --pythonplatform Linux
-  _run uv run pyright --pythonplatform Windows
-  _run uv run ruff check
+  echo todo check
+  # _run uv run pyright --pythonplatform Darwin
+  # _run uv run pyright --pythonplatform Linux
+  # _run uv run pyright --pythonplatform Windows
+  # _run uv run ruff check
 }

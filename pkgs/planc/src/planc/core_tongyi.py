@@ -39,8 +39,7 @@ class ResourceConfig(Generic[SPEC]):
 
 
 class ResourceType(ABC):
-    """资源类型接口
-    """
+    """资源类型接口"""
 
     @property
     @abstractmethod
@@ -60,8 +59,7 @@ class ResourceType(ABC):
 
 
 class Resource(Generic[SPEC, STATE], ResourceConfig[SPEC]):
-    """一个完整的受管理资源
-    """
+    """一个完整的受管理资源"""
 
     @property
     @abstractmethod
@@ -99,8 +97,7 @@ class Resource_(Resource[SPEC, STATE]):
 
     @property
     def name(self) -> str:
-        """Name 是区分资源的关键, 我们会把name 用tag的形式打在每个实际的资源上, 以此对齐声明的资源配置和实际资源实例
-        """
+        """Name 是区分资源的关键, 我们会把name 用tag的形式打在每个实际的资源上, 以此对齐声明的资源配置和实际资源实例"""
         return self.expected.name
 
     @property
@@ -183,8 +180,7 @@ class Project:
 
 
 class Provider(ABC):
-    """无状态服务提供者, 状态由每个Provider对应的 Vendor 维护
-    """
+    """无状态服务提供者, 状态由每个Provider对应的 Vendor 维护"""
 
     def __init__(self):
         self.resource_services = ResourceServices()
@@ -241,8 +237,7 @@ class Vendor:
         return self.sorted_resource_types_cache
 
     async def refresh(self) -> None:
-        """SPI方法，不应被客户程序直接调用，客户程序应通过@qpa/core的Project使用
-        """
+        """SPI方法，不应被客户程序直接调用，客户程序应通过@qpa/core的Project使用"""
         instances = await self.provider.find_resource_instances()
         self._resource_instances = _ResourceInstances(*instances)
 
@@ -337,8 +332,7 @@ class ResourceService(ABC, Generic[SPEC, STATE]):
 
     @abstractmethod
     async def load(self, config: ResourceConfig[SPEC]) -> list[ResourceInstance[STATE]]:
-        """@return 可能返回多个实际的同名云资源，因为一个资源可能被非正常的多次创建，重复问题留给上层程序判断解决
-        """
+        """@return 可能返回多个实际的同名云资源，因为一个资源可能被非正常的多次创建，重复问题留给上层程序判断解决"""
         pass
 
 
@@ -361,8 +355,7 @@ class ResourceServices(dict[ResourceType, ResourceService]):
 
 
 def topo_sort(dependencies: dict[ResourceType, list[ResourceType]]) -> list[ResourceType]:
-    """拓扑排序实现
-    """
+    """拓扑排序实现"""
     # 这里需要根据具体需求实现拓扑排序算法
     # 为了简化，这里返回所有key的列表
     # 在实际应用中，需要实现真正的拓扑排序

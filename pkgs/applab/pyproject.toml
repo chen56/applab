@@ -1,13 +1,13 @@
 [project]
-name = "apphub"
-version = "0.0.1dev20251209110701"
+name = "applab"
+version = "0.0.1dev20251226222400"
 # dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 
 description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Chen Peng" }]
-urls = { "homepage" = "https://github.com/chen56/apphub" }
+urls = { "homepage" = "https://github.com/chen56/applab" }
 
 requires-python = ">=3.12"
 dependencies = [
@@ -38,4 +38,4 @@ dev = [
 
 
 [project.scripts]
-apphub = "apphub.cli:main"
+applab = "applab.cli:main"

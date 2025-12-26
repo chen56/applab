@@ -25,8 +25,7 @@ STATE = TypeVar("STATE")
 
 @dataclass(frozen=True)
 class ResourceConfig(Generic[SPEC]):
-    """The desired configuration of a resource (the desired state).
-    """
+    """The desired configuration of a resource (the desired state)."""
 
     name: str
     spec: SPEC
@@ -140,8 +139,7 @@ UpFunc = Callable[["Project"], Awaitable[None]]
 
 
 class ResourceServices(dict[ResourceType, "ResourceService[Any, Any]"]):
-    """Map ResourceType -> ResourceService
-    """
+    """Map ResourceType -> ResourceService"""
 
     def register(self, service: ResourceService[Any, Any]) -> None:
         t = service.resource_type
@@ -168,8 +166,7 @@ class Provider(ABC):
 
 
 class _ResourceInstances(list[ResourceInstance[Any]]):
-    """Specialized list with convenience delete-by-instance method.
-    """
+    """Specialized list with convenience delete-by-instance method."""
 
     def delete(self, instance: ResourceInstance[Any]) -> None:
         try:

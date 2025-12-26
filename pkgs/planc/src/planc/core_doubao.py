@@ -158,8 +158,7 @@ class ProjectConfig:
 
 
 class Vendors(list["Vendor"]):
-    """供应商列表类，继承自list
-    """
+    """供应商列表类，继承自list"""
 
     def __init__(self):
         super().__init__()
@@ -184,8 +183,7 @@ class Vendors(list["Vendor"]):
 
 
 class Project:
-    """项目类，管理资源和供应商
-    """
+    """项目类，管理资源和供应商"""
 
     def __init__(self, config: ProjectConfig):
         """初始化项目
@@ -300,8 +298,7 @@ class _Resources(dict[str, Resource_[Any, Any]]):
 
 
 class Vendor:
-    """供应商类，管理资源服务和资源实例
-    """
+    """供应商类，管理资源服务和资源实例"""
 
     def __init__(self, provider: Provider):
         """初始化供应商

@@ -18,7 +18,7 @@ build() {
 publish() {
   # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
   local api_key
-  api_key=$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)
+  api_key=$(uv run -m keyring get pypi_applab_api_token pypi_applab_api_token)
   _run uv publish -t "${api_key}"
 }
 

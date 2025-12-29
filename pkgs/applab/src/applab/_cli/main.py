@@ -1,22 +1,32 @@
+"""cli main入口
+"""
+# 更激进的做法：在 cli 模块被导入时直接判断调用栈或引导语
+if __name__ != "__main__":
+    raise ImportError(
+        "'applab.cli' 仅限命令行调用，请改用 'applab' 作为 API 接口。"
+    )
+
 from cyclopts import App
 
 from .provider import provider_app
 
 app = App()
 
+# cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
 # Change the group of "--help" and "--version" to the implicitly created "Admin" group.
 app["--help"].group = "Cli info options"
 app["--version"].group = "Cli info options"
-
 
 # Child app inherits parent's settings
 provider_app = app.command(provider_app, "provider")
 
 
 @app.default()
-def main():
+def _root_cmd():
     """
     One click install app on some cloud.
+
+    ## Examples
 
     ```bash
     applab provider list
@@ -35,6 +45,10 @@ def main():
     app.help_print()
 
 
-app()
+def main():
+    app()
+
+
+#
 if __name__ == "__main__":
-    provider_app()
+    main()

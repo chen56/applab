@@ -44,8 +44,7 @@ publish() {
 }
 
 sync() (
-  clean
-  uv sync
+  _run uv sync --all-extras --all-groups --all-packages
   # uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
 )
 

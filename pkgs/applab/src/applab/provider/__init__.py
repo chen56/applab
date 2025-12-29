@@ -7,14 +7,19 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Annotated, Dict, Optional
+from typing import Annotated
 
 from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
+
+from applab.provider.base import ProviderRegister
+
+# 全局注册表实例
+providers = ProviderRegister()
 
 # ============================================================
 # Extension Point：Provider 抽象基类
 # ============================================================
-
 
 class Provider(ABC):
     """Extension Point: 所有 Provider 必须实现 login"""
@@ -28,11 +33,12 @@ class Provider(ABC):
 # ============================================================
 # 模拟 applab_apps 包（provider 实现）
 # ============================================================
+class UIField:
+    pass
 @dataclass
-class TextField:
+class TextField(UIField):
     label: str
     help: str | None = None
-
 
 class QCloudCredential(BaseModel):
     secret_id: Annotated[
@@ -69,8 +75,8 @@ class AliyunProvider(Provider):
 _PROVIDER_REGISTRY2: dict[str, Provider] = {
     "qcloud": QCloudProvider(),
     "aliyun": AliyunProvider(),
-    "gcp": GCPProvider(),
 }  # 已安装的 provider
+
 
 # ============================================================
 # 使用示例

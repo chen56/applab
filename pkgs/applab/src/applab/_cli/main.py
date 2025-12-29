@@ -1,10 +1,5 @@
 """cli main入口
 """
-# 更激进的做法：在 cli 模块被导入时直接判断调用栈或引导语
-if __name__ != "__main__":
-    raise ImportError(
-        "'applab.cli' 仅限命令行调用，请改用 'applab' 作为 API 接口。"
-    )
 
 from cyclopts import App
 

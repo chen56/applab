@@ -1,4 +1,4 @@
-"""依赖集合排序：不允许循环依赖"""
+"""依赖集合排序：不允许循环依赖."""
 
 from typing import TypeVar
 
@@ -11,10 +11,12 @@ def _topo_sort(dependencies_tree: dict[T, list[T]]) -> list[T]:
     Args:
         dependencies_tree (dict): 依赖关系树，键为依赖项，值为被依赖项列表
 
-    Returns:
+    Returns
+    -------
         list: 拓扑排序后的节点列表
 
-    Examples:
+    Examples
+    --------
         >>> dependencies = {
                 "WebApp": ["API", "Database"],  # WebApp依赖API和Database
                 "API": ["Utils"],                # API依赖Utils
@@ -23,7 +25,8 @@ def _topo_sort(dependencies_tree: dict[T, list[T]]) -> list[T]:
         >>> _topo_sort(dependencies)
         ['Utils', 'API', 'Database', 'WebApp']  # 正确的安装顺序
 
-    Raises:
+    Raises
+    ------
         Exception: 当检测到循环依赖时抛出异常
     """
     visited = {}

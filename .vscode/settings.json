@@ -5,7 +5,7 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     // use ty replace default pylance
-    "python.languageServer": "None",
+    // "python.languageServer": "None",
 
     "[python]": {
         "editor.formatOnSave": true,

@@ -34,7 +34,7 @@ def _topo_sort(dependencies_tree: dict[T, list[T]]) -> list[T]:
 
     def dfs(node: T):
         """dfs(node) 函数用于深度优先遍历每个节点.
-        使用 visiting 集合来检测是否发生了循环依赖。如果遇到未访问的邻居节点，则递归调用 DFS。
+        使用 visiting 集合来检测是否发生了循环依赖。如果遇到未访问的邻居节点，则递归调用 DFS。.
         """
         if visited.get(node, 0) == 1:
             raise Exception(f"Detected circular dependency at: {node}")

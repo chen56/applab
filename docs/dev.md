@@ -1,5 +1,7 @@
 # 开发
 
+## 项目初始化
+
 ## 已采纳
 
 - 验证及模型定义: [pydantic](https://pydantic.dev)

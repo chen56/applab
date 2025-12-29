@@ -41,19 +41,3 @@ provider = TencentCloudProvider(project=project)
 docker: DockerState = provider.apply(Docker(zone="tencentcloud/ap-shanghai-1"))
 print(docker.config.name)
 provider.remove(docker=docker)
-
-# applab provider list
-# applab provider info qcloud
-# applab provider login qcloud
-# applab zone list --provider qcloud
-# applab install docker --provider qcloud --zone ap-shanghai-1
-# applab app list --provider qcloud --zone ap-shanghai-1
-# applab app list --provider qcloud
-
-# applab providers list
-# applab provider qcloud info
-# applab provider qcloud login
-# applab zone list --provider qcloud
-# applab install docker --provider qcloud --zone ap-shanghai-1
-# applab app list --provider qcloud --zone ap-shanghai-1
-# applab app list --provider qcloud

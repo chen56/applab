@@ -30,6 +30,8 @@ requires = ["uv_build>=0.9.15,<0.10.0"]
 # uv_build默认就使用 src/ 布局，不需要额外配置
 build-backend = "uv_build"
 
+[project.scripts]
+applab = "applab.core._cli.main:main"
 
 #################################################################################
 # uv

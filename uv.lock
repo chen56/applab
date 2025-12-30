@@ -5,8 +5,7 @@ requires-python = ">=3.12"
 [manifest]
 members = [
     "applab",
-    "applab-root",
-    "planc",
+    "applab-core",
 ]
 
 [[package]]
@@ -20,8 +19,37 @@ wheels = [
 
 [[package]]
 name = "applab"
-version = "0.0.1.dev20251226222400"
-source = { editable = "pkgs/applab" }
+version = "0.0.2.dev20251230153900"
+source = { editable = "." }
+dependencies = [
+    { name = "applab-core" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "keyring" },
+    { name = "pyrefly" },
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "ty" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "applab-core", editable = "pkgs/applab-core" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "keyring", specifier = ">=25.7.0" },
+    { name = "pyrefly", specifier = ">=0.46.2" },
+    { name = "pytest", specifier = ">=9.0.1" },
+    { name = "ruff", specifier = ">=0.14.10" },
+    { name = "ty", specifier = ">=0.0.7" },
+]
+
+[[package]]
+name = "applab-core"
+version = "0.0.2.dev20251230153900"
+source = { editable = "pkgs/applab-core" }
 dependencies = [
     { name = "cyclopts" },
     { name = "pydantic" },
@@ -33,9 +61,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "keyring" },
-    { name = "pyright" },
     { name = "pytest" },
-    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -50,34 +76,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "keyring", specifier = ">=25.7.0" },
-    { name = "pyright", specifier = ">=1.1.407" },
     { name = "pytest", specifier = ">=9.0.1" },
-    { name = "ruff", specifier = ">=0.14.8" },
-]
-
-[[package]]
-name = "applab-root"
-version = "0.0.1.dev20251226222400"
-source = { virtual = "." }
-
-[package.dev-dependencies]
-dev = [
-    { name = "keyring" },
-    { name = "pyright" },
-    { name = "pytest" },
-    { name = "ruff" },
-    { name = "ty" },
-]
-
-[package.metadata]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "keyring", specifier = ">=25.7.0" },
-    { name = "pyright", specifier = ">=1.1.407" },
-    { name = "pytest", specifier = ">=9.0.1" },
-    { name = "ruff", specifier = ">=0.14.10" },
-    { name = "ty", specifier = ">=0.0.7" },
 ]
 
 [[package]]
@@ -310,23 +309,23 @@ wheels = [
 
 [[package]]
 name = "jaraco-context"
-version = "6.0.1"
+version = "6.0.2"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/df/ad/f3777b81bf0b6e7bc7514a1656d3e637b2e8e15fab2ce3235730b3e7a4e6/jaraco_context-6.0.1.tar.gz", hash = "sha256:9bae4ea555cf0b14938dc0aee7c9f32ed303aa20a3b73e7dc80111628792d1b3", size = 13912, upload-time = "2024-08-20T03:39:27.358Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/8d/7d/41acf8e22d791bde812cb6c2c36128bb932ed8ae066bcb5e39cb198e8253/jaraco_context-6.0.2.tar.gz", hash = "sha256:953ae8dddb57b1d791bf72ea1009b32088840a7dd19b9ba16443f62be919ee57", size = 14994, upload-time = "2025-12-24T19:21:35.784Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ff/db/0c52c4cf5e4bd9f5d7135ec7669a3a767af21b3a308e1ed3674881e52b62/jaraco.context-6.0.1-py3-none-any.whl", hash = "sha256:f797fc481b490edb305122c9181830a3a5b76d84ef6d1aef2fb9b47ab956f9e4", size = 6825, upload-time = "2024-08-20T03:39:25.966Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/c7/0c/1e0096ced9c55f9c6c6655446798df74165780375d3f5ab5f33751e087ae/jaraco_context-6.0.2-py3-none-any.whl", hash = "sha256:55fc21af4b4f9ca94aa643b6ee7fe13b1e4c01abf3aeb98ca4ad9c80b741c786", size = 6988, upload-time = "2025-12-24T19:21:34.557Z" },
 ]
 
 [[package]]
 name = "jaraco-functools"
-version = "4.3.0"
+version = "4.4.0"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
 dependencies = [
     { name = "more-itertools" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/f7/ed/1aa2d585304ec07262e1a83a9889880701079dde796ac7b1d1826f40c63d/jaraco_functools-4.3.0.tar.gz", hash = "sha256:cfd13ad0dd2c47a3600b439ef72d8615d482cedcff1632930d6f28924d92f294", size = 19755, upload-time = "2025-08-18T20:05:09.91Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/0f/27/056e0638a86749374d6f57d0b0db39f29509cce9313cf91bdc0ac4d91084/jaraco_functools-4.4.0.tar.gz", hash = "sha256:da21933b0417b89515562656547a77b4931f98176eb173644c0d35032a33d6bb", size = 19943, upload-time = "2025-12-21T09:29:43.6Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/b4/09/726f168acad366b11e420df31bf1c702a54d373a83f968d94141a8c3fde0/jaraco_functools-4.3.0-py3-none-any.whl", hash = "sha256:227ff8ed6f7b8f62c56deff101545fa7543cf2c8e7b82a7c2116e672f29c26e8", size = 10408, upload-time = "2025-08-18T20:05:08.69Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/fd/c4/813bb09f0985cb21e959f21f2464169eca882656849adf727ac7bb7e1767/jaraco_functools-4.4.0-py3-none-any.whl", hash = "sha256:9eec1e36f45c818d9bf307c8948eb03b2b56cd44087b3cdc989abca1f20b9176", size = 10481, upload-time = "2025-12-21T09:29:42.27Z" },
 ]
 
 [[package]]
@@ -386,15 +385,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nodeenv"
-version = "1.9.1"
-source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/43/16/fc88b08840de0e0a72a2f9d8c6bae36be573e475a6326ae854bcc549fc45/nodeenv-1.9.1.tar.gz", hash = "sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f", size = 47437, upload-time = "2024-06-04T18:44:11.171Z" }
-wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9", size = 22314, upload-time = "2024-06-04T18:44:08.352Z" },
-]
-
-[[package]]
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
@@ -402,35 +392,6 @@ sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a1/d4/1fc4078c65507b
 wheels = [
     { url = "https://pypi.tuna.tsinghua.edu.cn/packages/20/12/38679034af332785aac8774540895e234f4d07f7545804097de4b666afd8/packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484", size = 66469, upload-time = "2025-04-19T11:48:57.875Z" },
 ]
-
-[[package]]
-name = "planc"
-version = "0.0.1.dev20251226222400"
-source = { editable = "pkgs/planc" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "requests" },
-    { name = "tencentcloud-sdk-python-common" },
-    { name = "tencentcloud-sdk-python-cvm" },
-    { name = "tencentcloud-sdk-python-vpc" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.12.5" },
-    { name = "requests", specifier = ">=2.32.5" },
-    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.12" },
-    { name = "tencentcloud-sdk-python-cvm", specifier = ">=3.1.2" },
-    { name = "tencentcloud-sdk-python-vpc", specifier = ">=3.1.11" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [[package]]
 name = "pluggy"
@@ -546,16 +507,19 @@ wheels = [
 ]
 
 [[package]]
-name = "pyright"
-version = "1.1.407"
+name = "pyrefly"
+version = "0.46.2"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
-dependencies = [
-    { name = "nodeenv" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a6/1b/0aa08ee42948b61745ac5b5b5ccaec4669e8884b53d31c8ec20b2fcd6b6f/pyright-1.1.407.tar.gz", hash = "sha256:099674dba5c10489832d4a4b2d302636152a9a42d317986c38474c76fe562262", size = 4122872, upload-time = "2025-10-24T23:17:15.145Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a5/60/40ba98bed6cdc375d80d1be92b0980fb9425102993246dddd7a5cd9db9e2/pyrefly-0.46.2.tar.gz", hash = "sha256:d680c411948e41fcfc1d37f7c7a3d566c52e226d48eef0b1d4c922ddb0465abb", size = 4762179, upload-time = "2025-12-29T16:44:52.683Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/dc/93/b69052907d032b00c40cb656d21438ec00b3a471733de137a3f65a49a0a0/pyright-1.1.407-py3-none-any.whl", hash = "sha256:6dd419f54fcc13f03b52285796d65e639786373f433e243f8b94cf93a7444d21", size = 5997008, upload-time = "2025-10-24T23:17:13.159Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/dc/05/5fa9cd08d9ed6f791158707cd7e860f283e6a44fddea1d5abb9dcb3a153c/pyrefly-0.46.2-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:94090428807796247b42f2c5840cff4d3262e1a64dcc23ba9d56cd0708e328b0", size = 11642476, upload-time = "2025-12-29T16:44:33.386Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/57/fd/d4c73518cbf8629c335e2ef6fe54d75d12782cb882d883c1fc964679f0c8/pyrefly-0.46.2-py3-none-macosx_11_0_arm64.whl", hash = "sha256:1dbe54b8ef0a3697614d3a622cd15eb642415bed4c72540372cbcbfb5ff0119a", size = 11262304, upload-time = "2025-12-29T16:44:35.823Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/01/ff/9f1056e2437b7067d950198312c3c26ead6c6bae57d14a2ba075bae82b90/pyrefly-0.46.2-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f225303ff76ad6b581abb566c160fbc64bcb9cf4260151c4897853485fab619b", size = 31476614, upload-time = "2025-12-29T16:44:38.4Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/8d/d4/302d853a3b34f8eec57ab6417c6b03d3f496fcb965fcf92893d5c6ff9179/pyrefly-0.46.2-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:81903be4bcdca9e1f24b7ad0a9768cd8094f74847c5f67ceec731bd2e933e3be", size = 33695293, upload-time = "2025-12-29T16:44:40.994Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/af/2c/458e271a63f5ddeb407b16277d1520425691f87627bce5cafac926339e3f/pyrefly-0.46.2-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a4bce05c26954fea7aa43ce51675ade8ea8770fe187443833e8751637864ebed", size = 34734729, upload-time = "2025-12-29T16:44:43.628Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/1d/e6/ac334eb16962f3da390859e70461be9bc8ebb1f7bdb6d11a99e846263d1e/pyrefly-0.46.2-py3-none-win32.whl", hash = "sha256:a95a95a53e453f381e4cf4da5cdc67b21852e9b13fafd71f97dcdc008e01b277", size = 10725298, upload-time = "2025-12-29T16:44:46.254Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/c2/e0/96ca0587e76c08eb8c917b44369d953bf22e255f43568bf612811676ff69/pyrefly-0.46.2-py3-none-win_amd64.whl", hash = "sha256:e75d43f7149bc5d472edfa9071a95f51b2cd3024ff6d4808cddbcfbdfdd32d7a", size = 11417266, upload-time = "2025-12-29T16:44:48.212Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a1/ef/11687e55e5b3d92f9695c713d9f90af181c2a4376c032ec34650ea8a035d/pyrefly-0.46.2-py3-none-win_arm64.whl", hash = "sha256:1a467d24f33500d0bfc8fe8f8fe3d1da5d9e4ad9637fc49d4f83b3f2cef7d8d6", size = 10962676, upload-time = "2025-12-29T16:44:50.374Z" },
 ]
 
 [[package]]
@@ -673,30 +637,6 @@ dependencies = [
 sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/47/d1/cf986b61efa8cdac03d096288797f4e39318365864ac1bb0b58ac2a6da8c/tencentcloud_sdk_python_common-3.1.12.tar.gz", hash = "sha256:4ad497e5cab7575d72afd0d6f33089d841fd6be35b7918d987dc0959f3e7704c", size = 22645, upload-time = "2025-12-13T11:31:45.418Z" }
 wheels = [
     { url = "https://pypi.tuna.tsinghua.edu.cn/packages/3a/1f/ede39220dac458b4a1eea961ad3ed96170742527c0165c3f8d7a9bcc98e0/tencentcloud_sdk_python_common-3.1.12-py2.py3-none-any.whl", hash = "sha256:5148235e93ea622042c2924f834b2af4335b44a34e766329864cace467a044a5", size = 34264, upload-time = "2025-12-13T11:31:42.866Z" },
-]
-
-[[package]]
-name = "tencentcloud-sdk-python-cvm"
-version = "3.1.2"
-source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
-dependencies = [
-    { name = "tencentcloud-sdk-python-common" },
-]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/67/e4/f4c1638af8f1a87a6a741a81be8458b0902e0fc2a4de27a3db3e5cf0473d/tencentcloud_sdk_python_cvm-3.1.2.tar.gz", hash = "sha256:5275713ba1f6d634406bbf8d94d1d810610abeb5f49f0584b874857e58ba8503", size = 148953, upload-time = "2025-11-23T21:07:37.841Z" }
-wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/d0/3a/410c99fbed1bba080f2bea2585b0054cedd072063c21fa09527336385190/tencentcloud_sdk_python_cvm-3.1.2-py2.py3-none-any.whl", hash = "sha256:b5dbdc93922504b18cb767a0bc155699354691efee689cea05b1b6caec64ffc1", size = 151613, upload-time = "2025-11-23T21:07:35.19Z" },
-]
-
-[[package]]
-name = "tencentcloud-sdk-python-vpc"
-version = "3.1.11"
-source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
-dependencies = [
-    { name = "tencentcloud-sdk-python-common" },
-]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/1c/be/c78e5d351ce7cdac0378d9530cd5185750f8682765f69406f20612ed8d45/tencentcloud_sdk_python_vpc-3.1.11.tar.gz", hash = "sha256:ce93703e9b2eb255fb2950b7ef92ec535dd20568036adb9c4cb0c74129845770", size = 330134, upload-time = "2025-12-10T21:11:23.514Z" }
-wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/7d/e7/402e279a45d7b636a683fbb80dcf32c856b930584a04e550d2695d5e950a/tencentcloud_sdk_python_vpc-3.1.11-py2.py3-none-any.whl", hash = "sha256:7bf5f4d5ca586f6323ede122a14b0c885c82dc988143d9aab2e061a2d6e46618", size = 333840, upload-time = "2025-12-10T21:11:20.736Z" },
 ]
 
 [[package]]

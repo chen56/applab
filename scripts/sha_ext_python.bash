@@ -12,7 +12,7 @@ build() {
   clean
   check
   format
-  _run uv build "$@"
+  _run uv build
 }
 
 publish() {

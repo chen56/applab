@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 from typing import List, Type
 
+
 class ProviderBase:
     # 类属性（不可变字段）
     name: str = "base"
@@ -13,12 +14,7 @@ class ProviderBase:
 
     def info(self) -> dict:
         """返回 provider 信息字典"""
-        return {
-            "name": self.name,
-            "version": self.version,
-            "capabilities": self.capabilities,
-            "recipes": self.recipes
-        }
+        return {"name": self.name, "version": self.version, "capabilities": self.capabilities, "recipes": self.recipes}
 
 
 class ProviderRegister(Mapping):
@@ -49,4 +45,3 @@ class ProviderRegister(Mapping):
     def info(self, name: str) -> dict:
         cls = self._registry[name]
         return cls().info()
-

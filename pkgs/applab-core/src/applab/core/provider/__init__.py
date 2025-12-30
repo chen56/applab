@@ -21,6 +21,7 @@ providers = ProviderRegister()
 # Extension Point：Provider 抽象基类
 # ============================================================
 
+
 class Provider(ABC):
     """Extension Point: 所有 Provider 必须实现 login"""
 
@@ -35,10 +36,13 @@ class Provider(ABC):
 # ============================================================
 class UIField:
     pass
+
+
 @dataclass
 class TextField(UIField):
     label: str
     help: str | None = None
+
 
 class QCloudCredential(BaseModel):
     secret_id: Annotated[

@@ -1,5 +1,4 @@
-"""cli main入口
-"""
+"""cli main入口"""
 
 from cyclopts import App
 

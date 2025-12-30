@@ -14,6 +14,8 @@ requires-python = ">=3.12"
 # 统一依赖所有子包
 dependencies = [
     "applab-core",
+    "applab-cli",
+    "applab-provider-qcloud",
 ]
 
 [dependency-groups]
@@ -31,7 +33,7 @@ requires = ["uv_build>=0.9.15,<0.10.0"]
 build-backend = "uv_build"
 
 [project.scripts]
-applab = "applab.core._cli.main:main"
+applab = "applab.cli:main"
 
 #################################################################################
 # uv
@@ -39,7 +41,7 @@ applab = "applab.core._cli.main:main"
 
 [tool.uv.build-backend]
 namespace = true
-module-name=["applab"]
+module-name = ["applab"]
 module-root = "src"
 
 
@@ -57,6 +59,8 @@ members = [
 #   - 类似：uv pip install -e .
 # 需重启vscode
 applab-core = { workspace = true }
+applab-cli = { workspace = true }
+applab-provider-qcloud = { workspace = true }
 
 [tool.uv]
 # workspace 根虽然没代码，但作为聚合包
@@ -95,8 +99,10 @@ ignore = [
     "D102", # Missing docstring in a public method
     "D103", # Missing docstring in a public function
     "D104", # Missing docstring in a public package
+    "D105", # undocumented-magic-method (D105)
     "D107", # Missing docstring in a public nested class
     "D205", # 1 blank line required after the summary line
+    "D400",# missing-trailing-period
     "D401", # The first line should be imperative
     "E501", # Line too long
     "W293", # Blank line contains whitespace
@@ -194,8 +200,8 @@ python-version = "3.12"
 
 #### configuring your type check settings
 replace-imports-with-any = [
-#   "sympy.*",  
-#   "*.series",
+    #   "sympy.*",
+    #   "*.series",
 ]
 
 ignore-errors-in-generated-code = true

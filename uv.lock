@@ -5,7 +5,9 @@ requires-python = ">=3.12"
 [manifest]
 members = [
     "applab",
+    "applab-cli",
     "applab-core",
+    "applab-provider-qcloud",
 ]
 
 [[package]]
@@ -22,7 +24,9 @@ name = "applab"
 version = "0.0.2.dev20251230153900"
 source = { editable = "." }
 dependencies = [
+    { name = "applab-cli" },
     { name = "applab-core" },
+    { name = "applab-provider-qcloud" },
 ]
 
 [package.dev-dependencies]
@@ -35,7 +39,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "applab-core", editable = "pkgs/applab-core" }]
+requires-dist = [
+    { name = "applab-cli", editable = "pkgs/applab-cli" },
+    { name = "applab-core", editable = "pkgs/applab-core" },
+    { name = "applab-provider-qcloud", editable = "pkgs/applab-provider-qcloud" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -44,6 +52,37 @@ dev = [
     { name = "pytest", specifier = ">=9.0.1" },
     { name = "ruff", specifier = ">=0.14.10" },
     { name = "ty", specifier = ">=0.0.7" },
+]
+
+[[package]]
+name = "applab-cli"
+version = "0.0.2.dev20251230153900"
+source = { editable = "pkgs/applab-cli" }
+dependencies = [
+    { name = "cyclopts" },
+    { name = "pydantic" },
+    { name = "requests" },
+    { name = "rich" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "keyring" },
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "cyclopts", specifier = ">=4.4.0" },
+    { name = "pydantic", specifier = ">=2.12.5" },
+    { name = "requests", specifier = ">=2.32.5" },
+    { name = "rich", specifier = ">=14.2.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "keyring", specifier = ">=25.7.0" },
+    { name = "pytest", specifier = ">=9.0.1" },
 ]
 
 [[package]]
@@ -70,6 +109,33 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "requests", specifier = ">=2.32.5" },
     { name = "rich", specifier = ">=14.2.0" },
+    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.12" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "keyring", specifier = ">=25.7.0" },
+    { name = "pytest", specifier = ">=9.0.1" },
+]
+
+[[package]]
+name = "applab-provider-qcloud"
+version = "0.0.2.dev20251230153900"
+source = { editable = "pkgs/applab-provider-qcloud" }
+dependencies = [
+    { name = "applab-core" },
+    { name = "tencentcloud-sdk-python-common" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "keyring" },
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "applab-core", editable = "pkgs/applab-core" },
     { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.12" },
 ]
 

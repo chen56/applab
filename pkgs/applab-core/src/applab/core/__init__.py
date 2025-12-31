@@ -4,13 +4,14 @@
 """
 
 from ._arg_model import TextField, UIField
-from ._base import ProviderBase, ProviderRegister
+from ._base import VendorBase, ProviderRegister, applab
 
 __all__ = [
     # _arg_model
-    'TextField',
-    'UIField',
+    "TextField",
+    "UIField",
     # _base
-    'ProviderBase',
-    'ProviderRegister',
+    "VendorBase",
+    "ProviderRegister",
+    "applab",
 ]

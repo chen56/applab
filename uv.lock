@@ -7,7 +7,7 @@ members = [
     "applab",
     "applab-cli",
     "applab-core",
-    "applab-provider-qcloud",
+    "applab-vendor-tencentcloud",
 ]
 
 [[package]]
@@ -26,7 +26,7 @@ source = { editable = "." }
 dependencies = [
     { name = "applab-cli" },
     { name = "applab-core" },
-    { name = "applab-provider-qcloud" },
+    { name = "applab-vendor-tencentcloud" },
 ]
 
 [package.dev-dependencies]
@@ -42,7 +42,7 @@ dev = [
 requires-dist = [
     { name = "applab-cli", editable = "pkgs/applab-cli" },
     { name = "applab-core", editable = "pkgs/applab-core" },
-    { name = "applab-provider-qcloud", editable = "pkgs/applab-provider-qcloud" },
+    { name = "applab-vendor-tencentcloud", editable = "pkgs/applab-vendor-tencentcloud" },
 ]
 
 [package.metadata.requires-dev]
@@ -59,6 +59,8 @@ name = "applab-cli"
 version = "0.0.2.dev20251230153900"
 source = { editable = "pkgs/applab-cli" }
 dependencies = [
+    { name = "applab-core" },
+    { name = "applab-vendor-tencentcloud" },
     { name = "cyclopts" },
     { name = "pydantic" },
     { name = "requests" },
@@ -73,6 +75,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "applab-core", editable = "pkgs/applab-core" },
+    { name = "applab-vendor-tencentcloud", editable = "pkgs/applab-vendor-tencentcloud" },
     { name = "cyclopts", specifier = ">=4.4.0" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "requests", specifier = ">=2.32.5" },
@@ -109,7 +113,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "requests", specifier = ">=2.32.5" },
     { name = "rich", specifier = ">=14.2.0" },
-    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.12" },
+    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.23" },
 ]
 
 [package.metadata.requires-dev]
@@ -119,9 +123,9 @@ dev = [
 ]
 
 [[package]]
-name = "applab-provider-qcloud"
+name = "applab-vendor-tencentcloud"
 version = "0.0.2.dev20251230153900"
-source = { editable = "pkgs/applab-provider-qcloud" }
+source = { editable = "pkgs/applab-vendor-tencentcloud" }
 dependencies = [
     { name = "applab-core" },
     { name = "tencentcloud-sdk-python-common" },
@@ -136,7 +140,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "applab-core", editable = "pkgs/applab-core" },
-    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.12" },
+    { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.23" },
 ]
 
 [package.metadata.requires-dev]
@@ -695,14 +699,14 @@ wheels = [
 
 [[package]]
 name = "tencentcloud-sdk-python-common"
-version = "3.1.12"
+version = "3.1.23"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
 dependencies = [
     { name = "requests" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/47/d1/cf986b61efa8cdac03d096288797f4e39318365864ac1bb0b58ac2a6da8c/tencentcloud_sdk_python_common-3.1.12.tar.gz", hash = "sha256:4ad497e5cab7575d72afd0d6f33089d841fd6be35b7918d987dc0959f3e7704c", size = 22645, upload-time = "2025-12-13T11:31:45.418Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/8a/90/9936da8faa2e1ec8f9cccce3d3f86089d42c6f67b36e9dbfca5b78a1a6ce/tencentcloud_sdk_python_common-3.1.23.tar.gz", hash = "sha256:dbabbac6e612ae1fb1f3607d120fdc3e4bb1762c1c2d4834a31dc71f50a2e182", size = 22661, upload-time = "2025-12-30T21:08:38.997Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/3a/1f/ede39220dac458b4a1eea961ad3ed96170742527c0165c3f8d7a9bcc98e0/tencentcloud_sdk_python_common-3.1.12-py2.py3-none-any.whl", hash = "sha256:5148235e93ea622042c2924f834b2af4335b44a34e766329864cace467a044a5", size = 34264, upload-time = "2025-12-13T11:31:42.866Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/bd/62/7a1c5ad428e98e9bde829f16f287b3299bf373eb41c5b673ee60cc22687d/tencentcloud_sdk_python_common-3.1.23-py2.py3-none-any.whl", hash = "sha256:8fe22ed725b030f25632448799f944a61a0cdafdc0ecc8b1dc609c7bcbb04519", size = 34261, upload-time = "2025-12-30T21:08:37.156Z" },
 ]
 
 [[package]]

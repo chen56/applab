@@ -37,7 +37,7 @@ class Docker(App):
 
 
 project = Project(name="examples")
-provider = TencentCloudProvider(project=project)
-docker: DockerState = provider.apply(Docker(zone="tencentcloud/ap-shanghai-1"))
+vendor = TencentCloudProvider(project=project)
+docker: DockerState = vendor.apply(Docker(zone="tencentcloud/ap-shanghai-1"))
 print(docker.config.name)
-provider.remove(docker=docker)
+vendor.remove(docker=docker)

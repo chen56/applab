@@ -4,7 +4,7 @@
 
 目前只记录可能的概念，不是实现要求
 
-- provider
+- vendor
     - Capabilities & Labels 能力
         - [cpu_vm, gpu_vm, k8s, cfs, dns]
     - vm
@@ -26,9 +26,9 @@
             - topology
                 - mode: "cluster"
                 - min_nodes: 3
-            - provider:
-                - prefer: ["qcloud", "aws"]
-                - require: {include: ["qcloud", "aws","aliyun"]} #特殊app要求部署特殊云厂商
+            - vendor:
+                - prefer: ["tencentcloud", "aws"]
+                - require: {include: ["tencentcloud", "aws","aliyun"]} #特殊app要求部署特殊云厂商
             - os: Linux / Windows / macOS，glibc/musl
             - affinity: 暂时无
         - input param app可调整的参数
@@ -44,21 +44,21 @@
 ### cli 
 
 ```bash
-applab provider list
-applab provider info qcloud
-applab provider login qcloud
-applab zone list --provider qcloud
-applab install docker --provider qcloud --zone ap-shanghai-1
-applab app list --provider qcloud --zone ap-shanghai-1
-applab app list --provider qcloud
+applab vendor list
+applab vendor info tencentcloud
+applab vendor login tencentcloud
+applab zone list --vendor tencentcloud
+applab install docker --vendor tencentcloud --zone ap-shanghai-1
+applab app list --vendor tencentcloud --zone ap-shanghai-1
+applab app list --vendor tencentcloud
 
-applab providers list
-applab provider qcloud info
-applab provider qcloud login
-applab zone list --provider qcloud
-applab install docker --provider qcloud --zone ap-shanghai-1
-applab app list --provider qcloud --zone ap-shanghai-1
-applab app list --provider qcloud
+applab vendors list
+applab vendor tencentcloud info
+applab vendor tencentcloud login
+applab zone list --vendor tencentcloud
+applab install docker --vendor tencentcloud --zone ap-shanghai-1
+applab app list --vendor tencentcloud --zone ap-shanghai-1
+applab app list --vendor tencentcloud
 
 
 ```

@@ -15,7 +15,7 @@ requires-python = ">=3.12"
 dependencies = [
     "applab-core",
     "applab-cli",
-    "applab-provider-qcloud",
+    "applab-vendor-tencentcloud",
 ]
 
 [dependency-groups]
@@ -53,14 +53,9 @@ members = [
 
 
 [tool.uv.sources]
-# 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
-# 效果:
-#   - uv.lock： source = { editable = "pkgs/applab-core" }
-#   - 类似：uv pip install -e .
-# 需重启vscode
-applab-core = { workspace = true }
 applab-cli = { workspace = true }
-applab-provider-qcloud = { workspace = true }
+applab-core = { workspace = true }
+applab-vendor-tencentcloud = { workspace = true }
 
 [tool.uv]
 # workspace 根虽然没代码，但作为聚合包

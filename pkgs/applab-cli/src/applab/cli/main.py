@@ -2,9 +2,9 @@
 
 from cyclopts import App
 
-from .provider import provider_app
+from .vendor import account_app
 
-app = App()
+app = App(name="applab")
 
 # cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
 # Change the group of "--help" and "--version" to the implicitly created "Admin" group.
@@ -12,7 +12,7 @@ app["--help"].group = "Cli info options"
 app["--version"].group = "Cli info options"
 
 # Child app inherits parent's settings
-provider_app = app.command(provider_app, "provider",alias="p")
+account_app = app.command(account_app, "vendor", alias="p")
 
 
 @app.default()
@@ -23,15 +23,15 @@ def _root_cmd():
     ## Examples
 
     ```bash
-    applab provider list
-    applab provider info qcloud
-    applab provider login qcloud
-    applab zone list --provider qcloud
-    applab install docker --provider qcloud --zone ap-shanghai-1
-    applab x docker install --provider qcloud --zone ap-shanghai-1
+    applab vendor list
+    applab vendor info tencentcloud
+    applab vendor login tencentcloud
+    applab zone list --vendor tencentcloud
+    applab install docker --vendor tencentcloud --zone ap-shanghai-1
+    applab x docker install --vendor tencentcloud --zone ap-shanghai-1
 
-    applab app list --provider qcloud --zone ap-shanghai-1
-    applab app list --provider qcloud
+    applab app list --vendor tencentcloud --zone ap-shanghai-1
+    applab app list --vendor tencentcloud
     ```
 
     """

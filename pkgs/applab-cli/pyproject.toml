@@ -11,6 +11,8 @@ urls = { "homepage" = "https://github.com/chen56/applab" }
 
 requires-python = ">=3.12"
 dependencies = [
+    "applab-core",
+    "applab-vendor-tencentcloud",
     "cyclopts>=4.4.0",
     "pydantic>=2.12.5",
     "requests>=2.32.5",
@@ -39,3 +41,7 @@ dev = [
 namespace = false
 # PEP 420命名空间的module名需改为'.'分割，避免默认的'applab-core'
 module-name = "applab.cli"
+
+[tool.uv.sources]
+applab-core = { workspace = true }
+applab-vendor-tencentcloud = { workspace = true }

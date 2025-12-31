@@ -2,14 +2,14 @@ from typing import Annotated
 
 from pydantic import BaseModel
 
-from applab.core import TextField, ProviderBase
-
+from applab.core import TextField, VendorBase
 
 # ============================================================
-# 模拟 applab_apps 包（provider 实现）
+# 模拟 applab_apps 包（vendor 实现）
 # ============================================================
 
-class QCloudCredential(BaseModel):
+
+class TencentCloudCredential(BaseModel):
     secret_id: Annotated[
         str,
         TextField(
@@ -21,6 +21,7 @@ class QCloudCredential(BaseModel):
 
     secret_key: Annotated[str, TextField(label="SecretKey", type="password", help="Tencent Cloud API SecretKey")]
 
-class QCloudProvider(ProviderBase):
+
+class TencentCloudVendor(VendorBase):
     def __init__(self, name: str, version: str):
         super().__init__(name=name, version=version)

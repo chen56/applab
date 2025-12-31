@@ -59,19 +59,6 @@ check() {
 }
 
 
-clean() (
-  _run rm -rf .venv
-  _run rm -rf .ruff_cache
-  _run rm -rf build dist ./**/*.egg-info
-  _run rm -rf .pytest_cache .mypy_cache .coverage
-  _run find . \
-        -path "./.venv" -prune -o \
-        -path "./.git" -prune -o \
-        -path "./dist" -prune -o \
-        -name "__pycache__" -type d -exec rm -rf {} +
-  _run rm -rf .venv
-)
-
 info() {
   echo "sha run at: $(pwd)"
 }
@@ -84,6 +71,5 @@ info() {
 # 类似python的'if __name__ == "__main__"'
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   # 命令式执行的入口代码, 即'$ ./sha' 而不是'. ./sha'
-  echo '---------'
   sha "$@"
 fi

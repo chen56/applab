@@ -1,5 +1,5 @@
 [project]
-name = "applab-provider-qcloud"
+name = "applab-vendor-tencentcloud"
 version = "0.0.2dev20251230153900"
 license = { text = "MIT" }
 
@@ -11,7 +11,7 @@ urls = { "homepage" = "https://github.com/chen56/applab" }
 requires-python = ">=3.12"
 dependencies = [
     "applab-core",
-    "tencentcloud-sdk-python-common>=3.1.12",
+    "tencentcloud-sdk-python-common>=3.1.23",
 ]
 
 [build-system]
@@ -35,7 +35,7 @@ dev = [
 # namespace = true 会导致uv关掉安全检查，没搞懂啥意思，反正够乱的
 namespace = false
 # PEP 420命名空间的module名需改为'.'分割，避免默认的'applab-core'
-module-name = "applab.provider.qcloud"
+module-name = "applab.vendor.tencentcloud"
 
 [tool.uv.sources]
 applab-core = { workspace = true }

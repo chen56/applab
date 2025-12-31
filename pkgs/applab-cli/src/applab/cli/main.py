@@ -12,7 +12,7 @@ app["--help"].group = "Cli info options"
 app["--version"].group = "Cli info options"
 
 # Child app inherits parent's settings
-account_app = app.command(account_app, "vendor", alias="p")
+account_app = app.command(account_app, "vendor", alias="v")
 
 
 @app.default()

@@ -31,7 +31,7 @@ def list_():
 def info(vendor:str):
     """vendor metadata."""
     if vendor not in applab.runtimes:
-        cli.print_err(f"Vendor {vendor} not found.")
+        cli.error(f"Vendor {vendor} not found.")
         return 1  # 返回非零退出码表示失败
     cli.print(applab.runtimes[vendor])
 

@@ -42,6 +42,3 @@ namespace = false
 # PEP 420命名空间的module名需改为'.'分割，避免默认的'applab-core'
 module-name = "applab.cli"
 
-[tool.uv.sources]
-applab-core = { workspace = true }
-applab-vendor-tencentcloud = { workspace = true }

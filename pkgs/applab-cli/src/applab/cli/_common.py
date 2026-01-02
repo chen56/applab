@@ -1,11 +1,31 @@
-from typing import Any
+"""
+
+cli 颜色系统：
+
+Layer 1: Material 3 Color Roles（官方，不能改）
+  - primary / on_surface / on_surface_variant / outline ...
+
+Layer 2: Layer 2: Rich Theme (M3 Colors to Rich CLI)
+  - 这一层将 M3 色彩角色映射到 Rich CLI 的 Style(color=..., bgcolor=...)
+  - 严格选用Material 3的词汇，不扩展语义，只组合背景、前景色为主要style元素，名字也是第一层的名字（主要是背景名）
+
+Layer 3: Business Semantic Mapping
+  - 这一层为业务语义函数（如 info(), warn(), success(), error() 等），映射为第二层或第一层，加上特定的前缀或后缀来进行风格化处理。
+
+应用代码主要以使用Layer 3函数为主，无法表达时，可用Layer 2表达，而Layer 1只是颜色表，无法直接使用。
+
+"""
+
+from typing import Any, cast
+
 from rich.console import Console
 from typing import Dict, Literal
 from rich.style import Style
+from rich.text import Text
 from rich.theme import Theme
 
 # 定义标准 M3 角色类型（Color Tokens）
-M3_ROLE = Literal[
+_Material3_Color_Role_Name = Literal[
     # Primary
     "primary", "on_primary",
     "primary_container", "on_primary_container",
@@ -39,251 +59,213 @@ M3_ROLE = Literal[
     "scrim", "shadow"
 ]
 
-
-class _Material3Colors:
-    def __init__(self, *, dark: bool = True, high_contrast: bool = False):
-        self.dark = dark
-        self.high_contrast = high_contrast
-        self.roles = self._build()
-
-    def _build(self) -> Dict[M3_ROLE, str]:
-        if self.dark:
-            return {
-                "primary": "#D0BCFF" if not self.high_contrast else "#F3EDFF",
-                "on_primary": "#381E72",
-                "primary_container": "#4F378B",
-                "on_primary_container": "#EADDFF",
-
-                "secondary": "#CCC2DC",
-                "on_secondary": "#332D41",
-                "secondary_container": "#4A4458",
-                "on_secondary_container": "#E8DEF8",
-
-                "tertiary": "#EFB8C8",
-                "on_tertiary": "#492532",
-                "tertiary_container": "#633B48",
-                "on_tertiary_container": "#FFD8E4",
-
-                "error": "#F2B8B5",
-                "on_error": "#601410",
-                "error_container": "#8C1D18",
-                "on_error_container": "#F9DEDC",
-
-                "surface": "#1C1B1F",
-                "on_surface": "#E6E1E5" if not self.high_contrast else "#FFFFFF",
-                "surface_variant": "#49454F",
-                "on_surface_variant": "#CAC4D0",
-
-                "surface_container": "#2B2930",
-                "surface_container_high": "#36343B",
-                "surface_container_low": "#211F26",
-
-                "inverse_surface": "#FFFFFF" if not self.high_contrast else "#000000",
-                "on_inverse_surface": "#000000" if not self.high_contrast else "#FFFFFF",
-
-                "outline": "#938F99",
-
-                "scrim": "#000060",  # 半透明黑色遮罩层
-                "shadow": "#000040",  # 半透明黑色阴影
-            }
-        else:
-            return {
-                "primary": "#6750A4",
-                "on_primary": "#FFFFFF",
-                "primary_container": "#EADDFF",
-                "on_primary_container": "#21005D",
-
-                "secondary": "#625B71",
-                "on_secondary": "#FFFFFF",
-                "secondary_container": "#E8DEF8",
-                "on_secondary_container": "#1D192B",
-
-                "tertiary": "#7D5260",
-                "on_tertiary": "#FFFFFF",
-                "tertiary_container": "#FFD8E4",
-                "on_tertiary_container": "#31111D",
-
-                "error": "#B3261E",
-                "on_error": "#FFFFFF",
-                "error_container": "#F9DEDC",
-                "on_error_container": "#410E0B",
-
-                "surface": "#FFFBFE",
-                "on_surface": "#1C1B1F",
-                "surface_variant": "#E7E0EB",
-                "on_surface_variant": "#49454F",
-
-                "surface_container": "#F3EDF7",
-                "surface_container_high": "#ECE6F0",
-                "surface_container_low": "#F7F2FA",
-
-                "inverse_surface": "#1C1B1F",
-                "on_inverse_surface": "#FFFFFF",
-
-                "outline": "#79747E",
-
-                "scrim": "#000060",  # 半透明黑色遮罩层
-                "shadow": "#000040",  # 半透明黑色阴影
-            }
-
-    def to_rich_theme(self) -> Theme:
-        c = self.roles
-        return Theme({
-            # Primary / Secondary actions
-            "primary": Style(color=c["on_primary"], bgcolor=c["primary"]),
-            "primary.container": Style(
-                color=c["on_primary_container"], bgcolor=c["primary_container"]
-            ),
-
-            "secondary": Style(color=c["on_secondary"], bgcolor=c["secondary"]),
-            "secondary.container": Style(
-                color=c["on_secondary_container"], bgcolor=c["secondary_container"]
-            ),
-
-            # Tertiary
-            "tertiary": Style(color=c["on_tertiary"], bgcolor=c["tertiary"]),
-            "tertiary.container": Style(
-                color=c["on_tertiary_container"], bgcolor=c["tertiary_container"]
-            ),
-
-            # Error
-            "error": Style(color=c["on_error"], bgcolor=c["error"]),
-            "error.container": Style(
-                color=c["on_error_container"], bgcolor=c["error_container"]
-            ),
-
-            # Surfaces
-            "surface": Style(color=c["on_surface"], bgcolor=c["surface"]),
-            "surface.variant": Style(
-                color=c["on_surface_variant"], bgcolor=c["surface_variant"]
-            ),
-
-            # Surface containers (elevation)
-            "surface.container": Style(
-                color=c["on_surface"], bgcolor=c["surface_container"]
-            ),
-            "surface.container.high": Style(
-                color=c["on_surface"], bgcolor=c["surface_container_high"]
-            ),
-            "surface.container.low": Style(
-                color=c["on_surface"], bgcolor=c["surface_container_low"]
-            ),
-
-            # Inverse surfaces
-            "inverse_surface": Style(color=c["on_inverse_surface"], bgcolor=c["inverse_surface"]),
-
-            # Outline / divider
-            "outline": Style(color=c["outline"]),
-
-            # Shadow and scrim
-            "scrim": Style(color=c["scrim"], bgcolor=c["scrim"]),
-            "shadow": Style(color=c["shadow"], bgcolor=c["shadow"]),
-        })
+_RichStyleName = Literal[
+    "primary", "primary_container", "secondary", "secondary_container",
+    "tertiary", "tertiary_container", "error", "error_container",
+    "surface", "surface_variant", "surface_container", "surface_container_high",
+    "surface_container_low", "inverse_surface", "outline", "scrim", "shadow"
+]
 
 
-UXSemantic = Literal["success", "warning", "info", "error", "input"]
+def _build_material3_color_roles(*, dark: bool) -> Dict[_Material3_Color_Role_Name, str]:
+    if dark:
+        return {
+            # Primary (主色)
+            "primary": "#2979FF",  # 蓝色 #2979FF (Vibrant Blue)
+            "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
+            "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
+            "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
 
-# 默认映射值，作为对象初始化的默认参数
-_DEFAULT_MAP: Dict[UXSemantic, str] = {
-    # No semantic color in M3 → mapped roles
-    "success": "primary",
-    "warning": "tertiary",
-    "info": "surface_variant",
-    # The only true semantic color in M3
-    "error": "error",
-    "input": "surface",
-}
+            # Secondary (次要色)
+            "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
+            "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
+            "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
+            "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
 
-_DEFAULT_PREFIX: Dict[UXSemantic, str] = {
-    "success": "[OK]",
-    "warning": "[WARN]",
-    "info": "[INFO]",
-    "error": "[ERROR]",
-    "input": "[*]",
-}
+            # Tertiary (第三色)
+            "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
+            "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
+            "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
+            "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
+
+            # Error (错误色)
+            "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
+            "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
+            "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
+            "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
+
+            # Surface (背景色)
+            "surface": "#121212",  # 深灰 #121212 (Deep Grey)
+            "on_surface": "#E6E1E5",  # 白色 (On Surface: text on surface)
+            "surface_variant": "#49454F",  # 深灰紫 #49454F (Greyish Purple)
+            "on_surface_variant": "#CAC4D0",  # 淡灰色 #CAC4D0 (Light Grey)
+
+            # Surface Containers (容器背景)
+            "surface_container": "#2B2930",  # 深灰色 #2B2930 (Dark Grey)
+            "surface_container_high": "#36343B",  # 更深灰色 #36343B (Darker Grey)
+            "surface_container_low": "#211F26",  # 深棕色 #211F26 (Deep Brown)
+
+            # Inverse Surface (反转背景)
+            "inverse_surface": "#FFFFFF",  # 白色 (Inverse Surface: 白色背景)
+            "on_inverse_surface": "#000000",  # 黑色 (On Inverse Surface: 黑色文字)
+
+            # Outline (轮廓)
+            "outline": "#B3B3B3",  # 浅灰 #B3B3B3 (Light Grey Outline)
+
+            # Scrim & Shadow (遮罩与阴影)
+            "scrim": "#000080",  # 半透明黑色遮罩层
+            "shadow": "#000060",  # 半透明黑色阴影
+        }
+    else:
+        return {
+            # Primary (主色)
+            "primary": "#2979FF",  # 蓝色 #2979FF (Vibrant Blue)
+            "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
+            "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
+            "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
+
+            # Secondary (次要色)
+            "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
+            "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
+            "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
+            "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
+
+            # Tertiary (第三色)
+            "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
+            "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
+            "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
+            "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
+
+            # Error (错误色)
+            "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
+            "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
+            "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
+            "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
+
+            # Surface (背景色)
+            "surface": "#FFFBFE",  # 浅灰色 #FFFBFE (Light Grey)
+            "on_surface": "#1C1B1F",  # 深灰色 #1C1B1F (On Surface: text on surface)
+            "surface_variant": "#E7E0EB",  # 浅紫灰色 #E7E0EB (Light Purple Grey)
+            "on_surface_variant": "#49454F",  # 深灰紫 #49454F (Dark Grey Purple)
+
+            # Surface Containers (容器背景)
+            "surface_container": "#F3EDF7",  # 浅紫色 #F3EDF7 (Light Purple)
+            "surface_container_high": "#ECE6F0",  # 更浅紫色 #ECE6F0 (Lighter Purple)
+            "surface_container_low": "#F7F2FA",  # 浅灰紫色 #F7F2FA (Light Grey Purple)
+
+            # Inverse Surface (反转背景)
+            "inverse_surface": "#1C1B1F",  # 黑色 (Inverse Surface: 黑色背景)
+            "on_inverse_surface": "#FFFFFF",  # 白色 (On Inverse Surface: 白色文字)
+
+            # Outline (轮廓)
+            "outline": "#79747E",  # 深灰 #79747E (Deep Grey Outline)
+
+            # Scrim & Shadow (遮罩与阴影)
+            "scrim": "#000080",  # 半透明黑色遮罩层 #00000080 (Semi-transparent Black)
+            "shadow": "#000060",  # 半透明阴影 #00000060 (Semi-transparent Shadow)
+        }
 
 
-class UXSemanticMapper:
-    """
-    Maps UX semantics to Material 3 color roles.
-
-    This is a policy, NOT a design system.
-    """
-
-    def __init__(self,
-                 map_: Dict[UXSemantic, str] | None = None,
-                 prefix: Dict[UXSemantic, str] | None = None):
-        """
-        初始化UXSemanticMapper实例
-
-        Args:
-            map_: UX语义到M3颜色角色的映射字典（默认为DEFAULT_MAP）
-            prefix: UX语义到前缀的映射字典（默认为DEFAULT_PREFIX）
-        """
-        self.map = map_ or _DEFAULT_MAP
-        self.prefix = prefix or _DEFAULT_PREFIX
-
-    def style_for(self, semantic: UXSemantic) -> str:
-        """
-        根据UX语义返回对应的M3颜色角色
-
-        Args:
-            semantic: UX语义类型
-
-        Returns:
-            对应的M3颜色角色字符串
-        """
-        return self.map[semantic]
-
-    def prefix_for(self, semantic: UXSemantic) -> str:
-        """
-        根据UX语义返回对应的前缀
-
-        Args:
-            semantic: UX语义类型
-
-        Returns:
-            对应的前缀字符串
-        """
-        return self.prefix[semantic]
+def _to_rich_theme(*, roles) -> Theme:
+    c = roles
+    styles: Dict[_RichStyleName, Style] = {
+        "primary": Style(color=c["on_primary"], bgcolor=c["primary"]),
+        "primary_container": Style(color=c["on_primary_container"], bgcolor=c["primary_container"]),
+        "secondary": Style(color=c["on_secondary"], bgcolor=c["secondary"]),
+        "secondary_container": Style(color=c["on_secondary_container"], bgcolor=c["secondary_container"]),
+        "tertiary": Style(color=c["on_tertiary"], bgcolor=c["tertiary"]),
+        "tertiary_container": Style(color=c["on_tertiary_container"], bgcolor=c["tertiary_container"]),
+        "error": Style(color=c["on_error"], bgcolor=c["error"]),
+        "error_container": Style(color=c["on_error_container"], bgcolor=c["error_container"]),
+        "surface": Style(color=c["on_surface"], bgcolor=c["surface"]),
+        "surface_variant": Style(color=c["on_surface_variant"], bgcolor=c["surface_variant"]),
+        "surface_container_low": Style(color=c["on_surface"], bgcolor=c["surface_container_low"]),
+        "surface_container": Style(color=c["on_surface"], bgcolor=c["surface_container"]),
+        "surface_container_high": Style(color=c["on_surface"], bgcolor=c["surface_container_high"]),
+        "inverse_surface": Style(color=c["on_inverse_surface"], bgcolor=c["inverse_surface"]),
+        "outline": Style(color=c["outline"]),
+        "scrim": Style(bgcolor=c["scrim"]),
+        "shadow": Style(bgcolor=c["shadow"]),
+    }
+    return Theme(styles=cast(Dict[str, Style], styles))
 
 
 class Cli:
-    def __init__(self) -> None:
-        theme = _Material3Colors(dark=True, high_contrast=False).to_rich_theme()
-        self.console = Console(theme=theme, color_system="standard")
-        self.console_err = Console(stderr=True, theme=theme)
-        self.uxSemantic = UXSemanticMapper()
+    def __init__(self, *, dark: bool = False):
+        # Layer 1 Material 3 Color Roles
+        m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
+        # Layer 2: Rich Theme (M3 Colors to Rich CLI)
+        self._rich_theme = _to_rich_theme(roles=m3_color_roles)
+
+        # Layer 3: Business Semantic Mapping : success()/info() function
+
+        self.console = Console(theme=self._rich_theme, color_system="truecolor")
+        self.console_err = Console(stderr=True, theme=self._rich_theme, color_system="truecolor")
+
+    def rich_style(self, name: _RichStyleName) -> Style:
+        return self._rich_theme.styles[name]
 
     def print(self, *objects: Any) -> None:
         self.console.print(*objects)
 
-    def error(self, *objects: Any) -> None:
-        self.console_err.print(self.uxSemantic.prefix_for("error"), *objects)
+    def success(self, *objects: Any) -> None:
+        self.console_err.print(self._text(*objects, prefix="🟢 ", style="primary"))
+
+    def warn(self, *objects: Any) -> None:
+        self.console_err.print(self._text(*objects, prefix="⚠️ ", style="tertiary"))
 
     def info(self, *objects: Any) -> None:
-        self.console.print(self.uxSemantic.prefix_for("info"), *objects)
+        self.console_err.print(self._text(*objects, prefix="ℹ️ ", style="surface_variant"))
 
-    def success(self, *objects: Any) -> None:
-        self.console.print(self.uxSemantic.prefix_for("success"), *objects)
+    def input(self, *objects: Any) -> None:
+        self.console_err.print(self._text(*objects, prefix="🧷 ", style="surface"))
 
-    def warning(self, *objects: Any) -> None:
-        self.console.print(self.uxSemantic.prefix_for("warning"), *objects)
+    def error(self, *objects: Any) -> None:
+        self.console_err.print(self._text(*objects, prefix="🔴 ", style="error"))
+
+    def _text(self, *objects: Any, prefix: str, style: _RichStyleName) -> Text:
+        text = Text(prefix, style="default")  # 图标使用默认背景
+        content = " ".join(map(str, objects))
+        text.append(content, style=self.rich_style(style))
+        return text
 
 
 cli = Cli()
 
+# 假设已导入所有相关类和模块
+
+cli = Cli()
+
 if __name__ == "__main__":
-    cli.print("[primary]INSTALL[/]")
-    cli.print("[primary.container]INSTALL[/]")
+    # 打印不同颜色角色的测试
+    cli.print("[primary]Primary Color[/]")
+    cli.print("[primary_container]Primary Container Color[/]")
 
-    cli.print("[surface.container.high]Created at 2025-01-01[/]")
-    cli.print("[error]Failed[/]")
-    cli.print("[surface.container.low] Cluster Ready [/]")
+    cli.print("[secondary]Secondary Color[/]")
+    cli.print("[secondary_container]Secondary Container Color[/]")
 
-    cli.print("[tertiary]This is tertiary color[/]")
-    cli.print("[tertiary.container]This is tertiary container color[/]")
+    cli.print("[tertiary]Tertiary Color[/]")
+    cli.print("[tertiary_container]Tertiary Container Color[/]")
 
-    cli.print("[inverse_surface]This is inverse surface[/]")
-    cli.print("[scrim]This is a scrim overlay[/]")
-    cli.print("[shadow]This is shadow[/]")
+    cli.print("[error]Error Color[/]")
+    cli.print("[error_container]Error Container Color[/]")
+
+    cli.print("[surface]Surface Color[/]")
+    cli.print("[surface_variant]Surface Variant Color[/]")
+
+    cli.print("[surface_container]Surface Container Color[/]")
+    cli.print("[surface_container_high]Surface Container High Color[/]")
+    cli.print("[surface_container_low]Surface Container Low Color[/]")
+
+    cli.print("[inverse_surface]Inverse Surface Color[/]")
+
+    cli.print("[outline]Outline Color[/]")
+    cli.print("[scrim]Scrim Overlay Color[/]")
+    cli.print("[shadow]Shadow Color[/]")
+
+    # Layer 3 层使用范例
+    cli.success("This is success message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    cli.warn("This is warn message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    cli.info("This is info message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    cli.input("This is input message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    cli.error("This is error message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")

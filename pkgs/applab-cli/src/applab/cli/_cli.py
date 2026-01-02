@@ -1,6 +1,8 @@
 """
 
-cli 颜色系统：
+# cli 工具
+
+## 颜色系统：
 
 Layer 1: Material 3 Color Roles（官方，不能改）
   - primary / on_surface / on_surface_variant / outline ...
@@ -237,33 +239,33 @@ cli = Cli()
 cli = Cli()
 
 if __name__ == "__main__":
-    # 打印不同颜色角色的测试
-    cli.print("[primary]Primary Color[/]")
-    cli.print("[primary_container]Primary Container Color[/]")
+    cli.print("## 颜色系统Layer 2 层使用范例")
+    cli.print("[primary]primary[/]")
+    cli.print("[primary_container]primary_container[/]")
 
-    cli.print("[secondary]Secondary Color[/]")
-    cli.print("[secondary_container]Secondary Container Color[/]")
+    cli.print("[secondary]secondary[/]")
+    cli.print("[secondary_container]secondary_container[/]")
 
-    cli.print("[tertiary]Tertiary Color[/]")
-    cli.print("[tertiary_container]Tertiary Container Color[/]")
+    cli.print("[tertiary]tertiary[/]")
+    cli.print("[tertiary_container]tertiary_container[/]")
 
-    cli.print("[error]Error Color[/]")
-    cli.print("[error_container]Error Container Color[/]")
+    cli.print("[error]error[/]")
+    cli.print("[error_container]error_container[/]")
 
-    cli.print("[surface]Surface Color[/]")
-    cli.print("[surface_variant]Surface Variant Color[/]")
+    cli.print("[surface]surface[/]")
+    cli.print("[surface_variant]surface_variant[/]")
 
-    cli.print("[surface_container]Surface Container Color[/]")
-    cli.print("[surface_container_high]Surface Container High Color[/]")
-    cli.print("[surface_container_low]Surface Container Low Color[/]")
+    cli.print("[surface_container]surface_container[/]")
+    cli.print("[surface_container_high]surface_container_high[/]")
+    cli.print("[surface_container_low]surface_container_low[/]")
 
-    cli.print("[inverse_surface]Inverse Surface Color[/]")
+    cli.print("[inverse_surface]inverse_surface[/]")
 
-    cli.print("[outline]Outline Color[/]")
-    cli.print("[scrim]Scrim Overlay Color[/]")
-    cli.print("[shadow]Shadow Color[/]")
+    cli.print("[outline]outline[/]")
+    cli.print("[scrim]scrim[/]")
+    cli.print("[shadow]shadow[/]")
 
-    # Layer 3 层使用范例
+    cli.print("## 颜色系统Layer 3 层使用范例")
     cli.success("This is success message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
     cli.warn("This is warn message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
     cli.info("This is info message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")

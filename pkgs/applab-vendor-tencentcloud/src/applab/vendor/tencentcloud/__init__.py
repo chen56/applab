@@ -5,7 +5,8 @@ Tencent Cloud Provider
 """
 
 from .vendor import TencentCloudVendor
-
+from .aliyun import AliyunVendor
 __all__ = [
     "TencentCloudVendor",
+    "AliyunVendor",
 ]

@@ -3,11 +3,15 @@
 没有export的模块，只提供cli的入口函数。
 """
 
-from .main import main
+version = "0.0.1"
+
 from applab.core import applab
 from applab.vendor import tencentcloud
 
-version = "0.0.1"
-applab.runtimes.register(tencentcloud.TencentCloudVendor(name="tencentcloud", version=version))
+applab.vendors.register(tencentcloud.TencentCloudVendor(name="tencentcloud", version=version))
+applab.vendors.register(tencentcloud.AliyunVendor(name="aliyun", version=version))
+
+from .main import main
+
 
 __all__ = ["main"]

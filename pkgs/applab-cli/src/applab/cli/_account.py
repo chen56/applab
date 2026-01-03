@@ -23,8 +23,8 @@ def list_():
     table.add_column("Vendor")
     table.add_column("Version")
 
-    for vendor in applab.vendors.values():
-        table.add_row(vendor.name, vendor.version)
+    for v in applab.vendors.values():
+        table.add_row(v.name, v.version)
     console.print(table)
 
 
@@ -45,7 +45,6 @@ login_app = App(
 Cloud vendor account login.
 """,
 )
-
 
 # 动态为每个云厂商生成登录命令
 for vendor in applab.vendors.values():

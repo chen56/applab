@@ -1,15 +1,24 @@
 from abc import ABC
 from abc import abstractmethod
+from typing import Type
 
 from applab.core import BaseParamModel
 
 
-class BaseCredentialModel(BaseParamModel):
+class BaseCredential(BaseParamModel):
     pass
 
 class _BaseAuthenticator(ABC):
+    @property
     @abstractmethod
-    def authenticate(self, credential: BaseCredentialModel):
+    def credential_type(self) -> Type[BaseCredential]:
+        """
+        抽象属性：子类必须覆盖此属性，并返回对应的 Credential Model 类型。
+        注意：返回的是类本身 (Type)，而不是实例。
+        """
+        pass
+    @abstractmethod
+    def authenticate(self, credential: BaseCredential):
         pass
 
 class BaseAKSKAuthenticator(_BaseAuthenticator, ABC):

@@ -1,9 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Type
 
 from pydantic import Field
 from pydantic.types import SecretStr
 
-from applab.core import BaseAKSKAuthenticator, BaseCredentialModel
+from applab.core import BaseAKSKAuthenticator, BaseCredential
 from applab.core import BaseVendor
 
 
@@ -20,11 +20,15 @@ class TencentCloudVendor(BaseVendor):
         )
 
 
-class TencentCloudCredential(BaseCredentialModel):
+class TencentCloudAKSKCredential(BaseCredential):
     secret_id: Annotated[str, Field(title="SecretId", description="Tencent Cloud API SecretId")]
     secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
 
 
 class TencentCloudAuthenticator(BaseAKSKAuthenticator):
-    def authenticate(self, credential: TencentCloudCredential):
+    @property
+    def credential_type(self) -> Type[TencentCloudAKSKCredential]:
+        return TencentCloudAKSKCredential
+
+    def authenticate(self, credential: TencentCloudAKSKCredential):
         pass

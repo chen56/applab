@@ -5,7 +5,7 @@
 
 from ._param_model import BaseParamModel, TextField, UIField
 from ._base import BaseVendor, VendorRegister, Applab
-from ._auth import BaseCredentialModel, BaseAKSKAuthenticator
+from ._auth import BaseCredential, BaseAKSKAuthenticator
 
 applab = Applab()
 
@@ -21,6 +21,6 @@ __all__ = [
     "applab",
 
     # _auth
-    "BaseCredentialModel",
+    "BaseCredential",
     "BaseAKSKAuthenticator",
 ]

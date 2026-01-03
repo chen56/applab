@@ -2,7 +2,7 @@ from cyclopts import App
 
 from applab.core import applab
 
-from ._common import cli
+from ._console import console
 
 account_app = App(
     name="account",
@@ -11,6 +11,7 @@ Cloud vendor account management.
 """,
 )
 
+
 @account_app.command(name="list")
 def list_():
     """
@@ -18,24 +19,26 @@ def list_():
     """
     from rich.table import Table
 
-    table = Table(title="Demo Table", show_lines=True)
-    table.add_column("Name")
+    table = Table(title="account table", show_lines=True)
+    table.add_column("Vendor")
     table.add_column("Version")
 
     for vendor in applab.runtimes.values():
         table.add_row(vendor.name, vendor.version)
-    print(table)
+    console.print(table)
 
 
 @account_app.command
-def info(vendor:str):
+def info(vendor: str):
     """vendor metadata."""
     if vendor not in applab.runtimes:
-        cli.error(f"Vendor {vendor} not found.")
+        console.error(f"Vendor {vendor} not found.")
         return 1  # 返回非零退出码表示失败
-    cli.print(applab.runtimes[vendor])
+    console.print(applab.runtimes[vendor])
+    return 0
+
 
 @account_app.command
-def login(path, url):
+def login():
     """Upload a file."""
-    print(f"Downloading {url} to {path}.")
+    console.info(f"Downloading .")

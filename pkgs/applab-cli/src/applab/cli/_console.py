@@ -192,7 +192,7 @@ def _to_rich_theme(*, roles) -> Theme:
     return Theme(styles=cast(Dict[str, Style], styles))
 
 
-class Cli:
+class _Console:
     def __init__(self, *, dark: bool = False):
         # Layer 1 Material 3 Color Roles
         m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
@@ -232,42 +232,38 @@ class Cli:
         return text
 
 
-cli = Cli()
-
-# 假设已导入所有相关类和模块
-
-cli = Cli()
+console = _Console()
 
 if __name__ == "__main__":
-    cli.print("## 颜色系统Layer 2 层使用范例")
-    cli.print("[primary]primary[/]")
-    cli.print("[primary_container]primary_container[/]")
+    console.print("## 颜色系统Layer 2 层使用范例")
+    console.print("[primary]primary[/]")
+    console.print("[primary_container]primary_container[/]")
 
-    cli.print("[secondary]secondary[/]")
-    cli.print("[secondary_container]secondary_container[/]")
+    console.print("[secondary]secondary[/]")
+    console.print("[secondary_container]secondary_container[/]")
 
-    cli.print("[tertiary]tertiary[/]")
-    cli.print("[tertiary_container]tertiary_container[/]")
+    console.print("[tertiary]tertiary[/]")
+    console.print("[tertiary_container]tertiary_container[/]")
 
-    cli.print("[error]error[/]")
-    cli.print("[error_container]error_container[/]")
+    console.print("[error]error[/]")
+    console.print("[error_container]error_container[/]")
 
-    cli.print("[surface]surface[/]")
-    cli.print("[surface_variant]surface_variant[/]")
+    console.print("[surface]surface[/]")
+    console.print("[surface_variant]surface_variant[/]")
 
-    cli.print("[surface_container]surface_container[/]")
-    cli.print("[surface_container_high]surface_container_high[/]")
-    cli.print("[surface_container_low]surface_container_low[/]")
+    console.print("[surface_container]surface_container[/]")
+    console.print("[surface_container_high]surface_container_high[/]")
+    console.print("[surface_container_low]surface_container_low[/]")
 
-    cli.print("[inverse_surface]inverse_surface[/]")
+    console.print("[inverse_surface]inverse_surface[/]")
 
-    cli.print("[outline]outline[/]")
-    cli.print("[scrim]scrim[/]")
-    cli.print("[shadow]shadow[/]")
+    console.print("[outline]outline[/]")
+    console.print("[scrim]scrim[/]")
+    console.print("[shadow]shadow[/]")
 
-    cli.print("## 颜色系统Layer 3 层使用范例")
-    cli.success("This is success message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
-    cli.warn("This is warn message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
-    cli.info("This is info message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
-    cli.input("This is input message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
-    cli.error("This is error message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.print("## 颜色系统Layer 3 层使用范例")
+    console.success("This is success message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.warn("This is warn message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.info("This is info message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.input("This is input message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.error("This is error message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")

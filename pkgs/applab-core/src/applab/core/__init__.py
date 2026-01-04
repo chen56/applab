@@ -4,10 +4,8 @@
 """
 
 from ._param_model import BaseParamModel, TextField, UIField
-from ._base import BaseVendor, VendorRegister, Applab
-from ._auth import BaseCredential, BaseAKSKAuthenticator
-
-applab = Applab()
+from ._base import Vendor, VendorRegister, Applab
+from ._auth import CredentialParam, Authenticator
 
 __all__ = [
     # _arg_model
@@ -16,11 +14,10 @@ __all__ = [
     "UIField",
 
     # _base
-    "BaseVendor",
+    "Vendor",
     "VendorRegister",
-    "applab",
 
     # _auth
-    "BaseCredential",
-    "BaseAKSKAuthenticator",
+    "CredentialParam",
+    "Authenticator",
 ]

@@ -2,34 +2,36 @@ from typing import Annotated, Type
 
 from pydantic import SecretStr, Field
 
-from applab.core import BaseAKSKAuthenticator, BaseCredential
-from applab.core import BaseVendor
+from applab.core import CredentialParam
+from applab.core import Vendor
+from applab.core import Authenticator
 
 
 # ============================================================
 # 模拟 applab_apps 包（vendor 实现）
 # ============================================================
 
-class AliyunAKSKCredential(BaseCredential):
+class AliyunAKSKCredentialParam(CredentialParam):
     access_key_id: Annotated[str, Field(title="AccessKey ID", description="Aliyun Cloud API AccessKey ID")]
     access_key_secret: Annotated[
         SecretStr, Field(title="AccessKey Secret", description="Aliyun Cloud API AccessKey Secret")]
 
 
-class AliyunAKSKAuthenticator(BaseAKSKAuthenticator):
+class AliyunAKSKAuthenticator(Authenticator):
     @property
-    def credential_type(self) -> Type[AliyunAKSKCredential]:
-        return AliyunAKSKCredential
+    def credential_type(self) -> Type[AliyunAKSKCredentialParam]:
+        return AliyunAKSKCredentialParam
 
-    def authenticate(self, credential: AliyunAKSKCredential):
+    def authenticate(self, credential: AliyunAKSKCredentialParam):
         pass
 
 
-class AliyunVendor(BaseVendor):
+class AliyunVendor(Vendor):
 
-    def __init__(self, name: str, version: str):
+    def __init__(self, version: str):
         super().__init__(
-            name=name,
+            name="aliyun",
+            display_name="阿里云",
             version=version,
-            aksk_authenticator=AliyunAKSKAuthenticator(),
+            default_authenticator=AliyunAKSKAuthenticator(),
         )

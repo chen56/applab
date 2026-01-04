@@ -2,7 +2,7 @@
 
 from cyclopts import App
 
-from ._account import account_app
+from ._cmd_account import account_app
 
 app = App(name="applab")
 
@@ -13,6 +13,7 @@ app["--version"].group = "Cli info options"
 
 # Child app inherits parent's settings
 account_app = app.command(account_app)
+
 
 @app.default()
 def _root_cmd():
@@ -42,6 +43,5 @@ def main():
     app()
 
 
-#
 if __name__ == "__main__":
-    main()
+    app()

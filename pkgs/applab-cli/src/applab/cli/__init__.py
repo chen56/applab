@@ -5,13 +5,13 @@
 
 version = "0.0.1"
 
-from applab.core import applab
+from applab.core import Applab
 from applab.vendor import tencentcloud
 
-applab.vendors.register(tencentcloud.TencentCloudVendor(name="tencentcloud", version=version))
-applab.vendors.register(tencentcloud.AliyunVendor(name="aliyun", version=version))
+applab = Applab()
+applab.vendors.register(tencentcloud.TencentCloudVendor(version=version))
+applab.vendors.register(tencentcloud.AliyunVendor(version=version))
 
 from .main import main
-
 
 __all__ = ["main"]

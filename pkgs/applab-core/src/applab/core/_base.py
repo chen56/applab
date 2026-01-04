@@ -1,20 +1,21 @@
-from ._auth import _BaseAuthenticator, BaseAKSKAuthenticator
-from abc import abstractmethod
 import json
 from abc import ABC
 from collections.abc import Mapping
 
+from ._auth import Authenticator
 
-class BaseVendor(ABC):
+class Vendor(ABC):
     def __init__(self,
                  name: str,
+                 display_name: str,
                  version: str = "0.0.1",
-                 aksk_authenticator: BaseAKSKAuthenticator = None,
+                 default_authenticator: Authenticator = None,
                  ):
         # 实例属性（可变字段）
         self.name = name
+        self.display_name = display_name
         self.version = version
-        self.aksk_authenticator = aksk_authenticator
+        self.default_authenticator = default_authenticator
 
     def info(self) -> dict:
         """返回 vendor 信息字典."""
@@ -27,18 +28,18 @@ class BaseVendor(ABC):
         return json.dumps(self.info())
 
 
-class VendorRegister(Mapping):
+class VendorRegister(Mapping[str, Vendor]):
     """只读 Provider 注册表."""
 
     def __init__(self):
-        self._registry: dict[str, BaseVendor] = {}
+        self._registry: dict[str, Vendor] = {}
 
-    def register(self, vendor: BaseVendor):
+    def register(self, vendor: Vendor):
         """注册 Provider 类."""
         self._registry[vendor.name] = vendor
 
     # Mapping 接口
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Vendor:
         return self._registry[key]
 
     def __iter__(self):
@@ -50,5 +51,5 @@ class VendorRegister(Mapping):
 
 class Applab:
     def __init__(self):
-        self.vendors = VendorRegister()
-
+        self.vendors: VendorRegister = VendorRegister()
+        self.vendors: VendorRegister = VendorRegister()

@@ -5,23 +5,23 @@ from typing import Type
 from applab.core import BaseParamModel
 
 
-class BaseCredential(BaseParamModel):
+class CredentialParam(BaseParamModel):
     pass
 
-class _BaseAuthenticator(ABC):
+class Authenticator(ABC):
     @property
     @abstractmethod
-    def credential_type(self) -> Type[BaseCredential]:
+    def credential_type(self) -> Type[CredentialParam]:
         """
         抽象属性：子类必须覆盖此属性，并返回对应的 Credential Model 类型。
         注意：返回的是类本身 (Type)，而不是实例。
         """
         pass
     @abstractmethod
-    def authenticate(self, credential: BaseCredential):
+    def authenticate(self, credential: CredentialParam):
         pass
 
-class BaseAKSKAuthenticator(_BaseAuthenticator, ABC):
+class AKSKAuthenticator(Authenticator, ABC):
     """
     AK/SK 的定义与起源:
     AK/SK 最早由 AWS（亚马逊云）定义，后被阿里云、华为云、百度智能云等主流云厂商沿用，成为**云服务 API 认证的通用术语**。

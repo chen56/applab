@@ -48,9 +48,27 @@ class TencentCloudAKSKAuthenticator(Authenticator):
     * **权限建议**：为了安全起见，建议创建一个 **子账号 (User)** 并仅授予该子账号必要的资源操作权限（如 `QcloudCVMFullAccess`），然后为该子账号创建 API 密钥。
 
     """
+
     @property
     def credential_type(self) -> Type[TencentCloudAKSKCredentialParam]:
         return TencentCloudAKSKCredentialParam
 
-    def authenticate(self, credential: TencentCloudAKSKCredentialParam):
-        pass
+    def authenticate(self, credential_param: TencentCloudAKSKCredentialParam):
+        from tencentcloud.common import credential
+        from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+        from tencentcloud.cvm.v20170312 import cvm_client, models as cvm_models
+
+        try:
+            # 1. 实例化认证对象
+            cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
+
+            # 2. 实例化要请求产品的 client 对象
+            client = cvm_client.CvmClient(cred, "ap-hongkong")
+
+            # 3. 构造一个简单的请求来验证登录是否成功
+            request = cvm_models.DescribeRegionsRequest()
+            client.DescribeRegions(request)
+            # todo exception handling & async support
+        except TencentCloudSDKException as err:
+            print(f"登录失败: {err}")
+            raise err

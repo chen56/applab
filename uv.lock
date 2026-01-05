@@ -128,7 +128,10 @@ version = "0.0.2.dev20251230153900"
 source = { editable = "pkgs/applab-vendor-tencentcloud" }
 dependencies = [
     { name = "applab-core" },
+    { name = "tencentcloud-sdk-python-cam" },
     { name = "tencentcloud-sdk-python-common" },
+    { name = "tencentcloud-sdk-python-cvm" },
+    { name = "tencentcloud-sdk-python-tag" },
 ]
 
 [package.dev-dependencies]
@@ -140,7 +143,10 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "applab-core", editable = "pkgs/applab-core" },
+    { name = "tencentcloud-sdk-python-cam", specifier = ">=3.1.20" },
     { name = "tencentcloud-sdk-python-common", specifier = ">=3.1.23" },
+    { name = "tencentcloud-sdk-python-cvm", specifier = ">=3.1.14" },
+    { name = "tencentcloud-sdk-python-tag", specifier = ">=3.0.1481" },
 ]
 
 [package.metadata.requires-dev]
@@ -698,6 +704,18 @@ wheels = [
 ]
 
 [[package]]
+name = "tencentcloud-sdk-python-cam"
+version = "3.1.20"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
+dependencies = [
+    { name = "tencentcloud-sdk-python-common" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ae/7c/d176effb79a7ee7b549fe4f70f52241a71e00169b02a06833450ef6ce880/tencentcloud_sdk_python_cam-3.1.20.tar.gz", hash = "sha256:cfa02bc7205921ecba409ea63145ba99bdf5499272d8d3db1840cc519b534e42", size = 53601, upload-time = "2025-12-25T21:05:56.226Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/d5/64/8cddb6890db6ee10c1d208b7a48a112ab619270b5c63966c2ea67a0e1673/tencentcloud_sdk_python_cam-3.1.20-py2.py3-none-any.whl", hash = "sha256:78a1b41d8170be12395db24c94bf6940d14e009944f88ef2c4293bbea8cd6220", size = 55100, upload-time = "2025-12-25T21:05:53.831Z" },
+]
+
+[[package]]
 name = "tencentcloud-sdk-python-common"
 version = "3.1.23"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
@@ -707,6 +725,30 @@ dependencies = [
 sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/8a/90/9936da8faa2e1ec8f9cccce3d3f86089d42c6f67b36e9dbfca5b78a1a6ce/tencentcloud_sdk_python_common-3.1.23.tar.gz", hash = "sha256:dbabbac6e612ae1fb1f3607d120fdc3e4bb1762c1c2d4834a31dc71f50a2e182", size = 22661, upload-time = "2025-12-30T21:08:38.997Z" }
 wheels = [
     { url = "https://pypi.tuna.tsinghua.edu.cn/packages/bd/62/7a1c5ad428e98e9bde829f16f287b3299bf373eb41c5b673ee60cc22687d/tencentcloud_sdk_python_common-3.1.23-py2.py3-none-any.whl", hash = "sha256:8fe22ed725b030f25632448799f944a61a0cdafdc0ecc8b1dc609c7bcbb04519", size = 34261, upload-time = "2025-12-30T21:08:37.156Z" },
+]
+
+[[package]]
+name = "tencentcloud-sdk-python-cvm"
+version = "3.1.14"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
+dependencies = [
+    { name = "tencentcloud-sdk-python-common" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/90/73/eb3c960f5252ff634f9cbcc9fb95752e5249863da6d8bb9301825206b33c/tencentcloud_sdk_python_cvm-3.1.14.tar.gz", hash = "sha256:2ffc60aa8adbb13256b842f06c6cce0851dffb76fb49b3aa201d47ca97075967", size = 148973, upload-time = "2025-12-18T04:20:22.862Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/c0/83/4ae461edeb4189d29bffe536ad12647935691aff3c6e155059dc905347d8/tencentcloud_sdk_python_cvm-3.1.14-py2.py3-none-any.whl", hash = "sha256:82d52038ac350089ce5f5df6d35fcf8ab0a9cefef620731228d457758c90c68c", size = 151656, upload-time = "2025-12-18T04:20:20.239Z" },
+]
+
+[[package]]
+name = "tencentcloud-sdk-python-tag"
+version = "3.0.1481"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple/" }
+dependencies = [
+    { name = "tencentcloud-sdk-python-common" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ac/ca/88e74ccf6b83db49d99913048d839c6cac5235010079740903c18da7d9c7/tencentcloud_sdk_python_tag-3.0.1481.tar.gz", hash = "sha256:63fc557e1d0a132268e9fb6ade36961e78c081492105e15ba748b8719347d6df", size = 17781, upload-time = "2025-11-04T13:46:13.913Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/92/b5/2982e579bda7f0823053e32fb5732c536feb1e5de199ef15a7263f0993ee/tencentcloud_sdk_python_tag-3.0.1481-py2.py3-none-any.whl", hash = "sha256:c3ef55af1717507e11647c86c78c5bcbd31d547933cb08843ddd4e543fc0097b", size = 19099, upload-time = "2025-11-04T13:46:11.168Z" },
 ]
 
 [[package]]

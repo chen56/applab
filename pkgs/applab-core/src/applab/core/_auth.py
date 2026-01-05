@@ -18,7 +18,7 @@ class Authenticator(ABC):
         """
         pass
     @abstractmethod
-    def authenticate(self, credential: CredentialParam):
+    def authenticate(self, credential_param: CredentialParam):
         pass
 
 class AKSKAuthenticator(Authenticator, ABC):

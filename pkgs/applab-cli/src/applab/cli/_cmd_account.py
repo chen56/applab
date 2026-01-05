@@ -57,6 +57,7 @@ def _create_login_handler(vendor: Vendor, authenticator: Authenticator):
         console.info(f"正在登录 {vendor.name}...{param=}")
         authenticator.authenticate(param)
         console.success(f"已成功登录 {vendor.name}")
+        # todo save credential and config
         # 执行实际逻辑
         return 0
 

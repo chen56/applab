@@ -11,7 +11,10 @@ urls = { "homepage" = "https://github.com/chen56/applab" }
 requires-python = ">=3.12"
 dependencies = [
     "applab-core",
+    "tencentcloud-sdk-python-cam>=3.1.20",
     "tencentcloud-sdk-python-common>=3.1.23",
+    "tencentcloud-sdk-python-cvm>=3.1.14",
+    "tencentcloud-sdk-python-tag>=3.0.1481",
 ]
 
 [build-system]

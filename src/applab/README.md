@@ -1,3 +1,3 @@
 # applab root package
 
-`/src`作为根包的源代码目录为无代码包，仅作为命名空间使用，uv 需要此目录避免报错
+root package为`applab`namespace, `/src`不能放代码，uv 需要此空目录避免报错

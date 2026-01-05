@@ -5,7 +5,7 @@
 
 from ._param_model import BaseParamModel, TextField, UIField
 from ._base import Vendor, VendorRegister, Applab
-from ._auth import CredentialParam, Authenticator
+from ._account import CredentialParam, Authenticator,CloudAccount
 
 __all__ = [
     # _arg_model
@@ -20,4 +20,5 @@ __all__ = [
     # _auth
     "CredentialParam",
     "Authenticator",
+    "CloudAccount",
 ]

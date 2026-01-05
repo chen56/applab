@@ -55,9 +55,10 @@ def _create_login_handler(vendor: Vendor, authenticator: Authenticator):
 
     def login_handler(*, param: DynamicParam):
         console.info(f"正在登录 {vendor.name}...{param=}")
-        authenticator.authenticate(param)
+        account=authenticator.authenticate(param)
         console.success(f"已成功登录 {vendor.name}")
         # todo save credential and config
+        applab.accounts.save_account(account)
         # 执行实际逻辑
         return 0
 

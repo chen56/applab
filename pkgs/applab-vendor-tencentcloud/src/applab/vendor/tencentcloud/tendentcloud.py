@@ -1,9 +1,11 @@
+from typing import Literal
+import datetime
 from typing import Annotated, Type
 
 from pydantic import Field
 from pydantic.types import SecretStr
 
-from applab.core import Authenticator, CredentialParam
+from applab.core import Authenticator, CredentialParam, CloudAccount
 from applab.core import Vendor
 
 
@@ -25,6 +27,12 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
     secret_id: Annotated[str, Field(title="SecretId", description="Tencent Cloud API SecretId")]
     secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
 
+
+class TencentCloudAccount(CloudAccount):
+    vendor: Literal["tencentcloud"] = "tencentcloud"
+    app_id: int
+    uin: str
+    owner_uin: str
 
 class TencentCloudAKSKAuthenticator(Authenticator):
     """
@@ -56,18 +64,23 @@ class TencentCloudAKSKAuthenticator(Authenticator):
     def authenticate(self, credential_param: TencentCloudAKSKCredentialParam):
         from tencentcloud.common import credential
         from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
-        from tencentcloud.cvm.v20170312 import cvm_client, models as cvm_models
+        from tencentcloud.cam.v20190116 import cam_client, models as cam_models
 
         try:
-            # 1. 实例化认证对象
             cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
 
-            # 2. 实例化要请求产品的 client 对象
-            client = cvm_client.CvmClient(cred, "ap-hongkong")
+            client = cam_client.CamClient(cred, "ap-guangzhou")
+            req = cam_models.GetUserAppIdRequest()
+            resp = client.GetUserAppId(req)
 
-            # 3. 构造一个简单的请求来验证登录是否成功
-            request = cvm_models.DescribeRegionsRequest()
-            client.DescribeRegions(request)
+            return TencentCloudAccount(
+                name=credential_param.name,
+                app_id=resp.AppId,
+                uin=resp.Uin,
+                owner_uin=resp.OwnerUin,
+                verified=True,
+                verified_at=datetime.datetime.now(datetime.UTC),)
+
             # todo exception handling & async support
         except TencentCloudSDKException as err:
             print(f"登录失败: {err}")

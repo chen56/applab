@@ -2,7 +2,8 @@ import json
 from abc import ABC
 from collections.abc import Mapping
 
-from ._auth import Authenticator
+from ._account import Authenticator, CloudAccountManager
+
 
 class Vendor(ABC):
     def __init__(self,
@@ -52,4 +53,4 @@ class VendorRegister(Mapping[str, Vendor]):
 class Applab:
     def __init__(self):
         self.vendors: VendorRegister = VendorRegister()
-        self.vendors: VendorRegister = VendorRegister()
+        self.accounts = CloudAccountManager()

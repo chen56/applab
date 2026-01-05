@@ -5,7 +5,8 @@
 
 from ._param_model import BaseParamModel, TextField, UIField
 from ._base import Vendor, VendorRegister, Applab
-from ._account import CredentialParam, Authenticator,CloudAccount
+from ._account import CredentialParam, Authenticator, CloudAccount, CloudAccounts
+from ._storage import JsonStorage
 
 __all__ = [
     # _arg_model
@@ -13,12 +14,16 @@ __all__ = [
     "TextField",
     "UIField",
 
-    # _base
-    "Vendor",
-    "VendorRegister",
-
     # _auth
     "CredentialParam",
     "Authenticator",
     "CloudAccount",
+    "CloudAccounts",
+
+    # _base
+    "Vendor",
+    "VendorRegister",
+
+    # _storage
+    "JsonStorage",
 ]

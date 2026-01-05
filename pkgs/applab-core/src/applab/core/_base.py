@@ -1,8 +1,10 @@
+from applab.core._constant import _APPLAB
+from applab.core._storage import JsonStorage
 import json
 from abc import ABC
 from collections.abc import Mapping
 
-from ._account import Authenticator, CloudAccountManager
+from ._account import Authenticator, CloudAccounts
 
 
 class Vendor(ABC):
@@ -53,4 +55,4 @@ class VendorRegister(Mapping[str, Vendor]):
 class Applab:
     def __init__(self):
         self.vendors: VendorRegister = VendorRegister()
-        self.accounts = CloudAccountManager()
+        self.account_storage = JsonStorage(path=_APPLAB.ACCOUNTS_FILE, model=CloudAccounts)

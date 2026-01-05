@@ -19,20 +19,18 @@ dependencies = [
     "rich>=14.2.0",
 ]
 
-[build-system]
-requires = ["uv_build>=0.9.15,<0.10.0"]
-# uv_build默认就使用 src/ 布局，不需要额外配置
-build-backend = "uv_build"
-
 [dependency-groups]
 dev = [
     "keyring>=25.7.0",
     "pytest>=9.0.1",
 ]
 
-#################################################################################
-# uv PEP 420 namespace 子项目配置
-#################################################################################
+
+
+[build-system]
+requires = ["uv_build>=0.9.15,<0.10.0"]
+# uv_build默认就使用 src/ 布局，不需要额外配置
+build-backend = "uv_build"
 
 [tool.uv.build-backend]
 # 开启命名空间支持 PEP 420

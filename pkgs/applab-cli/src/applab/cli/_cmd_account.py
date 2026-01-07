@@ -54,13 +54,14 @@ def _create_login_handler(vendor: Vendor, authenticator: Authenticator):
 
     def login_handler(*, param: DynamicParam):
         console.info(f"正在登录 {vendor.name}...{param=}")
-        account=authenticator.authenticate(param)
+        account = authenticator.authenticate(param)
         console.success(f"已成功登录 {vendor.name}")
 
-        accounts=applab.account_storage.load()
+        accounts = applab.account_storage.load()
         accounts.add(account)
         # cloudAccounts.
-        applab.account_storage.save_account(accounts)
+        applab.account_storage.save(accounts)
+        console.info(f"已保存账号 {applab.account_storage.path}")
         # 执行实际逻辑
         return 0
 

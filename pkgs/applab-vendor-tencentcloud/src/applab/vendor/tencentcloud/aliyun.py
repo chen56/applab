@@ -11,10 +11,12 @@ from applab.core import Authenticator
 # 模拟 applab_apps 包（vendor 实现）
 # ============================================================
 
+
 class AliyunAKSKCredentialParam(CredentialParam):
     access_key_id: Annotated[str, Field(title="AccessKey ID", description="Aliyun Cloud API AccessKey ID")]
     access_key_secret: Annotated[
-        SecretStr, Field(title="AccessKey Secret", description="Aliyun Cloud API AccessKey Secret")]
+        SecretStr, Field(title="AccessKey Secret", description="Aliyun Cloud API AccessKey Secret")
+    ]
 
 
 class AliyunAKSKAuthenticator(Authenticator):
@@ -27,7 +29,6 @@ class AliyunAKSKAuthenticator(Authenticator):
 
 
 class AliyunVendor(Vendor):
-
     def __init__(self, version: str):
         super().__init__(
             name="aliyun",

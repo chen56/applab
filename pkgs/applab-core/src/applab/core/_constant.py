@@ -3,10 +3,10 @@ from typing import NamedTuple
 
 
 class APPLAB(NamedTuple):
-    APP_NAME = "applab",
+    APP_NAME = ("applab",)
 
 
 class _APPLAB(NamedTuple):
-    APP_NAME = APPLAB.APP_NAME,
-    CONFIG_DIR = Path(Path.home(), ".applab")
-    ACCOUNTS_FILE = Path(CONFIG_DIR, ".accounts.json"),
+    APP_NAME = APPLAB.APP_NAME
+    CONFIG_DIR = Path.home().joinpath(".applab")
+    ACCOUNTS_FILE = CONFIG_DIR.joinpath("accounts.json")

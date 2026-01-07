@@ -2,9 +2,7 @@ from pydantic import BaseModel
 
 
 class BaseParamModel(BaseModel):
-    model_config = {
-        "kw_only": True
-    }
+    model_config = {"kw_only": True}
 
 
 class UIField(BaseModel):

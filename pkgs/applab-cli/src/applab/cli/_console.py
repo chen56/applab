@@ -29,43 +29,62 @@ from rich.theme import Theme
 # 定义标准 M3 角色类型（Color Tokens）
 _Material3_Color_Role_Name = Literal[
     # Primary
-    "primary", "on_primary",
-    "primary_container", "on_primary_container",
-
-        # Secondary
-    "secondary", "on_secondary",
-    "secondary_container", "on_secondary_container",
-
-        # Tertiary
-    "tertiary", "on_tertiary",
-    "tertiary_container", "on_tertiary_container",
-
-        # Error
-    "error", "on_error",
-    "error_container", "on_error_container",
-
-        # Surface system
-    "surface", "on_surface",
-    "surface_variant", "on_surface_variant",
-
-        # Surface containers (elevation)
-    "surface_container", "surface_container_high", "surface_container_low",
-
-        # Inverse surfaces
-    "inverse_surface", "on_inverse_surface",
-
-        # Outline / divider
+    "primary",
+    "on_primary",
+    "primary_container",
+    "on_primary_container",
+    # Secondary
+    "secondary",
+    "on_secondary",
+    "secondary_container",
+    "on_secondary_container",
+    # Tertiary
+    "tertiary",
+    "on_tertiary",
+    "tertiary_container",
+    "on_tertiary_container",
+    # Error
+    "error",
+    "on_error",
+    "error_container",
+    "on_error_container",
+    # Surface system
+    "surface",
+    "on_surface",
+    "surface_variant",
+    "on_surface_variant",
+    # Surface containers (elevation)
+    "surface_container",
+    "surface_container_high",
+    "surface_container_low",
+    # Inverse surfaces
+    "inverse_surface",
+    "on_inverse_surface",
+    # Outline / divider
     "outline",
-
-        # Shadow and scrim
-    "scrim", "shadow"
+    # Shadow and scrim
+    "scrim",
+    "shadow",
 ]
 
 _RichStyleName = Literal[
-    "primary", "primary_container", "secondary", "secondary_container",
-    "tertiary", "tertiary_container", "error", "error_container",
-    "surface", "surface_variant", "surface_container", "surface_container_high",
-    "surface_container_low", "inverse_surface", "outline", "scrim", "shadow"
+    "primary",
+    "primary_container",
+    "secondary",
+    "secondary_container",
+    "tertiary",
+    "tertiary_container",
+    "error",
+    "error_container",
+    "surface",
+    "surface_variant",
+    "surface_container",
+    "surface_container_high",
+    "surface_container_low",
+    "inverse_surface",
+    "outline",
+    "scrim",
+    "shadow",
 ]
 
 
@@ -77,43 +96,35 @@ def _build_material3_color_roles(*, dark: bool) -> Dict[_Material3_Color_Role_Na
             "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
             "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
             "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
-
             # Secondary (次要色)
             "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
             "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
             "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
             "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
-
             # Tertiary (第三色)
             "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
             "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
             "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
             "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
-
             # Error (错误色)
             "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
             "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
             "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
             "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
-
             # Surface (背景色)
             "surface": "#121212",  # 深灰 #121212 (Deep Grey)
             "on_surface": "#E6E1E5",  # 白色 (On Surface: text on surface)
             "surface_variant": "#49454F",  # 深灰紫 #49454F (Greyish Purple)
             "on_surface_variant": "#CAC4D0",  # 淡灰色 #CAC4D0 (Light Grey)
-
             # Surface Containers (容器背景)
             "surface_container": "#2B2930",  # 深灰色 #2B2930 (Dark Grey)
             "surface_container_high": "#36343B",  # 更深灰色 #36343B (Darker Grey)
             "surface_container_low": "#211F26",  # 深棕色 #211F26 (Deep Brown)
-
             # Inverse Surface (反转背景)
             "inverse_surface": "#FFFFFF",  # 白色 (Inverse Surface: 白色背景)
             "on_inverse_surface": "#000000",  # 黑色 (On Inverse Surface: 黑色文字)
-
             # Outline (轮廓)
             "outline": "#B3B3B3",  # 浅灰 #B3B3B3 (Light Grey Outline)
-
             # Scrim & Shadow (遮罩与阴影)
             "scrim": "#000080",  # 半透明黑色遮罩层
             "shadow": "#000060",  # 半透明黑色阴影
@@ -125,43 +136,35 @@ def _build_material3_color_roles(*, dark: bool) -> Dict[_Material3_Color_Role_Na
             "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
             "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
             "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
-
             # Secondary (次要色)
             "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
             "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
             "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
             "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
-
             # Tertiary (第三色)
             "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
             "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
             "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
             "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
-
             # Error (错误色)
             "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
             "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
             "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
             "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
-
             # Surface (背景色)
             "surface": "#FFFBFE",  # 浅灰色 #FFFBFE (Light Grey)
             "on_surface": "#1C1B1F",  # 深灰色 #1C1B1F (On Surface: text on surface)
             "surface_variant": "#E7E0EB",  # 浅紫灰色 #E7E0EB (Light Purple Grey)
             "on_surface_variant": "#49454F",  # 深灰紫 #49454F (Dark Grey Purple)
-
             # Surface Containers (容器背景)
             "surface_container": "#F3EDF7",  # 浅紫色 #F3EDF7 (Light Purple)
             "surface_container_high": "#ECE6F0",  # 更浅紫色 #ECE6F0 (Lighter Purple)
             "surface_container_low": "#F7F2FA",  # 浅灰紫色 #F7F2FA (Light Grey Purple)
-
             # Inverse Surface (反转背景)
             "inverse_surface": "#1C1B1F",  # 黑色 (Inverse Surface: 黑色背景)
             "on_inverse_surface": "#FFFFFF",  # 白色 (On Inverse Surface: 白色文字)
-
             # Outline (轮廓)
             "outline": "#79747E",  # 深灰 #79747E (Deep Grey Outline)
-
             # Scrim & Shadow (遮罩与阴影)
             "scrim": "#000080",  # 半透明黑色遮罩层 #00000080 (Semi-transparent Black)
             "shadow": "#000060",  # 半透明阴影 #00000060 (Semi-transparent Shadow)

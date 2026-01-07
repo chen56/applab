@@ -3,7 +3,8 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Type, Annotated
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
+from pydantic_core.core_schema import ValidationInfo
 
 from ._constant import APPLAB
 from ._param_model import BaseParamModel
@@ -14,6 +15,7 @@ _ACCOUNT_ID_LENGTH_ = 12
 
 def _new_account_id_() -> str:
     from nanoid import generate
+
     return generate(_ACCOUNT_ID_ALPHABET_, _ACCOUNT_ID_LENGTH_)
 
 
@@ -26,11 +28,15 @@ class CredentialParam(BaseParamModel):
 
 
 class CloudAccount(BaseModel):
-    id: Annotated[str, Field(default_factory=_new_account_id_)]
-    vendor: str
+    id: Annotated[str, Field(init=False, frozen=True, default_factory=_new_account_id_)]
+    vendor: Annotated[str, Field(init=False, frozen=True)]
     name: str
     is_default: bool = False
-    created_at: Annotated[datetime.datetime, Field(default_factory=lambda: datetime.datetime.now(datetime.UTC))]
+    created_at: Annotated[
+        datetime.datetime, Field(init=False, frozen=True, default_factory=lambda: datetime.datetime.now(datetime.UTC))
+    ]
+
+    model_config = ConfigDict()
 
     @property
     def credential_key(self) -> str:
@@ -52,28 +58,18 @@ class Authenticator(ABC):
         pass
 
 
+from pydantic import BaseModel
+
+
 class CloudAccounts(BaseModel):
     accounts: list[CloudAccount] = []
 
     # ---------- invariants ----------
     @model_validator(mode="after")
-    def validate_invariants(self) -> "CloudAccounts":
-        seen: set[tuple[str, str]] = set()
-        default_by_vendor: dict[str, str] = {}
-
-        for acc in self.accounts:
-            key = (acc.vendor, acc.name)
-            if key in seen:
-                raise ValueError(f"Duplicate account: {acc.vendor}:{acc.name}")
-            seen.add(key)
-
-            if acc.is_default:
-                if acc.vendor in default_by_vendor:
-                    raise ValueError(
-                        f"Multiple default accounts for vendor={acc.vendor}"
-                    )
-                default_by_vendor[acc.vendor] = acc.id
-
+    def validate_invariants(self, info: ValidationInfo) -> "CloudAccounts":
+        # id 主键去重
+        accounts_map: dict[str, CloudAccount] = {a.id: a for a in self.accounts}
+        self.accounts = list(accounts_map.values())
         return self
 
     def add(self, account: CloudAccount) -> CloudAccount:
@@ -85,18 +81,7 @@ class CloudAccounts(BaseModel):
         - Duplicate (vendor, name) for auto-generated names indicates an internal bug.
         - set_default=True marks this account as the default for its vendor.
         """
-        # ---------- 1. assign name if missing ----------
-        if not account.name:
-            account.name = self.generate_name(account.vendor)
 
-        # ---------- 2. internal invariant check ----------
-        if any(a.vendor == account.vendor and a.name == account.name for a in self.accounts):
-            # 自动生成的 name 出现重复 → 程序 bug
-            raise RuntimeError(
-                f"Duplicate account generated internally (BUG): {account.vendor}:{account.name}"
-            )
-
-        # ---------- 5. append ----------
         self.accounts.append(account)
         return account
 
@@ -117,15 +102,6 @@ class CloudAccounts(BaseModel):
 
     def existing_names(self, vendor: str) -> set[str]:
         return {a.name for a in self.accounts if a.vendor == vendor}
-
-    def generate_name(self, vendor: str) -> str:
-        names = self.existing_names(vendor)
-        if "default" not in names:
-            return "default"
-        i = 2
-        while f"default-{i}" in names:
-            i += 1
-        return f"default-{i}"
 
     def set_default(self, account: CloudAccount):
         for acc in self.accounts:

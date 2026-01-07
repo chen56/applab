@@ -8,12 +8,13 @@ from ._account import Authenticator, CloudAccounts
 
 
 class Vendor(ABC):
-    def __init__(self,
-                 name: str,
-                 display_name: str,
-                 version: str = "0.0.1",
-                 default_authenticator: Authenticator = None,
-                 ):
+    def __init__(
+        self,
+        name: str,
+        display_name: str,
+        version: str = "0.0.1",
+        default_authenticator: Authenticator = None,
+    ):
         # 实例属性（可变字段）
         self.name = name
         self.display_name = display_name

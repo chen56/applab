@@ -1,19 +1,18 @@
-from typing import Literal
-import datetime
 from typing import Annotated, Type
+from typing import Literal
 
 from pydantic import Field
 from pydantic.types import SecretStr
 
 from applab.core import Authenticator, CredentialParam, CloudAccount
 from applab.core import Vendor
+from applab.core.error import check
 
 
 # ============================================================
 # 模拟 applab_apps 包（vendor 实现）
 # ============================================================
 class TencentCloudVendor(Vendor):
-
     def __init__(self, version: str):
         super().__init__(
             name="tencentcloud",
@@ -29,10 +28,11 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
 
 
 class TencentCloudAccount(CloudAccount):
-    vendor: Literal["tencentcloud"] = "tencentcloud"
+    vendor: Annotated[Literal["tencentcloud"], Field(init=False, frozen=True)] = "tencentcloud"
     app_id: int
     uin: str
     owner_uin: str
+
 
 class TencentCloudAKSKAuthenticator(Authenticator):
     """
@@ -73,14 +73,13 @@ class TencentCloudAKSKAuthenticator(Authenticator):
             req = cam_models.GetUserAppIdRequest()
             resp = client.GetUserAppId(req)
 
-            return TencentCloudAccount(
+            result = TencentCloudAccount(
                 name=credential_param.name,
                 app_id=resp.AppId,
                 uin=resp.Uin,
                 owner_uin=resp.OwnerUin,
-                verified=True,
-                verified_at=datetime.datetime.now(datetime.UTC),)
-
+            )
+            return result
             # todo exception handling & async support
         except TencentCloudSDKException as err:
             print(f"登录失败: {err}")

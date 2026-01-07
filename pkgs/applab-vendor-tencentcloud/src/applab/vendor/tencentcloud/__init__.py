@@ -6,6 +6,7 @@ Tencent Cloud Provider
 
 from .tendentcloud import TencentCloudVendor
 from .aliyun import AliyunVendor
+
 __all__ = [
     "TencentCloudVendor",
     "AliyunVendor",

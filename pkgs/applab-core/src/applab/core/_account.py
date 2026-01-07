@@ -28,15 +28,15 @@ class CredentialParam(BaseParamModel):
 
 
 class CloudAccount(BaseModel):
-    id: Annotated[str, Field(init=False, frozen=True, default_factory=_new_account_id_)]
-    vendor: Annotated[str, Field(init=False, frozen=True)]
+    id: Annotated[str, Field(init=False, default_factory=_new_account_id_)]
+    vendor: str
     name: str
     is_default: bool = False
     created_at: Annotated[
-        datetime.datetime, Field(init=False, frozen=True, default_factory=lambda: datetime.datetime.now(datetime.UTC))
+        datetime.datetime, Field(init=False, default_factory=lambda: datetime.datetime.now(datetime.UTC))
     ]
 
-    model_config = ConfigDict()
+    model_config = ConfigDict(extra="allow")
 
     @property
     def credential_key(self) -> str:
@@ -63,6 +63,8 @@ from pydantic import BaseModel
 
 class CloudAccounts(BaseModel):
     accounts: list[CloudAccount] = []
+
+    model_config = ConfigDict(extra="allow")
 
     # ---------- invariants ----------
     @model_validator(mode="after")

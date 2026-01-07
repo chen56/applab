@@ -1,12 +1,11 @@
+import json
 from typing import Annotated, Type
-from typing import Literal
 
 from pydantic import Field
 from pydantic.types import SecretStr
 
 from applab.core import Authenticator, CredentialParam, CloudAccount
 from applab.core import Vendor
-from applab.core.error import check
 
 
 # ============================================================
@@ -28,7 +27,7 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
 
 
 class TencentCloudAccount(CloudAccount):
-    vendor: Annotated[Literal["tencentcloud"], Field(init=False, frozen=True)] = "tencentcloud"
+    vendor: str = "tencentcloud"
     app_id: int
     uin: str
     owner_uin: str
@@ -64,21 +63,21 @@ class TencentCloudAKSKAuthenticator(Authenticator):
     def authenticate(self, credential_param: TencentCloudAKSKCredentialParam):
         from tencentcloud.common import credential
         from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
-        from tencentcloud.cam.v20190116 import cam_client, models as cam_models
+        from tencentcloud.cam.v20190116 import cam_client as cam, models as cam_models
 
         try:
             cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
 
-            client = cam_client.CamClient(cred, "ap-guangzhou")
+            client = cam.CamClient(cred, "ap-guangzhou")
             req = cam_models.GetUserAppIdRequest()
             resp = client.GetUserAppId(req)
-
             result = TencentCloudAccount(
                 name=credential_param.name,
                 app_id=resp.AppId,
                 uin=resp.Uin,
                 owner_uin=resp.OwnerUin,
             )
+
             return result
             # todo exception handling & async support
         except TencentCloudSDKException as err:

@@ -9,11 +9,11 @@ from ._account import Authenticator, CloudAccounts
 
 class Vendor(ABC):
     def __init__(
-        self,
-        name: str,
-        display_name: str,
-        version: str = "0.0.1",
-        default_authenticator: Authenticator = None,
+            self,
+            name: str,
+            display_name: str,
+            version: str = "0.0.1",
+            default_authenticator: Authenticator = None,
     ):
         # 实例属性（可变字段）
         self.name = name
@@ -54,6 +54,10 @@ class VendorRegister(Mapping[str, Vendor]):
 
 
 class Applab:
-    def __init__(self):
-        self.vendors: VendorRegister = VendorRegister()
-        self.account_storage = JsonStorage(path=_APPLAB.ACCOUNTS_FILE, model=CloudAccounts)
+    def __init__(
+            self,
+            vendors: VendorRegister = VendorRegister(),
+            account_storage: JsonStorage[CloudAccounts] = JsonStorage(path=_APPLAB.ACCOUNTS_FILE, model=CloudAccounts),
+    ):
+        self.vendors = vendors
+        self.account_storage = account_storage

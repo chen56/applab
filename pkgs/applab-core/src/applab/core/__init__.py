@@ -19,6 +19,7 @@ __all__ = [
     "CloudAccount",
     "CloudAccounts",
     # _base
+    "Applab",
     "Vendor",
     "VendorRegister",
     # _storage

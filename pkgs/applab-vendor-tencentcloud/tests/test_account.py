@@ -1,7 +1,10 @@
 from unittest.mock import MagicMock, patch
 import pytest
-from applab.core._base import Applab
-from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, TencentCloudAccount, TencentCloudAKSKAuthenticator
+
+from applab.core import Applab
+from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, \
+    TencentCloudAccount, TencentCloudAKSKAuthenticator
+
 
 class Fixture:
     def __init__(self, *, applab: Applab):
@@ -9,10 +12,12 @@ class Fixture:
         self.vendor = TencentCloudVendor(version="0.0.1")
         self.applab.vendors.register(self.vendor)
 
+
 @pytest.fixture(scope="session")
 def fixture():
     applab = Applab()
     return Fixture(applab=applab)
+
 
 def test_login_success(fixture: Fixture):
     authenticator = fixture.vendor.default_authenticator
@@ -43,9 +48,10 @@ def test_login_success(fixture: Fixture):
         assert account.owner_uin == "1000001"
         assert account.vendor == "tencentcloud"
 
+
 def test_login_failure(fixture: Fixture):
     authenticator = fixture.vendor.default_authenticator
-    
+
     from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 
     with patch("tencentcloud.cam.v20190116.cam_client.CamClient") as MockClient:
@@ -60,4 +66,3 @@ def test_login_failure(fixture: Fixture):
 
         with pytest.raises(TencentCloudSDKException):
             authenticator.authenticate(credential_param)
-

@@ -2,46 +2,56 @@
 
 from cyclopts import App
 
-from ._cmd_account import account_app
-
-app = App(name="applab")
-
-# cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
-# Change the group of "--help" and "--version" to the implicitly created "Admin" group.
-app["--help"].group = "Cli info options"
-app["--version"].group = "Cli info options"
-
-# Child app inherits parent's settings
-account_app = app.command(account_app)
+from applab.core import Applab
+from applab.vendor import tencentcloud
+from ._cmd_account import AccountApp
 
 
-@app.default()
-def _root_cmd():
-    """
-    One click install app on some cloud.
+class ApplabCli:
+    def __init__(self, applab: Applab):
+        app = App(name="applab")
+        # cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
+        # Change the group of "--help" and "--version" to the implicitly created "Admin" group.
+        app["--help"].group = "Cli info options"
+        app["--version"].group = "Cli info options"
+        app.default(self._root_cmd)
+        app.command(AccountApp(applab).app, name="account")
 
-    ## Examples
+        self.app = app
+        self.applab = applab
 
-    ```bash
-    applab vendor list
-    applab vendor info tencentcloud
-    applab vendor login tencentcloud
-    applab zone list --vendor tencentcloud
-    applab install docker --vendor tencentcloud --zone ap-shanghai-1
-    applab x docker install --vendor tencentcloud --zone ap-shanghai-1
+    def _root_cmd(self):
+        """
+        One click install app on some cloud.
 
-    applab app list --vendor tencentcloud --zone ap-shanghai-1
-    applab app list --vendor tencentcloud
-    ```
+        ## Examples
 
-    """
-    # if help
-    app.help_print()
+        ```bash
+        applab vendor list
+        applab vendor info tencentcloud
+        applab vendor login tencentcloud
+        applab zone list --vendor tencentcloud
+        applab install docker --vendor tencentcloud --zone ap-shanghai-1
+        applab x docker install --vendor tencentcloud --zone ap-shanghai-1
+
+        applab app list --vendor tencentcloud --zone ap-shanghai-1
+        applab app list --vendor tencentcloud
+        ```
+
+        """
+        # if help
+        self.app.help_print()
 
 
 def main():
-    app()
+    # app()
+    version = "0.0.1"
+    applab = Applab()
+    applab.vendors.register(tencentcloud.TencentCloudVendor(version=version))
+    # applab.vendors.register(tencentcloud.AliyunVendor(version=version))
+
+    ApplabCli(applab).app()
 
 
 if __name__ == "__main__":
-    app()
+    main()

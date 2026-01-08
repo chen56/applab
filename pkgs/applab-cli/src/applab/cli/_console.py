@@ -1,8 +1,37 @@
 """
 
-# cli 工具
+# Console
 
-## 颜色系统：
+## 定位
+
+- Console是cli的业务信息输入/输出工具, 并不是日志，日志应使用logging
+- 用来封装替换print/rich的， print太简单,rich有点小复杂暂时不直接用
+- 为rich增强了 Material 3 Color Roles
+
+┌────────────────────────────┐
+│ CLI UX Layer               │  ← print / rich / click.echo -> 本模块Console
+│（用户可见、稳定）             │
+├────────────────────────────┤
+│ Business Events            │  ← logger.info / warning
+│（结构化、可观测）             │
+├────────────────────────────┤
+│ Debug / Diagnostics        │  ← logger.debug
+├────────────────────────────┤
+│ System Errors              │  ← logger.error / exception
+└────────────────────────────┘
+
+
+| 内容           | 去向              |
+| ------------ | ----------------- |
+| 命令返回值 / JSON | stdout            |
+| 用户友好提示       | stdout            |
+| 进度 / 状态说明    | stderr 或 TTY-only |
+| 调试 / 诊断      | logging           |
+
+
+
+
+## Material 3 颜色系统：
 
 Layer 1: Material 3 Color Roles（官方，不能改）
   - primary / on_surface / on_surface_variant / outline ...
@@ -15,6 +44,7 @@ Layer 3: Business Semantic Mapping
   - 这一层为业务语义函数（如 info(), warn(), success(), error() 等），映射为第二层或第一层，加上特定的前缀或后缀来进行风格化处理。
 
 应用代码主要以使用Layer 3函数为主，无法表达时，可用Layer 2表达，而Layer 1只是颜色表，无法直接使用。
+
 
 """
 
@@ -33,36 +63,36 @@ _Material3_Color_Role_Name = Literal[
     "on_primary",
     "primary_container",
     "on_primary_container",
-    # Secondary
+        # Secondary
     "secondary",
     "on_secondary",
     "secondary_container",
     "on_secondary_container",
-    # Tertiary
+        # Tertiary
     "tertiary",
     "on_tertiary",
     "tertiary_container",
     "on_tertiary_container",
-    # Error
+        # Error
     "error",
     "on_error",
     "error_container",
     "on_error_container",
-    # Surface system
+        # Surface system
     "surface",
     "on_surface",
     "surface_variant",
     "on_surface_variant",
-    # Surface containers (elevation)
+        # Surface containers (elevation)
     "surface_container",
     "surface_container_high",
     "surface_container_low",
-    # Inverse surfaces
+        # Inverse surfaces
     "inverse_surface",
     "on_inverse_surface",
-    # Outline / divider
+        # Outline / divider
     "outline",
-    # Shadow and scrim
+        # Shadow and scrim
     "scrim",
     "shadow",
 ]

@@ -24,10 +24,8 @@ def mock_applab(tmp_path: Path):
 def runner(mock_applab: Applab, capsys):
     app = ApplabCli(mock_applab).app
 
-    def _run(*args):
-        # 如果只传入一个参数，且该参数包含空格，则尝试拆分它
-        if len(args) == 1 and isinstance(args[0], str) and " " in args[0]:
-            args = shlex.split(args[0])
+    def _run(cmd: str):
+        args = shlex.split(cmd)
 
         try:
             # Cyclopts app can be called with a list of strings

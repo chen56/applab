@@ -52,6 +52,8 @@ from typing import Any, cast
 
 from rich.console import Console
 from typing import Dict, Literal
+
+from rich.markdown import Markdown
 from rich.style import Style
 from rich.text import Text
 from rich.theme import Theme
@@ -226,6 +228,10 @@ def _to_rich_theme(*, roles) -> Theme:
 
 
 class _Console:
+    """
+    all cli info/error/waring output to stdout, its app logic, not log.
+    """
+
     def __init__(self, *, dark: bool = False):
         # Layer 1 Material 3 Color Roles
         m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
@@ -233,9 +239,7 @@ class _Console:
         self._rich_theme = _to_rich_theme(roles=m3_color_roles)
 
         # Layer 3: Business Semantic Mapping : success()/info() function
-
         self.console = Console(theme=self._rich_theme, color_system="truecolor")
-        self.console_err = Console(stderr=True, theme=self._rich_theme, color_system="truecolor")
 
     def rich_style(self, name: _RichStyleName) -> Style:
         return self._rich_theme.styles[name]
@@ -243,26 +247,26 @@ class _Console:
     def print(self, *objects: Any) -> None:
         self.console.print(*objects)
 
+    def markdown(self, markup: str) -> None:
+        self.console.print(Markdown(markup))
+
     def success(self, *objects: Any) -> None:
-        self.console_err.print(self._text(*objects, prefix="🟢 ", style="primary"))
+        self._print("🟢 ", *objects, style="primary")
 
     def warn(self, *objects: Any) -> None:
-        self.console_err.print(self._text(*objects, prefix="⚠️ ", style="tertiary"))
+        self._print(":warning-emoji:", *objects, style="tertiary")
 
     def info(self, *objects: Any) -> None:
-        self.console_err.print(self._text(*objects, prefix="ℹ️ ", style="surface_variant"))
+        self._print("ℹ️ ", *objects, style="surface_variant")
 
     def input(self, *objects: Any) -> None:
-        self.console_err.print(self._text(*objects, prefix="🧷 ", style="surface"))
+        self._print("🧷 ", *objects, style="surface")
 
     def error(self, *objects: Any) -> None:
-        self.console_err.print(self._text(*objects, prefix="🔴 ", style="error"))
+        self._print("🔴 ", *objects, style="error")
 
-    def _text(self, *objects: Any, prefix: str, style: _RichStyleName) -> Text:
-        text = Text(prefix, style="default")  # 图标使用默认背景
-        content = " ".join(map(str, objects))
-        text.append(content, style=self.rich_style(style))
-        return text
+    def _print(self, *objects: Any, style: _RichStyleName):
+        self.console.print(*objects, style=self.rich_style(style))
 
 
 console = _Console()

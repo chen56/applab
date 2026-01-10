@@ -19,7 +19,7 @@ class Vendor(ABC):
         self.name = name
         self.display_name = display_name
         self.version = version
-        self.default_authenticator = default_authenticator
+        self.authenticator = default_authenticator
 
     def info(self) -> dict:
         """返回 vendor 信息字典."""

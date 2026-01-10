@@ -20,7 +20,7 @@ def fixture():
 
 
 def test_login_success(fixture: Fixture):
-    authenticator = fixture.vendor.default_authenticator
+    authenticator = fixture.vendor.authenticator
     assert isinstance(authenticator, TencentCloudAKSKAuthenticator)
 
     # 模拟 SDK 的响应
@@ -50,7 +50,7 @@ def test_login_success(fixture: Fixture):
 
 
 def test_login_failure(fixture: Fixture):
-    authenticator = fixture.vendor.default_authenticator
+    authenticator = fixture.vendor.authenticator
 
     from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 

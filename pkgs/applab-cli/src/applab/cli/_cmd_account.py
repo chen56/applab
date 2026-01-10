@@ -53,7 +53,7 @@ class AccountLoginApp:
 
         # 动态为每个云厂商生成登录命令
         for vendor in applab.vendors.values():
-            a = vendor.default_authenticator
+            a = vendor.authenticator
             if a:
                 authenticator_doc = inspect.cleandoc(a.__doc__ or "")
                 cmd_help = f"""

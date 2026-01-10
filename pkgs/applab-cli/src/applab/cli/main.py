@@ -1,7 +1,10 @@
 """cli main入口"""
 import logging
+import os
+import sys
 
 from cyclopts import App
+from rich.logging import RichHandler
 
 from applab.core import Applab
 from applab.vendor import tencentcloud
@@ -46,11 +49,6 @@ class ApplabCli:
         self.app.help_print()
 
 
-import logging
-import os
-import sys
-
-
 def __setup_logging():
     """
     applab logging bootstrap
@@ -61,6 +59,7 @@ def __setup_logging():
     - 应用可控，第三方库默认安静
     """
 
+    # todo loglevel -v param
     log_level: str = os.getenv("APPLAB_LOG_LEVEL", "WARNING").upper()
     log_level: int = getattr(logging, log_level, logging.WARNING)
     logging.basicConfig(
@@ -73,6 +72,8 @@ def __setup_logging():
             "%(message)s"
         ),
         datefmt="%Y-%m-%d %H:%M:%S",
+        # https://rich.readthedocs.io/en/stable/logging.html
+        handlers=[RichHandler()],
     )
 
     # --- 第三方库降噪 ---

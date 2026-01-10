@@ -17,7 +17,7 @@ class TencentCloudVendor(Vendor):
             name="tencentcloud",
             display_name="腾讯云",
             version=version,
-            default_authenticator=TencentCloudAKSKAuthenticator(),
+            authenticator=TencentCloudAKSKAuthenticator(),
         )
 
 

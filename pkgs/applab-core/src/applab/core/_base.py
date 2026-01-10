@@ -13,13 +13,13 @@ class Vendor(ABC):
             name: str,
             display_name: str,
             version: str = "0.0.1",
-            default_authenticator: Authenticator = None,
+            authenticator: Authenticator = None,
     ):
         # 实例属性（可变字段）
         self.name = name
         self.display_name = display_name
         self.version = version
-        self.authenticator = default_authenticator
+        self.authenticator = authenticator
 
     def info(self) -> dict:
         """返回 vendor 信息字典."""

@@ -34,5 +34,5 @@ class AliyunVendor(Vendor):
             name="aliyun",
             display_name="阿里云",
             version=version,
-            default_authenticator=AliyunAKSKAuthenticator(),
+            authenticator=AliyunAKSKAuthenticator(),
         )

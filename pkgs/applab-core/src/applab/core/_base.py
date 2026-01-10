@@ -1,10 +1,8 @@
-from applab.core._constant import _APPLAB
-from applab.core._storage import JsonStorage
 import json
 from abc import ABC
 from collections.abc import Mapping
 
-from ._account import Authenticator, CloudAccounts
+from ._account import Authenticator, AccountManager
 
 
 class Vendor(ABC):
@@ -12,14 +10,16 @@ class Vendor(ABC):
             self,
             name: str,
             display_name: str,
+            authenticator: Authenticator,
+            account_manager: AccountManager,
             version: str = "0.0.1",
-            authenticator: Authenticator = None,
     ):
         # 实例属性（可变字段）
         self.name = name
         self.display_name = display_name
         self.version = version
         self.authenticator = authenticator
+        self.account_manager = account_manager
 
     def info(self) -> dict:
         """返回 vendor 信息字典."""
@@ -36,28 +36,26 @@ class VendorRegister(Mapping[str, Vendor]):
     """只读 Provider 注册表."""
 
     def __init__(self):
-        self._registry: dict[str, Vendor] = {}
+        self._delegate: dict[str, Vendor] = {}
 
     def register(self, vendor: Vendor):
         """注册 Provider 类."""
-        self._registry[vendor.name] = vendor
+        self._delegate[vendor.name] = vendor
 
     # Mapping 接口
     def __getitem__(self, key) -> Vendor:
-        return self._registry[key]
+        return self._delegate[key]
 
     def __iter__(self):
-        return iter(self._registry)
+        return iter(self._delegate)
 
     def __len__(self):
-        return len(self._registry)
+        return len(self._delegate)
 
 
 class Applab:
     def __init__(
             self,
             vendors: VendorRegister = VendorRegister(),
-            account_storage: JsonStorage[CloudAccounts] = JsonStorage(path=_APPLAB.ACCOUNTS_FILE, model=CloudAccounts),
     ):
         self.vendors = vendors
-        self.account_storage = account_storage

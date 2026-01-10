@@ -44,21 +44,11 @@
 ### cli 
 
 ```bash
-applab vendor list
-applab vendor info tencentcloud
-applab vendor login tencentcloud
+applab account login tencentcloud
+applab account list
+applab account info tencentcloud
 applab zone list --vendor tencentcloud
-applab install docker --vendor tencentcloud --zone ap-shanghai-1
+applab app install docker --vendor tencentcloud --zone ap-shanghai-1
 applab app list --vendor tencentcloud --zone ap-shanghai-1
 applab app list --vendor tencentcloud
 
-applab vendors list
-applab vendor tencentcloud info
-applab vendor tencentcloud login
-applab zone list --vendor tencentcloud
-applab install docker --vendor tencentcloud --zone ap-shanghai-1
-applab app list --vendor tencentcloud --zone ap-shanghai-1
-applab app list --vendor tencentcloud
-
-
-```

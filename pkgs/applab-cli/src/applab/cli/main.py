@@ -64,7 +64,6 @@ def __setup_logging():
     log_level: int = getattr(logging, log_level, logging.WARNING)
     logging.basicConfig(
         level=log_level,
-        stream=sys.stderr,  # 不污染 stdout
         format=(
             "%(asctime)s "
             "[%(levelname)s] "
@@ -73,7 +72,7 @@ def __setup_logging():
         ),
         datefmt="%Y-%m-%d %H:%M:%S",
         # https://rich.readthedocs.io/en/stable/logging.html
-        handlers=[RichHandler()],
+        handlers=[RichHandler(rich_tracebacks=True)],
     )
 
     # --- 第三方库降噪 ---
@@ -92,7 +91,7 @@ def main():
     version = "0.0.1"
     applab = Applab()
     applab.vendors.register(tencentcloud.TencentCloudVendor(version=version))
-    applab.vendors.register(tencentcloud.AliyunVendor(version=version))
+    # applab.vendors.register(tencentcloud.AliyunVendor(version=version))
 
     ApplabCli(applab).app()
 

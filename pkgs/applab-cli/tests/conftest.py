@@ -4,18 +4,24 @@ from pathlib import Path
 import pytest
 
 from applab.cli.main import ApplabCli
-from applab.core import Applab, CloudAccounts, JsonStorage
+from applab.core import Applab, AccountManager, JsonStorage
+from applab.core._account import AccountList
+from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAccount
 
 
 @pytest.fixture
 def mock_applab(tmp_path: Path):
-    # 为测试创建一个临时的 applab 环境
-    app = Applab(account_storage=JsonStorage(path=tmp_path / "accounts.json", model=CloudAccounts))
-    # 保持原有的 vendors 注册，或者根据需要重新注册
-    from applab.vendor import tencentcloud
+    app = Applab()
 
-    app.vendors.register(tencentcloud.TencentCloudVendor(version="0.0.1"))
-    app.vendors.register(tencentcloud.AliyunVendor(version="0.0.1"))
+    # Setup TencentCloudVendor with a mock AccountManager
+    tencent_storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AccountList[TencentCloudAccount])
+    tencent_account_manager = AccountManager(storage=tencent_storage)
+    tencent_vendor = TencentCloudVendor(version="0.0.1")
+    tencent_vendor.account_manager = tencent_account_manager
+    app.vendors.register(tencent_vendor)
+
+    # from applab.vendor import tencentcloud
+    # app.vendors.register(tencentcloud.AliyunVendor(version="0.0.1"))
 
     return app
 
@@ -28,7 +34,6 @@ def runner(mock_applab: Applab, capsys):
         args = shlex.split(cmd)
 
         try:
-            # Cyclopts app can be called with a list of strings
             exit_code = app(list(args))
         except SystemExit as e:
             exit_code = e.code

@@ -2,35 +2,22 @@
   "general": {
     "vimMode": true,
     "preferredEditor": "code",
+    "checkpointing": {
+      "enabled": true
+    },
     "sessionRetention": {
       "enabled": true,
       "maxAge": "30d",
       "maxCount": 100
     }
-  },
-  "ui": {
-    "theme": "GitHub",
-    "hideBanner": true,
-    "hideTips": false,
-    "customWittyPhrases": [
-      "You forget a thousand things every day. Make sure this is one of ’em",
-      "Connecting to AGI"
-    ]
-  },
+  }, 
   "tools": {
-    "sandbox": "docker",
-    "discoveryCommand": "bin/get_tools",
-    "callCommand": "bin/call_tool",
-    "exclude": ["write_file"]
-  },
-  "mcpServers": {
-    "mainServer": {
-      "command": "bin/mcp_server.py"
-    },
-    "anotherServer": {
-      "command": "node",
-      "args": ["mcp_server.js", "--verbose"]
-    }
+    "sandbox": "false",
+    "enabledTools": [
+      "web_search",
+      "run_shell_command",
+      "file_management"
+    ]
   },
   "telemetry": {
     "enabled": true,
@@ -41,19 +28,16 @@
   "privacy": {
     "usageStatisticsEnabled": true
   },
-  "model": {
-    "name": "gemini-1.5-pro-latest",
-    "maxSessionTurns": 10,
-    "summarizeToolOutput": {
-      "run_shell_command": {
-        "tokenBudget": 100
-      }
-    }
-  },
   "context": {
-    "fileName": ["CONTEXT.md", "GEMINI.md"]
+    "fileName": [
+      "CONTEXT.md"
+    ]
   },
   "advanced": {
-    "excludedEnvVars": ["DEBUG", "DEBUG_MODE", "NODE_ENV"]
+    "excludedEnvVars": [
+      "DEBUG",
+      "DEBUG_MODE",
+      "NODE_ENV"
+    ]
   }
 }

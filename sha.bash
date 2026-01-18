@@ -36,6 +36,9 @@ publish() {
 }
 
 sync() (
+  # 同步gemini所需文件
+  ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
+
   _run uv sync --all-extras --all-groups
 )
 

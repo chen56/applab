@@ -41,3 +41,9 @@ namespace = false
 # PEP 420命名空间的module名需改为'.'分割，避免默认的'applab-core'
 module-name = "applab.cli"
 
+[tool.ruff]
+cache-dir = "build/.ruff_cache"
+
+[tool.pytest.ini_options]
+cache_dir = "build/.pytest_cache"
+

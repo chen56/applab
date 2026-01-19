@@ -1,7 +1,6 @@
 from unittest.mock import patch, MagicMock
 
 from applab.core import Applab
-from applab.vendor.tencentcloud.tendentcloud import TencentCloudAKSKCredentialParam, TencentCloudAccount
 
 
 def test_account_list_empty(runner):

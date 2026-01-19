@@ -27,7 +27,7 @@ info() {
 }
 
 build() {
-  lint
+  check
   format
   _run uv build --all-packages
 }
@@ -45,8 +45,8 @@ sync() (
 )
 
 
-lint() {
-  # uv run ruff check
+check() {
+  _run uv run ruff check --fix
   echo todo ruff
 }
 

@@ -1,7 +1,6 @@
 """cli main入口"""
 import logging
 import os
-import sys
 
 from cyclopts import App
 from rich.logging import RichHandler

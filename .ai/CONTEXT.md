@@ -147,3 +147,9 @@ cd pkgs/* && uv build
 - CLI 功能测试
 - 账号管理测试
 - 供应商集成测试
+
+
+## github 规范
+
+如需操作github相关事宜，请加载: [CONTEXT-GITHUB.md](CONTEXT-GITHUB.md). 
+

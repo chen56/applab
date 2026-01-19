@@ -83,6 +83,7 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 #################################################################################
 
 [tool.ruff]
+cache-dir = "build/.ruff_cache"
 src = ["."]
 exclude = [".git", "__pycache__", "build", "dist", ".venv"]
 line-length = 120
@@ -122,6 +123,13 @@ extend-select = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # 使用 NumPy 风格的 docstring 约定
+
+#################################################################################
+# pytest
+#################################################################################
+
+[tool.pytest.ini_options]
+cache_dir = "build/.pytest_cache"
 
 #################################################################################
 # pyright

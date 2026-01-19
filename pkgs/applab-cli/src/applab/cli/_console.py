@@ -55,7 +55,6 @@ from typing import Dict, Literal
 
 from rich.markdown import Markdown
 from rich.style import Style
-from rich.text import Text
 from rich.theme import Theme
 
 # 定义标准 M3 角色类型（Color Tokens）

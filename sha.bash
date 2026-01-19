@@ -58,7 +58,7 @@ check() {
   # _run uv run pyright --pythonplatform Darwin
   # _run uv run pyright --pythonplatform Linux
   # _run uv run pyright --pythonplatform Windows
-  # _run uv run ruff check
+  _run uv run ruff check --fix
 }
 
 

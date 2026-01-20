@@ -36,9 +36,6 @@ publish() {
 }
 
 sync() (
-  # 同步ai所需文件
-  # ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
-
   _run uv sync --all-extras --all-groups
   _run repomix
   _run quarto render .ai/context.qmd

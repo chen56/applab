@@ -151,5 +151,5 @@ cd pkgs/* && uv build
 
 ## github 规范
 
-如需操作github相关事宜，请加载: [CONTEXT-GITHUB.md](CONTEXT-GITHUB.md). 
+如需操作github相关事宜，请用`read_file`加载: [github规范](rules/github.md). 
 

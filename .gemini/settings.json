@@ -30,8 +30,13 @@
   },
   "context": {
     "fileName": [
-      "CONTEXT.md"
-    ]
+      "context.md",
+      "context-github.md",
+      "context-repomix-output.md",
+      "gemini.md"
+    ],
+    "includeDirectories": [".ai"]
+
   },
   "advanced": {
     "excludedEnvVars": [
@@ -39,5 +44,16 @@
       "DEBUG_MODE",
       "NODE_ENV"
     ]
+  },
+  "experimental": {
+    "skills": true,
+    "plan":true,
+    "cliHelpAgentSettings": {
+      "enabled": true
+    },
+    "codebaseInvestigatorSettings": {
+      "enabled": true,
+      "maxNumTurns": 5
+    }
   }
 }

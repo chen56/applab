@@ -36,10 +36,11 @@ publish() {
 }
 
 sync() (
-  # 同步gemini所需文件
-  ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
-
   _run uv sync --all-extras --all-groups
+  _run rsync -av --delete ai build/
+  _run repomix
+  _run quarto render ai/context.qmd
+
 )
 
 
@@ -65,6 +66,12 @@ check() {
 info() {
   echo "sha run at: $(pwd)"
 }
+
+gemini() {
+  # export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
+  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
+}
+
 ##########################################
 # app 入口
 ##########################################

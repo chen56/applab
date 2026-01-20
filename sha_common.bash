@@ -108,16 +108,13 @@ self() {
   }
 }
 
-
 clean() (
   _run rm -rf .venv
+  _run rm -rf .quarto
   _run rm -rf .ruff_cache
-  _run rm -rf build dist ./**/*.egg-info
-  _run rm -rf .pytest_cache .mypy_cache .coverage
-  _run find . \
-        -path "./.venv" -prune -o \
-        -path "./.git" -prune -o \
-        -path "./dist" -prune -o \
-        -name "__pycache__" -type d -exec rm -rf {} +
-  _run rm -rf .venv
+  _run rm -rf ./**/build
+  _run rm -rf ./**/__pycache__
+  _run rm -rf ./**/dist
+  _run rm -rf ./**/*.egg-info
+  _run rm -rf .pytest_cache
 )

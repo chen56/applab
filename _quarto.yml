@@ -1,0 +1,11 @@
+project:
+  title: "applab"
+  output-dir: "build/"  # 所有输出放 docs/
+  execute-dir: project
+  resources:
+    - ai/context.qmd
+  
+  
+
+
+

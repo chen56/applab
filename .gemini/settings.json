@@ -32,7 +32,7 @@
     "fileName": [
       "context.md"
     ],
-    "includeDirectories": ["ai"]
+    "includeDirectories": ["build/ai"]
 
   },
   "advanced": {

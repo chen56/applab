@@ -29,7 +29,7 @@ The content is organized as follows:
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
 - Only files matching these patterns are included: **/*.py, **/*.md, **/*.toml, **/.gitignore, **/*.bash
-- Files matching these patterns are excluded: .ai/**, pkgs/**/sha.bash, pkgs/**/README.md, .trae/**, .vscode/**, .idea/**, **/tests/**
+- Files matching these patterns are excluded: ai/**, pkgs/**/sha.bash, pkgs/**/README.md, .trae/**, .vscode/**, .idea/**, **/tests/**
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
 - Files are sorted by Git change count (files with more changes are at the bottom)
@@ -1481,11 +1481,11 @@ publish() {
 
 sync() (
   # 同步ai所需文件
-  # ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
+  # ln -sf ../ai/CONTEXT.md .gemini/CONTEXT.md
 
   _run uv sync --all-extras --all-groups
   _run repomix
-  _run quarto render .ai/context.qmd
+  _run quarto render ai/context.qmd
 
 )
 

@@ -38,7 +38,7 @@ publish() {
 sync() (
   _run uv sync --all-extras --all-groups
   _run repomix
-  _run quarto render .ai/context.qmd
+  _run quarto render ai/context.qmd
 
 )
 

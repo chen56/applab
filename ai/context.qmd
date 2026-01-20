@@ -38,7 +38,7 @@ applab/
 │   └── applab-vendor-*/     # Vendor Adapters (e.g., tencentcloud)
 ├── src/
 │   └── applab/              # Namespace Root
-├── .ai/                     # AI Context & Rules
+├── ai/                     # AI Context & Rules
 └── pyproject.toml           # Workspace Config
 ```
 

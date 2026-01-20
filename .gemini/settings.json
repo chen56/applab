@@ -30,8 +30,7 @@
   },
   "context": {
     "fileName": [
-      "context.md",
-      "context-repomix-output.md"
+      "context.md"
     ],
     "includeDirectories": [".ai"]
 

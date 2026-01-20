@@ -65,6 +65,13 @@ check() {
 info() {
   echo "sha run at: $(pwd)"
 }
+
+gemini() {
+  export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
+  command gemini
+
+}
+
 ##########################################
 # app 入口
 ##########################################

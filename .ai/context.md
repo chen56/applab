@@ -41,6 +41,7 @@ applab/
 ### Standards
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/).
 - **Code Style**: Ruff, NumPy docstrings, 120 line length.
+- **Git Operations**: Do NOT perform `git add`, `commit`, `push` or other state-changing git commands unless explicitly instructed by the user.
 
 ## Authentication
 | Vendor | ID Credential | Secret Credential | Key Params |

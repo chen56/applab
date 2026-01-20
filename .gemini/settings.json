@@ -12,18 +12,7 @@
     }
   }, 
   "tools": {
-    "sandbox": "false",
-    "enabledTools": [
-      "web_search",
-      "run_shell_command",
-      "file_management"
-    ]
-  },
-  "telemetry": {
-    "enabled": true,
-    "target": "local",
-    "otlpEndpoint": "http://localhost:4317",
-    "logPrompts": true
+    "sandbox": "true"
   },
   "privacy": {
     "usageStatisticsEnabled": true

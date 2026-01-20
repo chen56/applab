@@ -31,9 +31,7 @@
   "context": {
     "fileName": [
       "context.md",
-      "context-github.md",
-      "context-repomix-output.md",
-      "gemini.md"
+      "context-repomix-output.md"
     ],
     "includeDirectories": [".ai"]
 

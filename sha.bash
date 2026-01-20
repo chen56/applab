@@ -69,7 +69,7 @@ info() {
 
 gemini() {
   # export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
-  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini -s "$@"
+  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
 }
 
 ##########################################

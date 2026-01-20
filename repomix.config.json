@@ -11,8 +11,8 @@
     "directoryStructure": true,
     "files": true,
     "removeComments": false,
-    "removeEmptyLines": true,
-    "compress": true,
+    "removeEmptyLines": false,
+    "compress": false,
     "topFilesLength": 5,
     "showLineNumbers": false,
     "truncateBase64": false,
@@ -39,7 +39,13 @@
     "useDotIgnore": true,
     "useDefaultPatterns": true,
     "customPatterns": [
-      ".ai/**"
+      ".ai/**",
+      "pkgs/**/sha.bash",
+      "pkgs/**/README.md",
+      ".trae/**",
+      ".vscode/**",
+      ".idea/**",
+      "**/tests/**"
     ]
   },
   "security": {

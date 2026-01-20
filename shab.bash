@@ -41,7 +41,7 @@ publish() {
 
 sync() (
   _run uv sync --all-extras --all-groups --all-packages
-  repomix
+  _run repomix
 )
 
 
@@ -51,15 +51,15 @@ check() {
 }
 
 lintfix() {
-  uv run ruff check --fix
+  _run uv run ruff check --fix
 }
 
 format() {
-  uv run ruff format
+  _run uv run ruff format
 }
 
 test() {
-  uv run pytest
+  _run uv run pytest
 }
 
 sync_github() {

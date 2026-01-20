@@ -1,5 +1,4 @@
 This file is a merged representation of a subset of the codebase, containing specifically included files and files not matching ignore patterns, combined into a single document by Repomix.
-The content has been processed where empty lines have been removed, content has been compressed (code blocks are separated by ⋮---- delimiter).
 
 # File Summary
 
@@ -29,19 +28,14 @@ The content is organized as follows:
 ## Notes
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
-- Only files matching these patterns are included: **/*.py, **/*.md, **/*.toml, **/*.bash
-- Files matching these patterns are excluded: .ai/**
+- Only files matching these patterns are included: **/*.py, **/*.md, **/*.toml, **/.gitignore, **/*.bash
+- Files matching these patterns are excluded: .ai/**, pkgs/**/sha.bash, pkgs/**/README.md, .trae/**, .vscode/**, .idea/**, **/tests/**
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
-- Empty lines have been removed from all files
-- Content has been compressed - code blocks are separated by ⋮---- delimiter
 - Files are sorted by Git change count (files with more changes are at the bottom)
 
 # Directory Structure
 ```
-.trae/
-  rules/
-    project_rules.md
 docs/
   dev-core.md
   dev.md
@@ -55,13 +49,7 @@ pkgs/
           _cmd_account.py
           _console.py
           main.py
-    tests/
-      conftest.py
-      test_cli_account.py
-      test_cmd_account.py
     pyproject.toml
-    README.md
-    sha.bash
   applab-core/
     src/
       applab/
@@ -75,8 +63,6 @@ pkgs/
           error.py
           storage.py
     pyproject.toml
-    README.md
-    sha.bash
   applab-vendor-tencentcloud/
     src/
       applab/
@@ -85,13 +71,11 @@ pkgs/
             __init__.py
             aliyun.py
             tendentcloud.py
-    tests/
-      test_account.py
     pyproject.toml
-    README.md
 src/
   applab/
     README.md
+.gitignore
 pyproject.toml
 README.md
 sha_common.bash
@@ -100,16 +84,6 @@ shab.bash
 ```
 
 # Files
-
-## File: .trae/rules/project_rules.md
-````markdown
-# applab 项目规则
-
-- 注释
-  - 重要接口代码包含注释
-  - 复杂算法包含注释
-  - 中文注释
-````
 
 ## File: docs/dev.md
 ````markdown
@@ -134,32 +108,38 @@ shab.bash
 - https://github.com/pydantic/logfire
 ````
 
-## File: pkgs/applab-cli/README.md
-````markdown
-# applab
-````
-
 ## File: pkgs/applab-core/src/applab/core/asserts.py
 ````python
-def __get_all_paths(d, current_path="root")
-⋮----
-"""get all paths from a nested dict or list"""
-paths = []
-⋮----
-new_path = f"{current_path}['{k}']"
-⋮----
-new_path = f"{current_path}[{i}]"
-⋮----
-# leaf node（int, str, float...）
-⋮----
-def diff_subset(expected_subset: dict, fullset: dict, )
-⋮----
-diff = DeepDiff(fullset, expected_subset, include_paths=__get_all_paths(expected_subset), view=COLORED_VIEW)
+from deepdiff import DeepDiff
+from deepdiff.helper import COLORED_VIEW
+
+
+def __get_all_paths(d, current_path="root"):
+    """get all paths from a nested dict or list"""
+    paths = []
+    if isinstance(d, dict):
+        for k, v in d.items():
+            new_path = f"{current_path}['{k}']"
+            paths.extend(__get_all_paths(v, new_path))
+    elif isinstance(d, list):
+        for i, v in enumerate(d):
+            new_path = f"{current_path}[{i}]"
+            paths.extend(__get_all_paths(v, new_path))
+    else:
+        # leaf node（int, str, float...）
+        paths.append(current_path)
+    return paths
+
+
+def diff_subset(expected_subset: dict, fullset: dict, ):
+    diff = DeepDiff(fullset, expected_subset, include_paths=__get_all_paths(expected_subset), view=COLORED_VIEW)
+    assert {} == diff, diff
 ````
 
 ## File: pkgs/applab-core/src/applab/core/error.py
 ````python
 """
+
 AppError
 │
 ├── CheckError
@@ -177,165 +157,165 @@ AppError
     ├─ NetworkDisconnected
     └─ DeviceUnavailable
     （究竟是系统问题还是什么问题需要程序边界解释器自行动态解释）
+
 """
+
+
 # reference:
 # https://docs.python.org/zh-cn/3.14/library/exceptions.html
 # https://docs.python.org/zh-cn/3.14/tutorial/errors.html
-class ApplabError(Exception)
-⋮----
-"""Base class for all application-level errors."""
-user_visible: bool = False
-retryable: bool = False
+class ApplabError(Exception):
+    """Base class for all application-level errors."""
+
+    user_visible: bool = False
+    retryable: bool = False
+
+
 # ---------- Business ----------
-class BizError(ApplabError)
-⋮----
-"""
+
+
+class BizError(ApplabError):
+    """
     业务异常: 可预料的业务流程，非故障，比如:
     - 用户可感知错误: 表单、权限、操作超限
     - 业务流程异常: 状态机异常、业务规则冲突
+
     处理事项：
     - 应用于 CLI/GUI 的提示
     - 不应打印 traceback 到终端
     - 可携带结构化信息（字段名、错误码）
     """
-⋮----
+
+    pass
+
+
 # ---------- Check / Invariant ----------
-class CheckError(AssertionError)
-⋮----
-"""
+
+
+class CheckError(AssertionError):
+    """
     Invariant Check Error, like `assert`, but assert not raise error when running in optimized mode
+
     ref: <https://discuss.python.org/t/stop-ignoring-asserts-when-running-in-optimized-mode>
     """
-user_visible = False
-retryable = False
-def check(condition: bool, message: str) -> None
+
+    user_visible = False
+    retryable = False
+
+
+def check(condition: bool, message: str) -> None:
+    if not condition:
+        raise CheckError(message)
 ````
 
 ## File: pkgs/applab-core/src/applab/core/storage.py
 ````python
-class JsonStorage[T: BaseModel]
-⋮----
-def __init__(self, path: Path, model: type[T])
-def load(self) -> T
-⋮----
-# 要求无参构造器
-⋮----
-json_string = pathlib.Path(self.path).read_text(encoding="utf-8")
-⋮----
-def save(self, doc: T)
+import os
+import pathlib
+from pathlib import Path
+
+from pydantic import BaseModel
+
+
+class JsonStorage[T: BaseModel]:
+    def __init__(self, path: Path, model: type[T]):
+        self.path = path
+        self.model = model
+
+    def load(self) -> T:
+        if not self.path.exists():
+            # 要求无参构造器
+            return self.model()
+
+        json_string = pathlib.Path(self.path).read_text(encoding="utf-8")
+        return self.model.model_validate_json(json_string)
+
+    def save(self, doc: T):
+        atomic_save_text(self.path, doc.model_dump_json(indent=4))
+
+
 # ---------------------------
 # 文本版本
-⋮----
-"""
-    Atomically save text or JSON-serializable data to a file.
+# ---------------------------
+def atomic_save_text(
+        path: Path,
+        text: str,
+        *,
+        encoding: str = "utf-8",
+        fsync: bool = True,
+) -> None:
     """
-path = path.resolve()
-⋮----
-tmp = _temp_file_path(path)
-⋮----
+    Atomically save text or JSON-serializable data to a file.
+
+    """
+    path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    tmp = _temp_file_path(path)
+
+    with open(tmp, "w", encoding=encoding) as f:
+        f.write(text)
+        f.flush()
+        if fsync:
+            os.fsync(f.fileno())
+
+    os.replace(tmp, path)
+
+
+# ---------------------------
 # 二进制版本
-⋮----
-"""
+# ---------------------------
+def atomic_save_bytes(
+        path: Path,
+        data: bytes,
+        *,
+        fsync: bool = True,
+) -> None:
+    """
     Atomically save binary data to a file.
     """
-⋮----
-def _temp_file_path(path: Path) -> Path
-⋮----
-"""
+    path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    tmp = _temp_file_path(path)
+
+    with open(tmp, "wb") as f:
+        f.write(data)
+        f.flush()
+        if fsync:
+            os.fsync(f.fileno())
+
+    os.replace(tmp, path)
+
+
+def _temp_file_path(path: Path) -> Path:
+    """
     注意：
     1. 未使用tempfile.NamedTemporaryFile工具,因为它默认目录为/var/folders/.../T/tmpxxxx，而path可能在云盘，
     跨文件系统的os.replace不是原子操作。
     2. tmp文件即便失败也不用清理，下次重新覆盖和os.replace
     """
-````
-
-## File: pkgs/applab-vendor-tencentcloud/README.md
-````markdown
-
-````
-
-## File: pkgs/applab-cli/tests/test_cmd_account.py
-````python
-def test_account_list_empty(runner)
-def test_account_login_and_list(runner, mock_applab: Applab)
-⋮----
-# Mock the authenticator's response
-mock_resp = MagicMock()
-⋮----
-mock_client_instance = MockClient.return_value
-⋮----
-# Run the login command
-cmd = "account login tencentcloud --secret-id fake-id --secret-key fake-key --title test-acc"
-⋮----
-# Run the list command to verify the account was saved
-⋮----
-# Run the info command
-````
-
-## File: pkgs/applab-cli/sha.bash
-````bash
-#!/usr/bin/env bash
-
-MODULE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-ROOT_DIR=$(cd "$MODULE_DIR/../.." && pwd)
-source "$ROOT_DIR/sha.bash"
-cd "$MODULE_DIR"
-
-##########################################
-# app cmd script
-# 独立于项目组的特殊命令
-##########################################
-
-##########################################
-# app 入口
-##########################################
-# 守卫语句，本脚本如果作为lib导入使用则不再执行后续命令入口代码
-# - 当本脚本作为命令被执行时'$ ./sha', $0为'./sha,
-# - 当本脚本当作类库导入时即: '. ./sha'，$0值为bash/zsh等
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-  sha "$@"
-fi
+    return path.with_name(f".{path.name}.tmp")
 ````
 
 ## File: pkgs/applab-core/src/applab/core/_param_model.py
 ````python
-class BaseParamModel(BaseModel)
-⋮----
-model_config = {"kw_only": True}
-class UIField(BaseModel)
-⋮----
-model_config = {"kw_only": True}  # 强制所有字段为关键字参数
-class TextField(UIField)
-⋮----
-label: str
-# error:Fields with a default value must come after any fields without a default.
-type: str
-help: str = ""
-````
+from pydantic import BaseModel
 
-## File: pkgs/applab-core/sha.bash
-````bash
-#!/usr/bin/env bash
 
-MODULE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-ROOT_DIR=$(cd "$MODULE_DIR/../.." && pwd)
-source "$ROOT_DIR/sha.bash"
-cd "$MODULE_DIR"
+class BaseParamModel(BaseModel):
+    model_config = {"kw_only": True}
 
-##########################################
-# app cmd script
-# 独立于项目组的特殊命令
-##########################################
 
-##########################################
-# app 入口
-##########################################
-# 守卫语句，本脚本如果作为lib导入使用则不再执行后续命令入口代码
-# - 当本脚本作为命令被执行时'$ ./sha', $0为'./sha,
-# - 当本脚本当作类库导入时即: '. ./sha'，$0值为bash/zsh等
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-  sha "$@"
-fi
+class UIField(BaseModel):
+    model_config = {"kw_only": True}  # 强制所有字段为关键字参数
+
+
+class TextField(UIField):
+    label: str
+    # error:Fields with a default value must come after any fields without a default.
+    type: str
+    help: str = ""
 ````
 
 ## File: README.md
@@ -531,78 +511,16 @@ applab app list --vendor tencentcloud --zone ap-shanghai-1
 applab app list --vendor tencentcloud
 ````
 
-## File: pkgs/applab-cli/tests/conftest.py
-````python
-@pytest.fixture
-def mock_applab(tmp_path: Path)
-⋮----
-app = Applab()
-# Setup TencentCloudVendor with a mock AccountManager
-tencent_storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AccountList[TencentCloudAccount])
-tencent_account_manager = AccountManager(storage=tencent_storage)
-tencent_vendor = TencentCloudVendor(version="0.0.1")
-⋮----
-# from applab.vendor import tencentcloud
-# app.vendors.register(tencentcloud.AliyunVendor(version="0.0.1"))
-⋮----
-@pytest.fixture
-def runner(mock_applab: Applab, capsys)
-⋮----
-app = ApplabCli(mock_applab).app
-def _run(cmd: str)
-⋮----
-args = shlex.split(cmd)
-⋮----
-exit_code = app(list(args))
-⋮----
-exit_code = e.code
-captured = capsys.readouterr()
-````
-
-## File: pkgs/applab-cli/tests/test_cli_account.py
-````python
-def test_account_login_tencentcloud_mock(mock_applab: Applab, runner)
-⋮----
-fake_resp = GetUserAppIdResponse()
-⋮----
-vendor: TencentCloudVendor = cast(TencentCloudVendor, mock_applab.vendors["tencentcloud"])
-accounts = vendor.account_manager.accounts.accounts
-⋮----
-acc = accounts[0]
-⋮----
-def test_account_list(mock_applab, runner)
-def test_account_info_help(runner)
-````
-
 ## File: pkgs/applab-core/src/applab/core/_constant.py
 ````python
-class APPLAB(NamedTuple)
-⋮----
-APP_NAME = ("applab",)
-CONFIG_DIR = Path.home().joinpath(".applab")
-ACCOUNTS_FILE = CONFIG_DIR.joinpath("accounts.json")
-````
+from pathlib import Path
+from typing import NamedTuple
 
-## File: pkgs/applab-core/README.md
-````markdown
-# applab
 
-## Auth
-
-### AK/SK方式
-
-AK/SK 最早由 AWS（亚马逊云）定义，后被其他厂商沿用，成为**云服务 API 认证的通用术语**。
-
-- **AK**：AccessKey ID（访问密钥 ID），是「公钥」——可公开，仅用于标识用户/应用身份，无法单独用来调用 API；
-- **SK**：SecretKey / Secret Access Key（访问密钥私钥），是「私钥」——必须严格保密，用于对 API 请求进行签名，云厂商通过签名验证请求合法性。
-
-| 云厂商 (Vendor) | 核心凭据 1 (ID 类)   | 核心凭据 2 (Secret 类)   | 关键上下文参数 (必须项)                                  |
-|:-------------|:----------------|:--------------------|:-----------------------------------------------|
-| **AWS**      | `access_key_id` | `secret_access_key` | `region_name Client 时必须指定地域`                   |
-| **腾讯云**      | `secret_id`     | `secret_key`        | -                                              |
-| **阿里云**      | `access_key_id` | `access_key_secret` | -                                              |
-| **Azure**    | `client_id`     | `client_secret`     | `tenant_id 用于鉴权`<br />`subscription_id 用于定位资源` |
-| **GCP**      | `client_email`  | `private_key`       | `project_id`                                   |
+class APPLAB(NamedTuple):
+    APP_NAME = ("applab",)
+    CONFIG_DIR = Path.home().joinpath(".applab")
+    ACCOUNTS_FILE = CONFIG_DIR.joinpath("accounts.json")
 ````
 
 ## File: src/applab/README.md
@@ -633,40 +551,17 @@ App（GUI界面：针对非技术用户）
 ````python
 """
 Tencent Cloud Provider
+
 [tencentcloud-sdk-python](https://github.com/TencentCloud/tencentcloud-sdk-python)
 """
-⋮----
-__all__ = [
-````
 
-## File: pkgs/applab-vendor-tencentcloud/tests/test_account.py
-````python
-class Fixture
-⋮----
-def __init__(self, *, applab: Applab, vendor: TencentCloudVendor)
-⋮----
-@pytest.fixture
-def fixture(tmp_path: Path)
-⋮----
-applab = Applab()
-storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AccountList[TencentCloudAccount])
-account_manager = AccountManager(storage=storage)
-vendor = TencentCloudVendor(version="0.0.1")
-⋮----
-def test_login_success(fixture: Fixture)
-⋮----
-authenticator = fixture.vendor.authenticator
-⋮----
-mock_resp = MagicMock()
-⋮----
-mock_client_instance = MockClient.return_value
-⋮----
-credential_param = TencentCloudAKSKCredentialParam(
-account = authenticator.authenticate(credential_param)
-⋮----
-loaded_accounts = fixture.vendor.account_manager.storage.load()
-⋮----
-def test_login_failure(fixture: Fixture)
+from .tendentcloud import TencentCloudVendor
+from .aliyun import AliyunVendor
+
+__all__ = [
+    "TencentCloudVendor",
+    "AliyunVendor",
+]
 ````
 
 ## File: pkgs/applab-vendor-tencentcloud/pyproject.toml
@@ -724,14 +619,234 @@ cache_dir = "build/.pytest_cache"
 applab-core = { workspace = true }
 ````
 
+## File: .gitignore
+````
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# UV
+#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#uv.lock
+
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#poetry.lock
+#poetry.toml
+
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
+#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
+#pdm.lock
+#pdm.toml
+.pdm-python
+.pdm-build/
+
+# pixi
+#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
+#pixi.lock
+#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
+#   in the .venv directory. It is recommended not to include this directory in version control.
+.pixi
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+.idea/
+!/.idea/dictionaries/
+
+# Abstra
+# Abstra is an AI-powered process automation framework.
+# Ignore directories containing user credentials, local state, and settings.
+# Learn more at https://abstra.io/docs
+.abstra/
+
+# Visual Studio Code
+#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#  you could uncomment the following to ignore the entire vscode folder
+# .vscode/
+
+# Ruff stuff:
+.ruff_cache/
+
+# PyPI configuration file
+.pypirc
+
+# Cursor
+#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
+#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
+#  refer to https://docs.cursor.com/context/ignore-files
+.cursorignore
+.cursorindexingignore
+
+# Marimo
+marimo/_static/
+marimo/_lsp/
+__marimo__/
+
+
+# macOS system files
+.DS_Store
+````
+
 ## File: pkgs/applab-cli/src/applab/cli/_console.py
 ````python
 """
+
 # Console
+
 ## 定位
+
 - Console是cli的业务信息输入/输出工具, 并不是日志，日志应使用logging
 - 用来封装替换print/rich的， print太简单,rich有点小复杂暂时不直接用
 - 为rich增强了 Material 3 Color Roles
+
 ┌────────────────────────────┐
 │ CLI UX Layer               │  ← print / rich / click.echo -> 本模块Console
 │（用户可见、稳定）             │
@@ -743,188 +858,412 @@ applab-core = { workspace = true }
 ├────────────────────────────┤
 │ System Errors              │  ← logger.error / exception
 └────────────────────────────┘
+
+
 | 内容           | 去向              |
 | ------------ | ----------------- |
 | 命令返回值 / JSON | stdout            |
 | 用户友好提示       | stdout            |
 | 进度 / 状态说明    | stderr 或 TTY-only |
 | 调试 / 诊断      | logging           |
+
+
+
+
 ## Material 3 颜色系统：
+
 Layer 1: Material 3 Color Roles（官方，不能改）
   - primary / on_surface / on_surface_variant / outline ...
+
 Layer 2: Layer 2: Rich Theme (M3 Colors to Rich CLI)
   - 这一层将 M3 色彩角色映射到 Rich CLI 的 Style(color=..., bgcolor=...)
   - 严格选用Material 3的词汇，不扩展语义，只组合背景、前景色为主要style元素，名字也是第一层的名字（主要是背景名）
+
 Layer 3: Business Semantic Mapping
   - 这一层为业务语义函数（如 info(), warn(), success(), error() 等），映射为第二层或第一层，加上特定的前缀或后缀来进行风格化处理。
+
 应用代码主要以使用Layer 3函数为主，无法表达时，可用Layer 2表达，而Layer 1只是颜色表，无法直接使用。
+
+
 """
-⋮----
+
+from typing import Any, cast
+
+from rich.console import Console
+from typing import Dict, Literal
+
+from rich.markdown import Markdown
+from rich.style import Style
+from rich.theme import Theme
+
 # 定义标准 M3 角色类型（Color Tokens）
 _Material3_Color_Role_Name = Literal[
-⋮----
-# Primary
-⋮----
-# Secondary
-⋮----
-# Tertiary
-⋮----
-# Error
-⋮----
-# Surface system
-⋮----
-# Surface containers (elevation)
-⋮----
-# Inverse surfaces
-⋮----
-# Outline / divider
-⋮----
-# Shadow and scrim
-⋮----
+    # Primary
+    "primary",
+    "on_primary",
+    "primary_container",
+    "on_primary_container",
+        # Secondary
+    "secondary",
+    "on_secondary",
+    "secondary_container",
+    "on_secondary_container",
+        # Tertiary
+    "tertiary",
+    "on_tertiary",
+    "tertiary_container",
+    "on_tertiary_container",
+        # Error
+    "error",
+    "on_error",
+    "error_container",
+    "on_error_container",
+        # Surface system
+    "surface",
+    "on_surface",
+    "surface_variant",
+    "on_surface_variant",
+        # Surface containers (elevation)
+    "surface_container",
+    "surface_container_high",
+    "surface_container_low",
+        # Inverse surfaces
+    "inverse_surface",
+    "on_inverse_surface",
+        # Outline / divider
+    "outline",
+        # Shadow and scrim
+    "scrim",
+    "shadow",
+]
+
 _RichStyleName = Literal[
-def _build_material3_color_roles(*, dark: bool) -> Dict[_Material3_Color_Role_Name, str]
-⋮----
-# Primary (主色)
-"primary": "#2979FF",  # 蓝色 #2979FF (Vibrant Blue)
-"on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
-"primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
-"on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
-# Secondary (次要色)
-"secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
-"on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
-"secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
-"on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
-# Tertiary (第三色)
-"tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
-"on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
-"tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
-"on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
-# Error (错误色)
-"error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
-"on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
-"error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
-"on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
-# Surface (背景色)
-"surface": "#121212",  # 深灰 #121212 (Deep Grey)
-"on_surface": "#E6E1E5",  # 白色 (On Surface: text on surface)
-"surface_variant": "#49454F",  # 深灰紫 #49454F (Greyish Purple)
-"on_surface_variant": "#CAC4D0",  # 淡灰色 #CAC4D0 (Light Grey)
-# Surface Containers (容器背景)
-"surface_container": "#2B2930",  # 深灰色 #2B2930 (Dark Grey)
-"surface_container_high": "#36343B",  # 更深灰色 #36343B (Darker Grey)
-"surface_container_low": "#211F26",  # 深棕色 #211F26 (Deep Brown)
-# Inverse Surface (反转背景)
-"inverse_surface": "#FFFFFF",  # 白色 (Inverse Surface: 白色背景)
-"on_inverse_surface": "#000000",  # 黑色 (On Inverse Surface: 黑色文字)
-# Outline (轮廓)
-"outline": "#B3B3B3",  # 浅灰 #B3B3B3 (Light Grey Outline)
-# Scrim & Shadow (遮罩与阴影)
-"scrim": "#000080",  # 半透明黑色遮罩层
-"shadow": "#000060",  # 半透明黑色阴影
-⋮----
-"surface": "#FFFBFE",  # 浅灰色 #FFFBFE (Light Grey)
-"on_surface": "#1C1B1F",  # 深灰色 #1C1B1F (On Surface: text on surface)
-"surface_variant": "#E7E0EB",  # 浅紫灰色 #E7E0EB (Light Purple Grey)
-"on_surface_variant": "#49454F",  # 深灰紫 #49454F (Dark Grey Purple)
-⋮----
-"surface_container": "#F3EDF7",  # 浅紫色 #F3EDF7 (Light Purple)
-"surface_container_high": "#ECE6F0",  # 更浅紫色 #ECE6F0 (Lighter Purple)
-"surface_container_low": "#F7F2FA",  # 浅灰紫色 #F7F2FA (Light Grey Purple)
-⋮----
-"inverse_surface": "#1C1B1F",  # 黑色 (Inverse Surface: 黑色背景)
-"on_inverse_surface": "#FFFFFF",  # 白色 (On Inverse Surface: 白色文字)
-⋮----
-"outline": "#79747E",  # 深灰 #79747E (Deep Grey Outline)
-⋮----
-"scrim": "#000080",  # 半透明黑色遮罩层 #00000080 (Semi-transparent Black)
-"shadow": "#000060",  # 半透明阴影 #00000060 (Semi-transparent Shadow)
-⋮----
-def _to_rich_theme(*, roles) -> Theme
-⋮----
-c = roles
-styles: Dict[_RichStyleName, Style] = {
-⋮----
-class _Console
-⋮----
-"""
+    "primary",
+    "primary_container",
+    "secondary",
+    "secondary_container",
+    "tertiary",
+    "tertiary_container",
+    "error",
+    "error_container",
+    "surface",
+    "surface_variant",
+    "surface_container",
+    "surface_container_high",
+    "surface_container_low",
+    "inverse_surface",
+    "outline",
+    "scrim",
+    "shadow",
+]
+
+
+def _build_material3_color_roles(*, dark: bool) -> Dict[_Material3_Color_Role_Name, str]:
+    if dark:
+        return {
+            # Primary (主色)
+            "primary": "#2979FF",  # 蓝色 #2979FF (Vibrant Blue)
+            "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
+            "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
+            "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
+            # Secondary (次要色)
+            "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
+            "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
+            "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
+            "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
+            # Tertiary (第三色)
+            "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
+            "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
+            "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
+            "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
+            # Error (错误色)
+            "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
+            "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
+            "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
+            "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
+            # Surface (背景色)
+            "surface": "#121212",  # 深灰 #121212 (Deep Grey)
+            "on_surface": "#E6E1E5",  # 白色 (On Surface: text on surface)
+            "surface_variant": "#49454F",  # 深灰紫 #49454F (Greyish Purple)
+            "on_surface_variant": "#CAC4D0",  # 淡灰色 #CAC4D0 (Light Grey)
+            # Surface Containers (容器背景)
+            "surface_container": "#2B2930",  # 深灰色 #2B2930 (Dark Grey)
+            "surface_container_high": "#36343B",  # 更深灰色 #36343B (Darker Grey)
+            "surface_container_low": "#211F26",  # 深棕色 #211F26 (Deep Brown)
+            # Inverse Surface (反转背景)
+            "inverse_surface": "#FFFFFF",  # 白色 (Inverse Surface: 白色背景)
+            "on_inverse_surface": "#000000",  # 黑色 (On Inverse Surface: 黑色文字)
+            # Outline (轮廓)
+            "outline": "#B3B3B3",  # 浅灰 #B3B3B3 (Light Grey Outline)
+            # Scrim & Shadow (遮罩与阴影)
+            "scrim": "#000080",  # 半透明黑色遮罩层
+            "shadow": "#000060",  # 半透明黑色阴影
+        }
+    else:
+        return {
+            # Primary (主色)
+            "primary": "#2979FF",  # 蓝色 #2979FF (Vibrant Blue)
+            "on_primary": "#FFFFFF",  # 白色 (On Primary: text/foreground on primary background)
+            "primary_container": "#1565C0",  # 深蓝色 #1565C0 (Deep Blue)
+            "on_primary_container": "#FFFFFF",  # 白色 (On Primary Container)
+            # Secondary (次要色)
+            "secondary": "#80D6FF",  # 浅蓝色 #80D6FF (Light Blue)
+            "on_secondary": "#003C8F",  # 深蓝色 (On Secondary: text on secondary background)
+            "secondary_container": "#1E88E5",  # 深蓝色 #1E88E5 (Dark Blue)
+            "on_secondary_container": "#FFFFFF",  # 白色 (On Secondary Container)
+            # Tertiary (第三色)
+            "tertiary": "#64B5F6",  # 淡蓝色 #64B5F6 (Soft Blue)
+            "on_tertiary": "#FFFFFF",  # 白色 (On Tertiary: text on tertiary background)
+            "tertiary_container": "#1E3C8F",  # 暗蓝色 #1E3C8F (Dark Blue)
+            "on_tertiary_container": "#FFD8E4",  # 粉色 #FFD8E4 (Soft Pink)
+            # Error (错误色)
+            "error": "#FF3B30",  # 错误红色 #FF3B30 (Red)
+            "on_error": "#FFFFFF",  # 白色 (On Error: text on error background)
+            "error_container": "#F1C2C0",  # 淡红色 #F1C2C0 (Light Red)
+            "on_error_container": "#601410",  # 深红色 #601410 (Dark Red)
+            # Surface (背景色)
+            "surface": "#FFFBFE",  # 浅灰色 #FFFBFE (Light Grey)
+            "on_surface": "#1C1B1F",  # 深灰色 #1C1B1F (On Surface: text on surface)
+            "surface_variant": "#E7E0EB",  # 浅紫灰色 #E7E0EB (Light Purple Grey)
+            "on_surface_variant": "#49454F",  # 深灰紫 #49454F (Dark Grey Purple)
+            # Surface Containers (容器背景)
+            "surface_container": "#F3EDF7",  # 浅紫色 #F3EDF7 (Light Purple)
+            "surface_container_high": "#ECE6F0",  # 更浅紫色 #ECE6F0 (Lighter Purple)
+            "surface_container_low": "#F7F2FA",  # 浅灰紫色 #F7F2FA (Light Grey Purple)
+            # Inverse Surface (反转背景)
+            "inverse_surface": "#1C1B1F",  # 黑色 (Inverse Surface: 黑色背景)
+            "on_inverse_surface": "#FFFFFF",  # 白色 (On Inverse Surface: 白色文字)
+            # Outline (轮廓)
+            "outline": "#79747E",  # 深灰 #79747E (Deep Grey Outline)
+            # Scrim & Shadow (遮罩与阴影)
+            "scrim": "#000080",  # 半透明黑色遮罩层 #00000080 (Semi-transparent Black)
+            "shadow": "#000060",  # 半透明阴影 #00000060 (Semi-transparent Shadow)
+        }
+
+
+def _to_rich_theme(*, roles) -> Theme:
+    c = roles
+    styles: Dict[_RichStyleName, Style] = {
+        "primary": Style(color=c["on_primary"], bgcolor=c["primary"]),
+        "primary_container": Style(color=c["on_primary_container"], bgcolor=c["primary_container"]),
+        "secondary": Style(color=c["on_secondary"], bgcolor=c["secondary"]),
+        "secondary_container": Style(color=c["on_secondary_container"], bgcolor=c["secondary_container"]),
+        "tertiary": Style(color=c["on_tertiary"], bgcolor=c["tertiary"]),
+        "tertiary_container": Style(color=c["on_tertiary_container"], bgcolor=c["tertiary_container"]),
+        "error": Style(color=c["on_error"], bgcolor=c["error"]),
+        "error_container": Style(color=c["on_error_container"], bgcolor=c["error_container"]),
+        "surface": Style(color=c["on_surface"], bgcolor=c["surface"]),
+        "surface_variant": Style(color=c["on_surface_variant"], bgcolor=c["surface_variant"]),
+        "surface_container_low": Style(color=c["on_surface"], bgcolor=c["surface_container_low"]),
+        "surface_container": Style(color=c["on_surface"], bgcolor=c["surface_container"]),
+        "surface_container_high": Style(color=c["on_surface"], bgcolor=c["surface_container_high"]),
+        "inverse_surface": Style(color=c["on_inverse_surface"], bgcolor=c["inverse_surface"]),
+        "outline": Style(color=c["outline"]),
+        "scrim": Style(bgcolor=c["scrim"]),
+        "shadow": Style(bgcolor=c["shadow"]),
+    }
+    return Theme(styles=cast(Dict[str, Style], styles))
+
+
+class _Console:
+    """
     all cli info/error/waring output to stdout, its app logic, not log.
     """
-def __init__(self, *, dark: bool = False)
-⋮----
-# Layer 1 Material 3 Color Roles
-m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
-# Layer 2: Rich Theme (M3 Colors to Rich CLI)
-⋮----
-# Layer 3: Business Semantic Mapping : success()/info() function
-⋮----
-def rich_style(self, name: _RichStyleName) -> Style
-def print(self, *objects: Any) -> None
-def markdown(self, markup: str) -> None
-def success(self, *objects: Any) -> None
-def warn(self, *objects: Any) -> None
-def info(self, *objects: Any) -> None
-def input(self, *objects: Any) -> None
-def error(self, *objects: Any) -> None
-def _print(self, *objects: Any, style: _RichStyleName)
+
+    def __init__(self, *, dark: bool = False):
+        # Layer 1 Material 3 Color Roles
+        m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
+        # Layer 2: Rich Theme (M3 Colors to Rich CLI)
+        self._rich_theme = _to_rich_theme(roles=m3_color_roles)
+
+        # Layer 3: Business Semantic Mapping : success()/info() function
+        self.console = Console(theme=self._rich_theme, color_system="truecolor")
+
+    def rich_style(self, name: _RichStyleName) -> Style:
+        return self._rich_theme.styles[name]
+
+    def print(self, *objects: Any) -> None:
+        self.console.print(*objects)
+
+    def markdown(self, markup: str) -> None:
+        self.console.print(Markdown(markup))
+
+    def success(self, *objects: Any) -> None:
+        self._print("🟢 ", *objects, style="primary")
+
+    def warn(self, *objects: Any) -> None:
+        self._print(":warning-emoji:", *objects, style="tertiary")
+
+    def info(self, *objects: Any) -> None:
+        self._print("ℹ️ ", *objects, style="surface_variant")
+
+    def input(self, *objects: Any) -> None:
+        self._print("🧷 ", *objects, style="surface")
+
+    def error(self, *objects: Any) -> None:
+        self._print("🔴 ", *objects, style="error")
+
+    def _print(self, *objects: Any, style: _RichStyleName):
+        self.console.print(*objects, style=self.rich_style(style))
+
+
 console = _Console()
+
+if __name__ == "__main__":
+    console.print("## 颜色系统Layer 2 层使用范例")
+    console.print("[primary]primary[/]")
+    console.print("[primary_container]primary_container[/]")
+
+    console.print("[secondary]secondary[/]")
+    console.print("[secondary_container]secondary_container[/]")
+
+    console.print("[tertiary]tertiary[/]")
+    console.print("[tertiary_container]tertiary_container[/]")
+
+    console.print("[error]error[/]")
+    console.print("[error_container]error_container[/]")
+
+    console.print("[surface]surface[/]")
+    console.print("[surface_variant]surface_variant[/]")
+
+    console.print("[surface_container]surface_container[/]")
+    console.print("[surface_container_high]surface_container_high[/]")
+    console.print("[surface_container_low]surface_container_low[/]")
+
+    console.print("[inverse_surface]inverse_surface[/]")
+
+    console.print("[outline]outline[/]")
+    console.print("[scrim]scrim[/]")
+    console.print("[shadow]shadow[/]")
+
+    console.print("## 颜色系统Layer 3 层使用范例")
+    console.success("This is success message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.warn("This is warn message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.info("This is info message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.input("This is input message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
+    console.error("This is error message. 一般情况下，内部无需指定格式语义，又第三层特殊函数自己处理")
 ````
 
 ## File: pkgs/applab-core/src/applab/core/_account.py
 ````python
+import datetime
+from abc import ABC, abstractmethod
+from typing import Type, Annotated, List
+
+from pydantic import BaseModel, Field, ConfigDict
+
+from ._constant import APPLAB
+from ._param_model import BaseParamModel
+from .storage import JsonStorage
+
 _ACCOUNT_ID_ALPHABET_ = "0123456789abcdefghijklmnopqrstuvwxyz"
 _ACCOUNT_ID_LENGTH_ = 12
-def _new_account_id_() -> str
-def _keyring_key_(account_id: str) -> str
-class CredentialParam(BaseParamModel)
-⋮----
-title: Annotated[str, Field(title="Credential Title")] = "default"
-class Account(BaseModel)
-⋮----
-id: Annotated[str, Field(init=False, default_factory=_new_account_id_)]
-vendor: str
-title: str
-is_default: bool = False
-created_at: Annotated[
-model_config = ConfigDict(extra="allow")
-⋮----
-@property
-    def credential_key(self) -> str
-class Authenticator(ABC)
-⋮----
-@property
-@abstractmethod
-    def credential_type(self) -> Type[CredentialParam]
-⋮----
-@abstractmethod
-    def authenticate(self, credential_param: CredentialParam) -> Account
-class AccountList[T:Account](BaseModel)
-⋮----
-accounts: List[T] = []
-class AccountManager[T:Account]
-⋮----
-def __init__(self, storage: JsonStorage[AccountList[T]])
-def add(self, account: T)
-def set_default(self, account: T)
-def save(self)
+
+
+def _new_account_id_() -> str:
+    from nanoid import generate
+
+    return generate(_ACCOUNT_ID_ALPHABET_, _ACCOUNT_ID_LENGTH_)
+
+
+def _keyring_key_(account_id: str) -> str:
+    return f"{APPLAB.APP_NAME}.account.{account_id}"
+
+
+class CredentialParam(BaseParamModel):
+    title: Annotated[str, Field(title="Credential Title")] = "default"
+
+
+class Account(BaseModel):
+    id: Annotated[str, Field(init=False, default_factory=_new_account_id_)]
+    vendor: str
+    title: str
+    is_default: bool = False
+    created_at: Annotated[
+        datetime.datetime, Field(init=False, default_factory=lambda: datetime.datetime.now(datetime.UTC))
+    ]
+
+    model_config = ConfigDict(extra="allow")
+
+    @property
+    def credential_key(self) -> str:
+        return _keyring_key_(self.id)
+
+
+class Authenticator(ABC):
+    @property
+    @abstractmethod
+    def credential_type(self) -> Type[CredentialParam]:
+        pass
+
+    @abstractmethod
+    def authenticate(self, credential_param: CredentialParam) -> Account:
+        pass
+
+
+class AccountList[T:Account](BaseModel):
+    accounts: List[T] = []
+
+
+class AccountManager[T:Account]:
+    def __init__(self, storage: JsonStorage[AccountList[T]]):
+        self.storage = storage
+        self.accounts: AccountList[T] = self.storage.load()
+
+    def add(self, account: T):
+        self.accounts.accounts.append(account)
+        self.save()
+
+    def set_default(self, account: T):
+        for acc in self.accounts.accounts:
+            acc.is_default = False
+        account.is_default = True
+        self.save()
+
+    def save(self):
+        self.storage.save(self.accounts)
 ````
 
 ## File: pkgs/applab-vendor-tencentcloud/src/applab/vendor/tencentcloud/aliyun.py
 ````python
+from typing import Annotated, Type
+
+from pydantic import SecretStr, Field
+
+from applab.core import CredentialParam
+from applab.core import Vendor
+from applab.core import Authenticator
+
+
 # ============================================================
 # 模拟 applab_apps 包（vendor 实现）
-⋮----
-class AliyunAKSKCredentialParam(CredentialParam)
-⋮----
-access_key_id: Annotated[str, Field(title="AccessKey ID", description="Aliyun Cloud API AccessKey ID")]
-access_key_secret: Annotated[
-class AliyunAKSKAuthenticator(Authenticator)
-⋮----
-@property
-    def credential_type(self) -> Type[AliyunAKSKCredentialParam]
-def authenticate(self, credential: AliyunAKSKCredentialParam)
-class AliyunVendor(Vendor)
-⋮----
-def __init__(self, version: str)
+# ============================================================
+
+
+class AliyunAKSKCredentialParam(CredentialParam):
+    access_key_id: Annotated[str, Field(title="AccessKey ID", description="Aliyun Cloud API AccessKey ID")]
+    access_key_secret: Annotated[
+        SecretStr, Field(title="AccessKey Secret", description="Aliyun Cloud API AccessKey Secret")
+    ]
+
+
+class AliyunAKSKAuthenticator(Authenticator):
+    @property
+    def credential_type(self) -> Type[AliyunAKSKCredentialParam]:
+        return AliyunAKSKCredentialParam
+
+    def authenticate(self, credential: AliyunAKSKCredentialParam):
+        pass
+
+
+class AliyunVendor(Vendor):
+    def __init__(self, version: str):
+        super().__init__(
+            name="aliyun",
+            display_name="阿里云",
+            version=version,
+            authenticator=AliyunAKSKAuthenticator(),
+        )
 ````
 
 ## File: sha.bash
@@ -1115,39 +1454,172 @@ cache_dir = "build/.pytest_cache"
 
 ## File: pkgs/applab-vendor-tencentcloud/src/applab/vendor/tencentcloud/tendentcloud.py
 ````python
-class TencentCloudVendor(Vendor)
-⋮----
-def __init__(self, version: str)
-class TencentCloudAKSKCredentialParam(CredentialParam)
-⋮----
-secret_id: Annotated[str, Field(title="SecretId", description="Tencent Cloud API SecretId")]
-secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
-class TencentCloudAccount(Account)
-⋮----
-vendor: str = "tencentcloud"
-app_id: int
-uin: str
-owner_uin: str
-class TencentCloudAKSKAuthenticator(Authenticator)
-⋮----
-@property
-    def credential_type(self) -> Type[TencentCloudAKSKCredentialParam]
-def authenticate(self, credential_param: TencentCloudAKSKCredentialParam)
-⋮----
-cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
-client = cam.CamClient(cred, "ap-guangzhou")
-req = cam_models.GetUserAppIdRequest()
-resp = client.GetUserAppId(req)
-result = TencentCloudAccount(
+from typing import Annotated, Type
+
+from pydantic import Field
+from pydantic.types import SecretStr
+
+from applab.core import Authenticator, CredentialParam, Account, Vendor, AccountManager
+from applab.core import AccountList
+from applab.core import APPLAB
+from applab.core.storage import JsonStorage
+
+
+class TencentCloudVendor(Vendor):
+    def __init__(self, version: str):
+        super().__init__(
+            name="tencentcloud",
+            display_name="腾讯云",
+            version=version,
+            authenticator=TencentCloudAKSKAuthenticator(),
+            account_manager=AccountManager(
+                storage=JsonStorage(path=APPLAB.CONFIG_DIR / "tencentcloud.json", model=AccountList[TencentCloudAccount]),
+            ),
+        )
+
+
+class TencentCloudAKSKCredentialParam(CredentialParam):
+    secret_id: Annotated[str, Field(title="SecretId", description="Tencent Cloud API SecretId")]
+    secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
+
+
+class TencentCloudAccount(Account):
+    vendor: str = "tencentcloud"
+    app_id: int
+    uin: str
+    owner_uin: str
+
+
+class TencentCloudAKSKAuthenticator(Authenticator):
+    @property
+    def credential_type(self) -> Type[TencentCloudAKSKCredentialParam]:
+        return TencentCloudAKSKCredentialParam
+
+    def authenticate(self, credential_param: TencentCloudAKSKCredentialParam):
+        from tencentcloud.common import credential
+        from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+        from tencentcloud.cam.v20190116 import cam_client as cam, models as cam_models
+        try:
+            cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
+
+            client = cam.CamClient(cred, "ap-guangzhou")
+            req = cam_models.GetUserAppIdRequest()
+            resp = client.GetUserAppId(req)
+            result = TencentCloudAccount(
+                title=credential_param.title,
+                app_id=resp.AppId,
+                uin=resp.Uin,
+                owner_uin=resp.OwnerUin,
+            )
+
+            return result
+        except TencentCloudSDKException as err:
+            print(f"登录失败: {err}")
+            raise err
 ````
 
 ## File: pkgs/applab-cli/src/applab/cli/__init__.py
 ````python
 """applab.cli.
+
 没有export的模块，只提供cli的入口函数。
 """
-⋮----
+
+from .main import main
+
 __all__ = ["main"]
+````
+
+## File: pkgs/applab-cli/src/applab/cli/_cmd_account.py
+````python
+import inspect
+
+from cyclopts import App, Parameter
+from applab.core import Vendor, Authenticator, Applab
+from ._console import console
+
+
+class AccountApp:
+    def __init__(self, applab: Applab):
+        self.applab = applab
+        self.app = App(
+            name="account",
+            help="""
+            Cloud account management.
+            """,
+        )
+        self.app.command(self.list_, name="list")
+        self.app.command(self.info)
+        self.app.command(AccountLoginApp(applab).app, name="login")
+
+    def list_(self):
+        """
+        列出所有已保存的云账户信息。
+        """
+        from rich.table import Table
+        table = Table(title="Cloud Accounts", show_lines=True)
+        table.add_column("Vendor")
+        table.add_column("Account Name")
+        table.add_column("Account ID")
+        table.add_column("Default")
+        table.add_column("Created At")
+        for vendor in self.applab.vendors.values():
+            for acc in vendor.account_manager.accounts.accounts:
+                table.add_row(acc.vendor, acc.title, acc.id, str(acc.is_default), str(acc.created_at))
+        console.print(table)
+
+    def info(self, vendor_name: str):
+        """
+        展示指定云厂商的账户详情（优先展示默认账户）。
+        """
+        vendor = self.applab.vendors.get(vendor_name)
+        if not vendor or not vendor.account_manager or not vendor.account_manager.accounts.accounts:
+            console.error(f"未找到厂商 {vendor_name} 的账户信息。")
+            return 1
+
+        accounts = vendor.account_manager.accounts.accounts
+        default_acc = next((a for a in accounts if a.is_default), accounts[0])
+        console.print(default_acc)
+        return 0
+
+
+class AccountLoginApp:
+    def __init__(self, applab: Applab):
+        self.applab = applab
+        self.app = App(
+            name="login",
+            help="""
+                Cloud account login.
+                """,
+        )
+
+        def _create_login_handler(vendor: Vendor, authenticator: Authenticator):
+            @Parameter(name="*")
+            class DynamicParam(authenticator.credential_type):
+                pass
+
+            def login_handler(*, param: DynamicParam):
+
+                console.info(f"正在登录 {vendor.name}...{param=}")
+                account = authenticator.authenticate(param)
+                console.success(f"已成功登录 {vendor.name}")
+                vendor.account_manager.add(account)
+                console.info(f"已保存账号到 {vendor.account_manager.storage.path}")
+                return 0
+
+            return login_handler
+
+        for vendor in applab.vendors.values():
+            authenticator_doc = inspect.cleandoc(vendor.authenticator.__doc__ or "")
+            cmd_help = f"""
+                {vendor.display_name}({vendor.name}) login.
+
+                **认证逻辑:**
+
+                {authenticator_doc}
+            """
+            self.app.command(name=vendor.name, help=inspect.cleandoc(cmd_help or ""))(
+                _create_login_handler(vendor, vendor.authenticator))
 ````
 
 ## File: shab.bash
@@ -1195,8 +1667,7 @@ publish() {
 
 sync() (
   _run uv sync --all-extras --all-groups --all-packages
-  # uv pip install -e . # 确保src目录被安装为可编辑模式，让import正常工作，避免使用PYTHONPATH
-  repomix
+  _run repomix
 )
 
 
@@ -1263,61 +1734,41 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
 fi
 ````
 
-## File: pkgs/applab-cli/src/applab/cli/_cmd_account.py
-````python
-class AccountApp
-⋮----
-def __init__(self, applab: Applab)
-def list_(self)
-⋮----
-"""
-        列出所有已保存的云账户信息。
-        """
-⋮----
-table = Table(title="Cloud Accounts", show_lines=True)
-⋮----
-def info(self, vendor_name: str)
-⋮----
-"""
-        展示指定云厂商的账户详情（优先展示默认账户）。
-        """
-vendor = self.applab.vendors.get(vendor_name)
-⋮----
-accounts = vendor.account_manager.accounts.accounts
-default_acc = next((a for a in accounts if a.is_default), accounts[0])
-⋮----
-class AccountLoginApp
-⋮----
-def _create_login_handler(vendor: Vendor, authenticator: Authenticator)
-⋮----
-@Parameter(name="*")
-            class DynamicParam(authenticator.credential_type)
-def login_handler(*, param: DynamicParam)
-⋮----
-account = authenticator.authenticate(param)
-⋮----
-authenticator_doc = inspect.cleandoc(vendor.authenticator.__doc__ or "")
-cmd_help = f"""
-````
-
 ## File: pkgs/applab-cli/src/applab/cli/main.py
 ````python
 """cli main入口"""
-⋮----
+import logging
+import os
+
+from cyclopts import App
+from rich.logging import RichHandler
+
+from applab.core import Applab
+from applab.vendor import tencentcloud
+from ._cmd_account import AccountApp
+
 logger = logging.getLogger(__name__)
-class ApplabCli
-⋮----
-def __init__(self, applab: Applab)
-⋮----
-app = App(name="applab")
-# cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
-# Change the group of "--help" and "--version" to the implicitly created "Admin" group.
-⋮----
-def _root_cmd(self)
-⋮----
-"""
+
+
+class ApplabCli:
+    def __init__(self, applab: Applab):
+        app = App(name="applab")
+        # cyclopts默认把--help和--version放在'Commands' group里，但这样不符合cli的习惯
+        # Change the group of "--help" and "--version" to the implicitly created "Admin" group.
+        app["--help"].group = "Cli info options"
+        app["--version"].group = "Cli info options"
+        app.default(self._root_cmd)
+        app.command(AccountApp(applab).app, name="account")
+
+        self.app = app
+        self.applab = applab
+
+    def _root_cmd(self):
+        """
         One click install app on some cloud.
+
         ## Examples
+
         ```bash
         applab vendor list
         applab vendor info tencentcloud
@@ -1325,82 +1776,164 @@ def _root_cmd(self)
         applab zone list --vendor tencentcloud
         applab install docker --vendor tencentcloud --zone ap-shanghai-1
         applab x docker install --vendor tencentcloud --zone ap-shanghai-1
+
         applab app list --vendor tencentcloud --zone ap-shanghai-1
         applab app list --vendor tencentcloud
         ```
+
         """
-# if help
-⋮----
-def __setup_logging()
-⋮----
-"""
+        # if help
+        self.app.help_print()
+
+
+def __setup_logging():
+    """
     applab logging bootstrap
+
     需求：
     - CLI 业务输出走 stdout
     - logging 走 stderr
     - 应用可控，第三方库默认安静
     """
-# todo loglevel -v param
-log_level: str = os.getenv("APPLAB_LOG_LEVEL", "WARNING").upper()
-log_level: int = getattr(logging, log_level, logging.WARNING)
-⋮----
-# https://rich.readthedocs.io/en/stable/logging.html
-⋮----
-# --- 第三方库降噪 ---
-log_level_deps = logging.WARNING
-⋮----
-def main()
-⋮----
-# app()
-version = "0.0.1"
-applab = Applab()
-⋮----
-# applab.vendors.register(tencentcloud.AliyunVendor(version=version))
+
+    # todo loglevel -v param
+    log_level: str = os.getenv("APPLAB_LOG_LEVEL", "WARNING").upper()
+    log_level: int = getattr(logging, log_level, logging.WARNING)
+    logging.basicConfig(
+        level=log_level,
+        format=(
+            "%(asctime)s "
+            "[%(levelname)s] "
+            "%(name)s: "
+            "%(message)s"
+        ),
+        datefmt="%Y-%m-%d %H:%M:%S",
+        # https://rich.readthedocs.io/en/stable/logging.html
+        handlers=[RichHandler(rich_tracebacks=True)],
+    )
+
+    # --- 第三方库降噪 ---
+    log_level_deps = logging.WARNING
+    logging.getLogger("urllib3").setLevel(log_level_deps)
+    logging.getLogger("requests").setLevel(log_level_deps)
+    logging.getLogger("botocore").setLevel(log_level_deps)
+    logging.getLogger("boto3").setLevel(log_level_deps)
+
+
+def main():
+    __setup_logging()
+    logger.info(f"applab started {__name__}")
+
+    # app()
+    version = "0.0.1"
+    applab = Applab()
+    applab.vendors.register(tencentcloud.TencentCloudVendor(version=version))
+    # applab.vendors.register(tencentcloud.AliyunVendor(version=version))
+
+    ApplabCli(applab).app()
+
+
+if __name__ == "__main__":
+    main()
 ````
 
 ## File: pkgs/applab-core/src/applab/core/__init__.py
 ````python
 """applab.core
+
 提供核心业务逻辑相关的工具。
 """
-⋮----
+
+from ._param_model import BaseParamModel, TextField, UIField
+from ._base import Vendor, VendorRegister, Applab
+from ._account import CredentialParam, Authenticator, Account, AccountManager, AccountList
+from .storage import JsonStorage
+from ._constant import APPLAB
 __all__ = [
-⋮----
-# _arg_model
-⋮----
-# _auth
-⋮----
-# _base
-⋮----
-# _constant
-⋮----
-# _storage
+    # _arg_model
+    "BaseParamModel",
+    "TextField",
+    "UIField",
+    # _auth
+    "CredentialParam",
+    "Authenticator",
+    "Account",
+    "AccountManager",
+    "AccountList",
+    # _base
+    "Applab",
+    "Vendor",
+    "VendorRegister",
+    # _constant
+    "APPLAB",
+    # _storage
+    "JsonStorage",
+]
 ````
 
 ## File: pkgs/applab-core/src/applab/core/_base.py
 ````python
-class Vendor(ABC)
-⋮----
-# 实例属性（可变字段）
-⋮----
-def info(self) -> dict
-⋮----
-"""返回 vendor 信息字典."""
-⋮----
-def __str__(self)
-class VendorRegister(Mapping[str, Vendor])
-⋮----
-"""只读 Provider 注册表."""
-def __init__(self)
-def register(self, vendor: Vendor)
-⋮----
-"""注册 Provider 类."""
-⋮----
-# Mapping 接口
-def __getitem__(self, key) -> Vendor
-def __iter__(self)
-def __len__(self)
-class Applab
+import json
+from abc import ABC
+from collections.abc import Mapping
+
+from ._account import Authenticator, AccountManager
+
+
+class Vendor(ABC):
+    def __init__(
+            self,
+            name: str,
+            display_name: str,
+            authenticator: Authenticator,
+            account_manager: AccountManager,
+            version: str = "0.0.1",
+    ):
+        # 实例属性（可变字段）
+        self.name = name
+        self.display_name = display_name
+        self.version = version
+        self.authenticator = authenticator
+        self.account_manager = account_manager
+
+    def info(self) -> dict:
+        """返回 vendor 信息字典."""
+        return {
+            "name": self.name,
+            "version": self.version,
+        }
+
+    def __str__(self):
+        return json.dumps(self.info())
+
+
+class VendorRegister(Mapping[str, Vendor]):
+    """只读 Provider 注册表."""
+
+    def __init__(self):
+        self._delegate: dict[str, Vendor] = {}
+
+    def register(self, vendor: Vendor):
+        """注册 Provider 类."""
+        self._delegate[vendor.name] = vendor
+
+    # Mapping 接口
+    def __getitem__(self, key) -> Vendor:
+        return self._delegate[key]
+
+    def __iter__(self):
+        return iter(self._delegate)
+
+    def __len__(self):
+        return len(self._delegate)
+
+
+class Applab:
+    def __init__(
+            self,
+            vendors: VendorRegister = VendorRegister(),
+    ):
+        self.vendors = vendors
 ````
 
 ## File: pyproject.toml

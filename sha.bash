@@ -36,10 +36,13 @@ publish() {
 }
 
 sync() (
-  # 同步gemini所需文件
-  ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
+  # 同步ai所需文件
+  # ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
 
   _run uv sync --all-extras --all-groups
+  _run repomix
+  _run quarto render .ai/context.qmd
+
 )
 
 
@@ -67,9 +70,8 @@ info() {
 }
 
 gemini() {
-  export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
-  command gemini
-
+  # export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
+  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
 }
 
 ##########################################

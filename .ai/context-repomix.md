@@ -806,9 +806,9 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#  and can be added to the global gitignore or merged into this file. However, if you prefer,
 #  you could uncomment the following to ignore the entire vscode folder
 # .vscode/
 
@@ -833,6 +833,13 @@ __marimo__/
 
 # macOS system files
 .DS_Store
+
+
+# quarto
+.quarto/
+**/*.quarto_ipynb
+
+/.quarto/
 ````
 
 ## File: pkgs/applab-cli/src/applab/cli/_console.py
@@ -1266,88 +1273,6 @@ class AliyunVendor(Vendor):
         )
 ````
 
-## File: sha.bash
-````bash
-#!/usr/bin/env bash
-# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
-
-set -o errtrace  # -E trap inherited in sub script
-set -o errexit   # -e
-set -o functrace # -T If set, any trap on DEBUG and RETURN are inherited by shell functions
-set -o pipefail  # default pipeline status==last command status, If set, status=any command fail
-
-## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
-shopt -s globstar
-
-cd "$(dirname "${BASH_SOURCE[0]}")"
-source "./sha_common.bash"
-
-##########################################
-# app cmd script
-# 独立于项目组的特殊命令
-##########################################
-
-##################################################
-# 项目扩展命令集
-##################################################
-
-build() {
-  echo "current:$(pwd)"
-  check
-  format
-  _run uv build
-}
-
-publish() {
-  # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
-  local api_key
-  api_key=$(uv run -m keyring get pypi_applab_api_token pypi_applab_api_token)
-  _run uv publish -t "${api_key}"
-}
-
-sync() (
-  # 同步gemini所需文件
-  ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
-
-  _run uv sync --all-extras --all-groups
-)
-
-
-format() {
-  # _run uv run ruff check --fix
-  # _run uv run ruff format
-  echo todo format
-}
-
-test() {
-  _run uv run pytest tests/
-}
-
-check() {
-  echo todo check
-  # _run uv run pyright --pythonplatform Darwin
-  # _run uv run pyright --pythonplatform Linux
-  # _run uv run pyright --pythonplatform Windows
-  _run uv run ruff check --fix
-}
-
-
-info() {
-  echo "sha run at: $(pwd)"
-}
-##########################################
-# app 入口
-##########################################
-# 守卫语句，本脚本如果作为lib导入使用则不再执行后续命令入口代码
-# - 当本脚本作为命令被执行时'$ ./sha', $0为'./sha,
-# - 当本脚本当作类库导入时即: '. ./sha'，$0值为bash/zsh等
-# 类似python的'if __name__ == "__main__"'
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-  # 命令式执行的入口代码, 即'$ ./sha' 而不是'. ./sha'
-  sha "$@"
-fi
-````
-
 ## File: pkgs/applab-cli/pyproject.toml
 ````toml
 [project]
@@ -1518,6 +1443,98 @@ class TencentCloudAKSKAuthenticator(Authenticator):
             raise err
 ````
 
+## File: sha.bash
+````bash
+#!/usr/bin/env bash
+# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+
+set -o errtrace  # -E trap inherited in sub script
+set -o errexit   # -e
+set -o functrace # -T If set, any trap on DEBUG and RETURN are inherited by shell functions
+set -o pipefail  # default pipeline status==last command status, If set, status=any command fail
+
+## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
+shopt -s globstar
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+source "./sha_common.bash"
+
+##########################################
+# app cmd script
+# 独立于项目组的特殊命令
+##########################################
+
+##################################################
+# 项目扩展命令集
+##################################################
+
+build() {
+  echo "current:$(pwd)"
+  check
+  format
+  _run uv build
+}
+
+publish() {
+  # echo "$(uv run -m keyring get pypi_org_paq_api_key pypi_org_paq_api_key)"
+  local api_key
+  api_key=$(uv run -m keyring get pypi_applab_api_token pypi_applab_api_token)
+  _run uv publish -t "${api_key}"
+}
+
+sync() (
+  # 同步ai所需文件
+  # ln -sf ../.ai/CONTEXT.md .gemini/CONTEXT.md
+
+  _run uv sync --all-extras --all-groups
+  _run repomix
+  _run quarto render .ai/context.qmd
+
+)
+
+
+format() {
+  # _run uv run ruff check --fix
+  # _run uv run ruff format
+  echo todo format
+}
+
+test() {
+  _run uv run pytest tests/
+}
+
+check() {
+  echo todo check
+  # _run uv run pyright --pythonplatform Darwin
+  # _run uv run pyright --pythonplatform Linux
+  # _run uv run pyright --pythonplatform Windows
+  _run uv run ruff check --fix
+}
+
+
+info() {
+  echo "sha run at: $(pwd)"
+}
+
+gemini() {
+  export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
+  command gemini "$@"
+
+}
+
+##########################################
+# app 入口
+##########################################
+# 守卫语句，本脚本如果作为lib导入使用则不再执行后续命令入口代码
+# - 当本脚本作为命令被执行时'$ ./sha', $0为'./sha,
+# - 当本脚本当作类库导入时即: '. ./sha'，$0值为bash/zsh等
+# 类似python的'if __name__ == "__main__"'
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  # 命令式执行的入口代码, 即'$ ./sha' 而不是'. ./sha'
+  sha "$@"
+fi
+````
+
 ## File: pkgs/applab-cli/src/applab/cli/__init__.py
 ````python
 """applab.cli.
@@ -1667,7 +1684,7 @@ publish() {
 
 sync() (
   _run uv sync --all-extras --all-groups --all-packages
-  _run repomix
+  _run ./sha.bash sync
 )
 
 
@@ -1677,15 +1694,15 @@ check() {
 }
 
 lintfix() {
-  uv run ruff check --fix
+  _run uv run ruff check --fix
 }
 
 format() {
-  uv run ruff format
+  _run uv run ruff format
 }
 
 test() {
-  uv run pytest
+  _run uv run pytest
 }
 
 sync_github() {
@@ -1959,12 +1976,14 @@ dependencies = [
 ]
 
 [dependency-groups]
+# quarto deps: jupyter
 dev = [
     "pytest>=9.0.1",
     "ruff>=0.14.10",
     "ty>=0.0.8",
     "pyrefly>=0.46.3",
     "keyring>=25.7.0",
+    "jupyter>=1.1.1",
 ]
 
 [build-system]

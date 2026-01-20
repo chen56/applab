@@ -41,7 +41,7 @@ publish() {
 
 sync() (
   _run uv sync --all-extras --all-groups --all-packages
-  _run repomix
+  _run ./sha.bash sync
 )
 
 

@@ -1,9 +1,17 @@
 # Applab Project Context
 
+
+**注意** 不要编辑context.md, 它是quarto自动生成, 请编辑context.qmd
+
+update date: 2026-01-20 18:54:45
+
 ## Overview
-Applab is a cloud application deployment tool designed with a plugin architecture to support multiple cloud vendors (e.g., Tencent Cloud).
+
+Applab is a cloud application deployment tool designed with a plugin
+architecture to support multiple cloud vendors (e.g., Tencent Cloud).
 
 ## Technical Architecture
+
 - **Structure**: Monorepo workspace using `uv`.
 - **Packaging**: PEP 420 Namespace Packages.
 - **Stack**:
@@ -15,7 +23,8 @@ Applab is a cloud application deployment tool designed with a plugin architectur
   - **Linting**: `ruff` (NumPy style docstrings)
 
 ## Project Structure
-```text
+
+``` text
 applab/
 ├── pkgs/
 │   ├── applab-cli/          # CLI Entry & UX
@@ -28,29 +37,41 @@ applab/
 ```
 
 ## Modules
-- **applab-core**: Universal classes, assertions, auth management, storage abstraction.
+
+- **applab-core**: Universal classes, assertions, auth management,
+  storage abstraction.
 - **applab-cli**: CLI logic, command parsing (Cyclopts), console output.
-- **applab-vendor-***: Cloud provider implementations (Auth, Resource Management).
+- **applab-vendor-**\*: Cloud provider implementations (Auth, Resource
+  Management).
 
 ## Development
+
 ### Environment
+
 - **Setup**: `uv sync` (Syncs entire workspace)
 - **Test**: `pytest` or `./sha test`
 - **Build**: `uv build` or `./sha build`
 
 ### Standards
-- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/).
+
+- **Commits**: [Conventional
+  Commits](https://www.conventionalcommits.org/).
 - **Code Style**: Ruff, NumPy docstrings, 120 line length.
-- **Git Operations**: Do NOT perform `git add`, `commit`, `push` or other state-changing git commands unless explicitly instructed by the user.
+- **Git Operations**: Do NOT perform `git add`, `commit`, `push` or
+  other state-changing git commands unless explicitly instructed by the
+  user.
 
 ## Authentication
-| Vendor | ID Credential | Secret Credential | Key Params |
-| :--- | :--- | :--- | :--- |
-| AWS | access_key_id | secret_access_key | region_name |
-| Tencent | secret_id | secret_key | - |
-| Aliyun | access_key_id | access_key_secret | - |
-| Azure | client_id | client_secret | tenant_id, subscription_id |
-| GCP | client_email | private_key | project_id |
+
+| Vendor  | ID Credential | Secret Credential | Key Params                 |
+|:--------|:--------------|:------------------|:---------------------------|
+| AWS     | access_key_id | secret_access_key | region_name                |
+| Tencent | secret_id     | secret_key        | \-                         |
+| Aliyun  | access_key_id | access_key_secret | \-                         |
+| Azure   | client_id     | client_secret     | tenant_id, subscription_id |
+| GCP     | client_email  | private_key       | project_id                 |
 
 ## References
-- **GitHub Rules**: [See Rules](rules/github.md) (Load via `read_file` if needed).
+
+- **GitHub Rules**: [See Rules](rules/github.md) (Load via `read_file`
+  if needed).

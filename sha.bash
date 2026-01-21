@@ -36,6 +36,8 @@ publish() {
 }
 
 sync() (
+  ln -fs ../ai/skills .gemini/skills
+
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete ai build/
   _run repomix

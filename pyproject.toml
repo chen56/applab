@@ -88,7 +88,7 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 cache-dir = "build/.ruff_cache"
 src = ["."]
 exclude = [".git", "__pycache__", "build", "dist", ".venv"]
-line-length = 120
+line-length = 150
 
 [tool.ruff.lint]
 ignore = [

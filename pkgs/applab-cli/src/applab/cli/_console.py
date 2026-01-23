@@ -48,11 +48,9 @@ Layer 3: Business Semantic Mapping
 
 """
 
-from typing import Any, cast
+from typing import Any, Dict, Literal, cast
 
 from rich.console import Console
-from typing import Dict, Literal
-
 from rich.markdown import Markdown
 from rich.style import Style
 from rich.theme import Theme
@@ -250,19 +248,19 @@ class _Console:
         self.console.print(Markdown(markup))
 
     def success(self, *objects: Any) -> None:
-        self._print("🟢 ", *objects, style="primary")
+        self._print("🟢", *objects, style="primary")
 
     def warn(self, *objects: Any) -> None:
         self._print(":warning-emoji:", *objects, style="tertiary")
 
     def info(self, *objects: Any) -> None:
-        self._print("ℹ️ ", *objects, style="surface_variant")
+        self._print("ℹ️", *objects, style="surface_variant")
 
     def input(self, *objects: Any) -> None:
-        self._print("🧷 ", *objects, style="surface")
+        self._print("🧷", *objects, style="surface")
 
     def error(self, *objects: Any) -> None:
-        self._print("🔴 ", *objects, style="error")
+        self._print("🔴", *objects, style="error")
 
     def _print(self, *objects: Any, style: _RichStyleName):
         self.console.print(*objects, style=self.rich_style(style))

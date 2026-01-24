@@ -3,7 +3,7 @@ from typing import Any
 from pydantic import BaseModel, SecretStr, field_serializer
 
 
-# TODO : reactor move to storage.py , and rename to pydantic_ext.py
+# TODO : reactor 1.  move to storage.py , 2. and rename to pydantic_ext.py ; 3.rename to AppLabBaseModel
 class AppLabBase(BaseModel):
     """AppLab 所有配置模型的基类"""
 

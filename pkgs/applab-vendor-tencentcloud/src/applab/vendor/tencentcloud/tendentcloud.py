@@ -1,4 +1,4 @@
-from typing import Annotated, Type
+from typing import Annotated, Literal, Type
 
 from applab.core import (
     APPLAB,
@@ -56,7 +56,7 @@ class TencentCloudAKSKCredential(AppLabBase):
 
 
 class TencentCloudAuthInfo(AuthInfo):
-    vendor: str = "tencentcloud"
+    vendor: Literal["tencentcloud"] = "tencentcloud"
     account: TencentCloudAccountInfo
     credential: TencentCloudAKSKCredential
 

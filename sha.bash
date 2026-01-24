@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+# shellcheck disable=SC2329  # 忽略函数未被使用的警告
 
 set -o errtrace  # -E trap inherited in sub script
 set -o errexit   # -e

@@ -1,14 +1,13 @@
-from unittest.mock import MagicMock, patch
-import pytest
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
+import pytest
 from pydantic import SecretStr
 
 from applab.core import Applab, AuthManager, JsonStorage
-# XXX(P2): 测试代码引用内部module不应该报问题
-from applab.core._auth import AuthInfoList
+from applab.core import AuthInfoList
 from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, \
-    TencentCloudAuthInfo, TencentCloudAKSKAuthenticator, TencentCloudAccountInfo, TencentCloudAKSKCredential
+    TencentCloudAuthInfo, TencentCloudAKSKAuthenticator
 
 
 class Fixture:

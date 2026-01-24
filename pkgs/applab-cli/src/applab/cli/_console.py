@@ -48,9 +48,9 @@ Layer 3: Business Semantic Mapping
 
 """
 
-from typing import Any, Dict, Literal, cast
+from typing import Any, Dict, Literal, cast, Union, Optional
 
-from rich.console import Console
+import rich.console
 from rich.markdown import Markdown
 from rich.style import Style
 from rich.theme import Theme
@@ -224,51 +224,81 @@ def _to_rich_theme(*, roles) -> Theme:
     return Theme(styles=cast(Dict[str, Style], styles))
 
 
-class _Console:
+class Console:
     """
     all cli info/error/waring output to stdout, its app logic, not log.
     """
 
-    def __init__(self, *, dark: bool = False):
+    def __init__(self, *, dark: bool = False, no_rich_style: bool = False):
         # Layer 1 Material 3 Color Roles
         m3_color_roles: dict[_Material3_Color_Role_Name, str] = _build_material3_color_roles(dark=dark)
         # Layer 2: Rich Theme (M3 Colors to Rich CLI)
         self._rich_theme = _to_rich_theme(roles=m3_color_roles)
 
         # Layer 3: Business Semantic Mapping : success()/info() function
-        self.console = Console(theme=self._rich_theme, color_system="truecolor")
+        # todo 应该是stdout+stderr
+        self.console = rich.console.Console(theme=self._rich_theme, color_system="truecolor")
+
+        self.no_rich_style = no_rich_style
 
     def rich_style(self, name: _RichStyleName) -> Style:
         return self._rich_theme.styles[name]
 
-    def print(self, *objects: Any) -> None:
-        self.console.print(*objects)
-
-    def markdown(self, markup: str) -> None:
-        self.console.print(Markdown(markup))
-
     def success(self, *objects: Any) -> None:
-        self._print("🟢", *objects, style="primary")
+        self._print_rich_style("🟢", *objects, style="primary")
 
     def warn(self, *objects: Any) -> None:
-        self._print(":warning-emoji:", *objects, style="tertiary")
+        self._print_rich_style(":warning-emoji:", *objects, style="tertiary")
 
     def info(self, *objects: Any) -> None:
-        self._print("ℹ️", *objects, style="surface_variant")
+        self._print_rich_style("ℹ️", *objects, style="surface_variant")
 
     def input(self, *objects: Any) -> None:
-        self._print("🧷", *objects, style="surface")
+        self._print_rich_style("🧷", *objects, style="surface")
 
     def error(self, *objects: Any) -> None:
-        self._print("🔴", *objects, style="error")
+        self._print_rich_style("🔴", *objects, style="error")
 
-    def _print(self, *objects: Any, style: _RichStyleName):
-        self.console.print(*objects, style=self.rich_style(style))
+    def print(self, *objects: Any) -> None:
+        self._print(*objects)
+
+    def markdown(self, markup: str) -> None:
+        self._print(Markdown(markup))
+
+    def _print_rich_style(self, *objects: Any, style: _RichStyleName):
+        if self.no_rich_style:
+            print(*objects)
+        else:
+            self._print(*objects, style=self.rich_style(style))
+
+    def _print(self, *objects: Any, style: Optional[Union[str, Style]] = None) -> None:
+        self.console.print(*objects, style=style)
 
 
-console = _Console()
+import re
+
+# ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+_ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;]*[mGKF]')
+
+
+def strip_ansi(s: str) -> str:
+    """Strip ANSI escape sequences from a string.
+
+    避免以下问题(pycharm/rich等工具 会加一些cli特殊字符):
+        assert "已成功删除账户 'test-account-1'" in out
+          E assert "已成功删除账户 'test-account-1'" in "即将删除以下账户，该操作会一并删除本地保存的凭据，且不可恢复！\n
+          \x1b[1;35mTencentCloudAccount\x1b[0m\x1b[1m(\x1b[0m\n
+          \x1b[33mid\x1b[0m=\x1b[32m'...1;121;255m12345\x1b[0m\x1b[1;38;2;255;255;255;48;2;41;121;255m)
+          \x1b[0m\x1b[38;2;255;255;255;48;2;41;121;255m。\x1b[0m\n"
+    """
+    return _ANSI_ESCAPE.sub("", s)
+
+
+console = Console()
 
 if __name__ == "__main__":
+    console = Console(no_rich_style=True)
+
     console.print("## 颜色系统Layer 2 层使用范例")
     console.print("[primary]primary[/]")
     console.print("[primary_container]primary_container[/]")

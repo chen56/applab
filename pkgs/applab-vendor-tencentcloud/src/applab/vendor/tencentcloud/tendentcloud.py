@@ -1,24 +1,39 @@
 from typing import Annotated, Type
 
+from applab.core import (
+    APPLAB,
+    Account,
+    AccountList,
+    AccountManager,
+    Authenticator,
+    CredentialParam,
+    Vendor,
+)
+from applab.core.storage import JsonStorage
 from pydantic import Field
 from pydantic.types import SecretStr
 
-from applab.core import Authenticator, CredentialParam, Account, Vendor, AccountManager
-from applab.core import AccountList
-from applab.core import APPLAB
-from applab.core.storage import JsonStorage
-
 
 class TencentCloudVendor(Vendor):
-    def __init__(self, version: str):
+    def __init__(
+        self,
+        version: str,
+        account_manager: AccountManager["TencentCloudAccount"] | None = None,
+    ):
+        # todo 没必要提供 可选的account_manager,test时可以mock改APPLAB.CONFIG_DIR
+        if account_manager is None:
+            account_manager = AccountManager(
+                storage=JsonStorage(
+                    path=APPLAB.CONFIG_DIR / "tencentcloud.json",
+                    model=AccountList[TencentCloudAccount],
+                )
+            )
         super().__init__(
             name="tencentcloud",
             display_name="腾讯云",
             version=version,
             authenticator=TencentCloudAKSKAuthenticator(),
-            account_manager=AccountManager(
-                storage=JsonStorage(path=APPLAB.CONFIG_DIR / "tencentcloud.json", model=AccountList[TencentCloudAccount]),
-            ),
+            account_manager=account_manager,
         )
 
 
@@ -32,6 +47,9 @@ class TencentCloudAccount(Account):
     app_id: int
     uin: str
     owner_uin: str
+    # XXX(P2): 加密secret_key
+    secret_id: str
+    secret_key: SecretStr
 
 
 class TencentCloudAKSKAuthenticator(Authenticator):
@@ -40,23 +58,24 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         return TencentCloudAKSKCredentialParam
 
     def authenticate(self, credential_param: TencentCloudAKSKCredentialParam):
+        from tencentcloud.cam.v20190116 import cam_client as cam
+        from tencentcloud.cam.v20190116 import models as cam_models
         from tencentcloud.common import credential
-        from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
-        from tencentcloud.cam.v20190116 import cam_client as cam, models as cam_models
-        try:
-            cred = credential.Credential(credential_param.secret_id, credential_param.secret_key.get_secret_value())
 
-            client = cam.CamClient(cred, "ap-guangzhou")
-            req = cam_models.GetUserAppIdRequest()
-            resp = client.GetUserAppId(req)
-            result = TencentCloudAccount(
-                title=credential_param.title,
-                app_id=resp.AppId,
-                uin=resp.Uin,
-                owner_uin=resp.OwnerUin,
-            )
+        cred = credential.Credential(
+            credential_param.secret_id, credential_param.secret_key.get_secret_value()
+        )
 
-            return result
-        except TencentCloudSDKException as err:
-            print(f"登录失败: {err}")
-            raise err
+        client = cam.CamClient(cred, "ap-guangzhou")
+        req = cam_models.GetUserAppIdRequest()
+        resp = client.GetUserAppId(req)
+        result = TencentCloudAccount(
+            title=credential_param.title,
+            app_id=resp.AppId,
+            uin=resp.Uin,
+            owner_uin=resp.OwnerUin,
+            secret_id=credential_param.secret_id,
+            secret_key=credential_param.secret_key,
+        )
+
+        return result

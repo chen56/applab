@@ -116,6 +116,7 @@ version = "0.0.2.dev20251230153900"
 source = { editable = "pkgs/applab-core" }
 dependencies = [
     { name = "cyclopts" },
+    { name = "deepdiff" },
     { name = "platformdirs" },
     { name = "pydantic" },
     { name = "requests" },
@@ -131,6 +132,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cyclopts", specifier = ">=4.4.0" },
+    { name = "deepdiff", specifier = ">=8.6.1" },
     { name = "platformdirs", specifier = ">=4.5.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "requests", specifier = ">=2.32.5" },

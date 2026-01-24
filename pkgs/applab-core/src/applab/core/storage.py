@@ -1,6 +1,7 @@
 import os
 import pathlib
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -16,16 +17,21 @@ class JsonStorage[T: BaseModel]:
             return self.model()
 
         json_string = pathlib.Path(self.path).read_text(encoding="utf-8")
-        return self.model.model_validate_json(json_string)
+        try:
+            return self.model.model_validate_json(json_string)
+        except Exception as e:
+            e.add_note(f"applab: Failed to pydantic validate JSON from {self.path}, check your file format.")
+            raise e
 
-    def save(self, doc: T):
-        atomic_save_text(self.path, doc.model_dump_json(indent=4))
+    # todo 可以做强类型参数而不是context
+    def save(self, doc: T, context: Any = None):
+        save_text(self.path, doc.model_dump_json(indent=4, context=context))
 
 
 # ---------------------------
 # 文本版本
 # ---------------------------
-def atomic_save_text(
+def save_text(
         path: Path,
         text: str,
         *,
@@ -33,7 +39,7 @@ def atomic_save_text(
         fsync: bool = True,
 ) -> None:
     """
-    Atomically save text or JSON-serializable data to a file.
+    Atomically save text data to a file.
 
     """
     path = path.resolve()
@@ -53,7 +59,7 @@ def atomic_save_text(
 # ---------------------------
 # 二进制版本
 # ---------------------------
-def atomic_save_bytes(
+def save_bytes(
         path: Path,
         data: bytes,
         *,

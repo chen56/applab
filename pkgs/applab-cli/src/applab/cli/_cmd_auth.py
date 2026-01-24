@@ -1,112 +1,112 @@
 import inspect
 from typing import Optional
 
-from applab.core import Account, Applab, Authenticator, Vendor
+from applab.core import AuthInfo, Applab, Authenticator, Vendor
 from cyclopts import App
 
 from ._console import console
 
 
-class AccountApp:
+class AuthApp:
     def __init__(self, applab: Applab):
         self.applab = applab
         self.app = App(
-            name="account",
+            name="auth",
             help="""
-            Cloud account management.
+            Cloud auth management.
             """,
         )
         self.app.command(self.list_, name="list")
         self.app.command(self.info)
         self.app.command(self.logout)
-        self.app.command(AccountLoginApp(applab).app, name="login")
+        self.app.command(AuthLoginApp(applab).app, name="login")
 
     # todo 是否能重构到core内部去
-    def _find_account(self, auth_id: str) -> Optional[tuple[Vendor, Account]]:
-        found_accounts = []
+    def _find_auth(self, auth_id: str) -> Optional[tuple[Vendor, AuthInfo]]:
+        found_auths = []
         for vendor in self.applab.vendors.values():
-            for acc in vendor.account_manager.accounts:
-                if acc.account_id == auth_id or acc.title == auth_id:
-                    found_accounts.append((vendor, acc))
-        if not found_accounts:
-            console.error(f"未找到指定的账户 '{auth_id}'。")
+            for acc in vendor.auth_manager.auths:
+                if acc.auth_id == auth_id or acc.title == auth_id:
+                    found_auths.append((vendor, acc))
+        if not found_auths:
+            console.error(f"未找到指定的认证信息 '{auth_id}'。")
             return None
-        if len(found_accounts) > 1:
+        if len(found_auths) > 1:
             console.error(
-                f"找到多个名为 '{auth_id}' 的账户，请使用唯一的账户 ID 执行。"
+                f"找到多个名为 '{auth_id}' 的认证信息，请使用唯一的 ID 执行。"
             )
             return None
-        return found_accounts[0]
+        return found_auths[0]
 
     def list_(self):
         """
-        列出所有已保存的云账户信息。
+        列出所有已保存的云认证信息。
         """
         from rich.table import Table
 
-        table = Table(title="Cloud Accounts", show_lines=True)
+        table = Table(title="Cloud Auths", show_lines=True)
         table.add_column("Vendor")
-        table.add_column("Account Name")
-        table.add_column("Account ID")
+        table.add_column("AuthInfo Name")
+        table.add_column("AuthInfo ID")
         table.add_column("Default")
         table.add_column("Created At")
         for vendor in self.applab.vendors.values():
-            for acc in vendor.account_manager._accounts.accounts:
+            for acc in vendor.auth_manager._auths.auths:
                 table.add_row(
                     acc.vendor,
                     acc.title,
-                    acc.account_id,
+                    acc.auth_id,
                     str(acc.is_default),
                     str(acc.created_at),
                 )
         console.print(table)
 
-    # todo 重构account_spec 名为auth_id
-    def info(self, account_spec: str):
+    # todo 重构为 auth_id
+    def info(self, auth_id: str):
         """
-        展示指定账户的详细信息。
+        展示指定认证的详细信息。
         """
-        result = self._find_account(account_spec)
+        result = self._find_auth(auth_id)
         if not result:
             return 1
         _, acc = result
         console.print(acc)
         return 0
 
-    # todo 重构account_spec 名为auth_id
-    def logout(self, account_spec: str):
+    # todo 重构为 auth_id
+    def logout(self, auth_id: str):
         """
-        删除一个已保存的云账户。
+        删除一个已保存的云认证信息。
         """
-        result = self._find_account(account_spec)
+        result = self._find_auth(auth_id)
         if not result:
             return 1
 
         from rich.prompt import Confirm
 
         vendor, acc = result
-        console.print("即将删除以下账户，该操作会一并删除本地保存的凭据，且不可恢复！")
+        console.print("即将删除以下认证信息，该操作会一并删除本地保存的凭据，且不可恢复！")
         console.print(acc)
-        if not Confirm.ask("请确认是否删除该账户", default=False):
+        if not Confirm.ask("请确认是否删除该认证信息", default=False):
             console.info("操作已取消。")
             return 0
 
-        removed = vendor.account_manager.remove(acc.account_id)
+        removed = vendor.auth_manager.remove(acc.auth_id)
         if removed:
-            console.success(f"已成功删除账户 '{removed.title}' (ID: {removed.account_id})。")
+            console.success(f"已成功删除认证信息 '{removed.title}' (ID: {removed.auth_id})。")
         else:
-            console.error(f"删除账户 '{acc.title}' (ID: {acc.account_id}) 时发生错误。")
+            console.error(f"删除认证信息 '{acc.title}' (ID: {acc.auth_id}) 时发生错误。")
             return 1
         return 0
 
 
-class AccountLoginApp:
+class AuthLoginApp:
     def __init__(self, applab: Applab):
         self.applab = applab
         self.app = App(
             name="login",
             help="""
-                Cloud account login.
+                Cloud auth login.
                 """,
         )
 
@@ -132,10 +132,10 @@ class AccountLoginApp:
                         **credential_param_args
                     )
 
-                    account = authenticator.authenticate(credential_param)
+                    auth_info = authenticator.authenticate(credential_param)
                     console.success(f"已成功登录 {vendor.name}")
-                    vendor.account_manager.add(account)
-                    console.info(f"已保存账号到 {vendor.account_manager._storage.path}")
+                    vendor.auth_manager.add(auth_info)
+                    console.info(f"已保存认证信息到 {vendor.auth_manager._storage.path}")
                     return 0
                 except Exception as e:
                     # todo console 失败一次，会发现颜色字符里有很多乱七八糟的颜色，不知道啥原因?

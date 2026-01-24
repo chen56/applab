@@ -2,9 +2,9 @@ from typing import Annotated, Type
 
 from applab.core import (
     APPLAB,
-    Account,
-    AccountList,
-    AccountManager,
+    AuthInfo,
+    AuthInfoList,
+    AuthManager,
     Authenticator,
     CredentialParam,
     Vendor,
@@ -18,14 +18,14 @@ class TencentCloudVendor(Vendor):
     def __init__(
         self,
         version: str,
-        account_manager: AccountManager["TencentCloudAccount"] | None = None,
+        auth_manager: AuthManager["TencentCloudAuthInfo"] | None = None,
     ):
-        # todo 没必要提供 可选的account_manager,test时可以mock改APPLAB.CONFIG_DIR
-        if account_manager is None:
-            account_manager = AccountManager(
+        # todo 没必要提供 可选的auth_manager,test时可以mock改APPLAB.CONFIG_DIR
+        if auth_manager is None:
+            auth_manager = AuthManager(
                 storage=JsonStorage(
                     path=APPLAB.CONFIG_DIR / "tencentcloud.json",
-                    model=AccountList[TencentCloudAccount],
+                    model=AuthInfoList[TencentCloudAuthInfo],
                 )
             )
         super().__init__(
@@ -33,7 +33,7 @@ class TencentCloudVendor(Vendor):
             display_name="腾讯云",
             version=version,
             authenticator=TencentCloudAKSKAuthenticator(),
-            account_manager=account_manager,
+            auth_manager=auth_manager,
         )
 
 
@@ -42,7 +42,7 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
     secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
 
 
-class TencentCloudAccount(Account):
+class TencentCloudAuthInfo(AuthInfo):
     vendor: str = "tencentcloud"
     app_id: int
     uin: str
@@ -69,7 +69,7 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         client = cam.CamClient(cred, "ap-guangzhou")
         req = cam_models.GetUserAppIdRequest()
         resp = client.GetUserAppId(req)
-        result = TencentCloudAccount(
+        result = TencentCloudAuthInfo(
             title=credential_param.title,
             app_id=resp.AppId,
             uin=resp.Uin,

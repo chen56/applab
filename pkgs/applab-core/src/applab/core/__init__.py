@@ -5,7 +5,7 @@
 
 from ._param_model import BaseParamModel, TextField, UIField
 from ._base import Vendor, VendorRegister, Applab
-from ._account import CredentialParam, Authenticator, Account, AccountManager, AccountList
+from ._auth import CredentialParam, Authenticator, AuthInfo, AuthManager, AuthInfoList
 from .storage import JsonStorage
 from ._constant import APPLAB
 __all__ = [
@@ -16,9 +16,9 @@ __all__ = [
     # _auth
     "CredentialParam",
     "Authenticator",
-    "Account",
-    "AccountManager",
-    "AccountList",
+    "AuthInfo",
+    "AuthManager",
+    "AuthInfoList",
     # _base
     "Applab",
     "Vendor",

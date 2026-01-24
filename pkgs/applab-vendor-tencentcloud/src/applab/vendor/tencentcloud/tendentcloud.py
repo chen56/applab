@@ -2,10 +2,12 @@ from typing import Annotated, Type
 
 from applab.core import (
     APPLAB,
+    AccountInfo,
     AuthInfo,
     AuthInfoList,
     AuthManager,
     Authenticator,
+    Credential,
     CredentialParam,
     Vendor,
 )
@@ -42,14 +44,22 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
     secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
 
 
-class TencentCloudAuthInfo(AuthInfo):
-    vendor: str = "tencentcloud"
+class TencentCloudAccountInfo(AccountInfo):
     app_id: int
     uin: str
     owner_uin: str
+
+
+class TencentCloudAKSKCredential(Credential):
     # XXX(P2): 加密secret_key
     secret_id: str
     secret_key: SecretStr
+
+
+class TencentCloudAuthInfo(AuthInfo):
+    vendor: str = "tencentcloud"
+    account: TencentCloudAccountInfo
+    credential: TencentCloudAKSKCredential
 
 
 class TencentCloudAKSKAuthenticator(Authenticator):
@@ -69,13 +79,20 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         client = cam.CamClient(cred, "ap-guangzhou")
         req = cam_models.GetUserAppIdRequest()
         resp = client.GetUserAppId(req)
-        result = TencentCloudAuthInfo(
+
+        account = TencentCloudAccountInfo(
             title=credential_param.title,
             app_id=resp.AppId,
             uin=resp.Uin,
             owner_uin=resp.OwnerUin,
+        )
+
+        credential_obj = TencentCloudAKSKCredential(
             secret_id=credential_param.secret_id,
             secret_key=credential_param.secret_key,
         )
 
-        return result
+        return TencentCloudAuthInfo(
+            account=account,
+            credential=credential_obj,
+        )

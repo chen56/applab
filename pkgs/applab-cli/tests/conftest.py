@@ -9,7 +9,8 @@ from applab.cli import _console
 from applab.cli.main import ApplabCli
 from applab.core import Applab, AuthManager, JsonStorage
 from applab.core._auth import AuthInfoList
-from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAuthInfo
+from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAuthInfo, TencentCloudAccountInfo, \
+    TencentCloudAKSKCredential
 
 
 @pytest.fixture
@@ -37,30 +38,46 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
     acc1 = TencentCloudAuthInfo(
         auth_id="tc-id-12345",
         vendor="tencentcloud",
-        title="test-auth-1",
-        app_id=1, uin="1", owner_uin="1",
-        secret_id="id1", secret_key=SecretStr("key1")
+        account=TencentCloudAccountInfo(
+            title="test-auth-1",
+            app_id=1, uin="1", owner_uin="1",
+        ),
+        credential=TencentCloudAKSKCredential(
+            secret_id="id1", secret_key=SecretStr("key1")
+        )
     )
     acc2 = TencentCloudAuthInfo(
         auth_id="tc-id-67890",
         vendor="tencentcloud",
-        title="test-auth-2",
-        app_id=2, uin="2", owner_uin="2",
-        secret_id="id2", secret_key=SecretStr("key2")
+        account=TencentCloudAccountInfo(
+            title="test-auth-2",
+            app_id=2, uin="2", owner_uin="2",
+        ),
+        credential=TencentCloudAKSKCredential(
+            secret_id="id2", secret_key=SecretStr("key2")
+        )
     )
     acc3 = TencentCloudAuthInfo(
         auth_id="tc-id-abcde",
         vendor="tencentcloud",
-        title="ambiguous-title",
-        app_id=3, uin="3", owner_uin="3",
-        secret_id="id3", secret_key=SecretStr("key3")
+        account=TencentCloudAccountInfo(
+            title="ambiguous-title",
+            app_id=3, uin="3", owner_uin="3",
+        ),
+        credential=TencentCloudAKSKCredential(
+            secret_id="id3", secret_key=SecretStr("key3")
+        )
     )
     acc4 = TencentCloudAuthInfo(
         auth_id="tc-id-fghij",
         vendor="tencentcloud",
-        title="ambiguous-title",
-        app_id=4, uin="4", owner_uin="4",
-        secret_id="id4", secret_key=SecretStr("key4")
+        account=TencentCloudAccountInfo(
+            title="ambiguous-title",
+            app_id=4, uin="4", owner_uin="4",
+        ),
+        credential=TencentCloudAKSKCredential(
+            secret_id="id4", secret_key=SecretStr("key4")
+        )
     )
     manager.add(acc1)
     manager.add(acc2)
@@ -76,9 +93,14 @@ def mock_tencent_auth(request):
     Can be parameterized to return a specific account or raise an exception.
     """
     mock_account = TencentCloudAuthInfo(
-        title="default-mock",
-        app_id=999, uin="999", owner_uin="999",
-        secret_id="mock-id", secret_key=SecretStr("mock-key")
+        vendor="tencentcloud",
+        account=TencentCloudAccountInfo(
+            title="default-mock",
+            app_id=999, uin="999", owner_uin="999",
+        ),
+        credential=TencentCloudAKSKCredential(
+            secret_id="mock-id", secret_key=SecretStr("mock-key")
+        )
     )
 
     if hasattr(request, "param"):

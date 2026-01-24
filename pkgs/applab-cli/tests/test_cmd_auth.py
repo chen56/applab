@@ -25,10 +25,10 @@ class TestLogin:
             data = json.load(f)
         assert len(data["auths"]) == 1
         stored_acc_data = data["auths"][0]
-        assert stored_acc_data["title"] == "default-mock"
-        assert stored_acc_data["app_id"] == 999
-        assert stored_acc_data["secret_id"] == "mock-id"
-        assert stored_acc_data["secret_key"] == "mock-key"  # pydantic serializes SecretStr to str
+        assert stored_acc_data["account"]["title"] == "default-mock"
+        assert stored_acc_data["account"]["app_id"] == 999
+        assert stored_acc_data["credential"]["secret_id"] == "mock-id"
+        assert stored_acc_data["credential"]["secret_key"] == "mock-key"  # pydantic serializes SecretStr to str
 
     def test_login_success(self, runner, mock_applab: Applab, monkeypatch):
         """Tests successful login and credential storage."""
@@ -57,10 +57,10 @@ class TestLogin:
             data = json.load(f)
         assert len(data["auths"]) == 1
         stored_acc_data = data["auths"][0]
-        assert stored_acc_data["title"] == "default"
-        assert stored_acc_data["app_id"] == 12345678
-        assert stored_acc_data["secret_id"] == "mock-id"
-        assert stored_acc_data["secret_key"] == "mock-key"  # pydantic serializes SecretStr to str
+        assert stored_acc_data["account"]["title"] == "default"
+        assert stored_acc_data["account"]["app_id"] == 12345678
+        assert stored_acc_data["credential"]["secret_id"] == "mock-id"
+        assert stored_acc_data["credential"]["secret_key"] == "mock-key"  # pydantic serializes SecretStr to str
 
     @pytest.mark.parametrize(
         "mock_tencent_auth", [Exception("Authentication failed!")], indirect=True

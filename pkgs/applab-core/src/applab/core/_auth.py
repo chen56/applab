@@ -24,15 +24,28 @@ class CredentialParam(BaseParamModel):
     title: Annotated[str, Field(title="Credential Title")] = "default"
 
 
+class AccountInfo(AppLabBase):
+    title: str
+
+
+class Credential(AppLabBase):
+    pass
+
+
 class AuthInfo(AppLabBase):
     # todo 如果手工删除 json里的auth_id字段，load后又会自动补一个，这是要的效果吗？
     auth_id: Annotated[str, Field(init=False, default_factory=_new_auth_id_)]
     vendor: str
-    title: str
     is_default: bool = False
     created_at: Annotated[
         datetime.datetime, Field(init=False, default_factory=lambda: datetime.datetime.now(datetime.UTC))
     ]
+    account: AccountInfo
+    credential: Credential
+
+    @property
+    def title(self) -> str:
+        return self.account.title
 
     model_config = ConfigDict(extra="allow")
 

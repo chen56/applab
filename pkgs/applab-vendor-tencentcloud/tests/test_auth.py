@@ -8,7 +8,7 @@ from applab.core import Applab, AuthManager, JsonStorage
 # XXX(P2): 测试代码引用内部module不应该报问题
 from applab.core._auth import AuthInfoList
 from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, \
-    TencentCloudAuthInfo, TencentCloudAKSKAuthenticator
+    TencentCloudAuthInfo, TencentCloudAKSKAuthenticator, TencentCloudAccountInfo, TencentCloudAKSKCredential
 
 
 class Fixture:
@@ -47,16 +47,16 @@ def test_login_success(fixture: Fixture):
             secret_key=SecretStr("secret")
         )
 
-        account = authenticator.authenticate(credential_param)
+        a = authenticator.authenticate(credential_param)
         # TODO 范型检查问题，需调查解决
-        fixture.vendor.auth_manager.add(account)
+        fixture.vendor.auth_manager.add(a)
 
-        assert isinstance(account, TencentCloudAuthInfo)
-        assert account.title == "test_account"
-        assert account.app_id == 12345
-        assert account.uin == "1000001"
-        assert account.owner_uin == "1000001"
-        assert account.vendor == "tencentcloud"
+        assert isinstance(a, TencentCloudAuthInfo)
+        assert a.title == "test_account"
+        assert a.account.app_id == 12345
+        assert a.account.uin == "1000001"
+        assert a.account.owner_uin == "1000001"
+        assert a.vendor == "tencentcloud"
 
         loaded_accounts = fixture.vendor.auth_manager._storage.load()
         assert len(loaded_accounts.auths) == 1

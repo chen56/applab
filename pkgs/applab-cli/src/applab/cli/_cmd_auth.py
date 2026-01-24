@@ -61,7 +61,6 @@ class AuthApp:
                 )
         console.print(table)
 
-    # todo 重构为 auth_id
     def info(self, auth_id: str):
         """
         展示指定认证的详细信息。
@@ -73,7 +72,6 @@ class AuthApp:
         console.print(acc)
         return 0
 
-    # todo 重构为 auth_id
     def logout(self, auth_id: str):
         """
         删除一个已保存的云认证信息。

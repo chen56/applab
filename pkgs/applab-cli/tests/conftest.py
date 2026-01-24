@@ -42,7 +42,7 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
         account=TencentCloudAccountInfo(
             app_id=1, uin="1", owner_uin="1",
         ),
-        credential=TencentCloudAKSKCredential(
+        credential_aksk=TencentCloudAKSKCredential(
             secret_id="id1", secret_key=SecretStr("key1")
         )
     )
@@ -53,7 +53,7 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
         account=TencentCloudAccountInfo(
             app_id=2, uin="2", owner_uin="2",
         ),
-        credential=TencentCloudAKSKCredential(
+        credential_aksk=TencentCloudAKSKCredential(
             secret_id="id2", secret_key=SecretStr("key2")
         )
     )
@@ -64,7 +64,7 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
         account=TencentCloudAccountInfo(
             app_id=3, uin="3", owner_uin="3",
         ),
-        credential=TencentCloudAKSKCredential(
+        credential_aksk=TencentCloudAKSKCredential(
             secret_id="id3", secret_key=SecretStr("key3")
         )
     )
@@ -75,7 +75,7 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
         account=TencentCloudAccountInfo(
             app_id=4, uin="4", owner_uin="4",
         ),
-        credential=TencentCloudAKSKCredential(
+        credential_aksk=TencentCloudAKSKCredential(
             secret_id="id4", secret_key=SecretStr("key4")
         )
     )
@@ -98,7 +98,7 @@ def mock_tencent_auth(request):
         account=TencentCloudAccountInfo(
             app_id=999, uin="999", owner_uin="999",
         ),
-        credential=TencentCloudAKSKCredential(
+        credential_aksk=TencentCloudAKSKCredential(
             secret_id="mock-id", secret_key=SecretStr("mock-key")
         )
     )
@@ -135,7 +135,7 @@ def runner(capsys):
         app = ApplabCli(applab_instance).app
         args = shlex.split(cmd)
 
-        # Resetting stdout/stderr capture
+        # 1. capsys : first read :Resetting stdout/stderr capture
         capsys.readouterr()
 
         try:
@@ -144,7 +144,7 @@ def runner(capsys):
             exit_code = e.code if e.code is not None else 0
         except Exception:
             exit_code = 1  # Generic failure
-        # todo read了2次？
+        # 2. capsys: only read cmd output
         captured = capsys.readouterr()
         return exit_code, _console.strip_ansi(captured.out), _console.strip_ansi(captured.err)
 

@@ -58,7 +58,7 @@ class TencentCloudAKSKCredential(AppLabBase):
 class TencentCloudAuthInfo(AuthInfo):
     vendor: Literal["tencentcloud"] = "tencentcloud"
     account: TencentCloudAccountInfo
-    credential: TencentCloudAKSKCredential
+    credential_aksk: TencentCloudAKSKCredential
 
 
 class TencentCloudAKSKAuthenticator(Authenticator):
@@ -93,5 +93,5 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         return TencentCloudAuthInfo(
             title=credential_param.title,
             account=account,
-            credential=credential_obj,
+            credential_aksk=credential_obj,
         )

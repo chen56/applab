@@ -38,8 +38,8 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
     acc1 = TencentCloudAuthInfo(
         auth_id="tc-id-12345",
         vendor="tencentcloud",
+        title="test-auth-1",
         account=TencentCloudAccountInfo(
-            title="test-auth-1",
             app_id=1, uin="1", owner_uin="1",
         ),
         credential=TencentCloudAKSKCredential(
@@ -49,8 +49,8 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
     acc2 = TencentCloudAuthInfo(
         auth_id="tc-id-67890",
         vendor="tencentcloud",
+        title="test-auth-2",
         account=TencentCloudAccountInfo(
-            title="test-auth-2",
             app_id=2, uin="2", owner_uin="2",
         ),
         credential=TencentCloudAKSKCredential(
@@ -60,8 +60,8 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
     acc3 = TencentCloudAuthInfo(
         auth_id="tc-id-abcde",
         vendor="tencentcloud",
+        title="ambiguous-title",
         account=TencentCloudAccountInfo(
-            title="ambiguous-title",
             app_id=3, uin="3", owner_uin="3",
         ),
         credential=TencentCloudAKSKCredential(
@@ -71,8 +71,8 @@ def prefilled_applab(mock_applab: Applab) -> Applab:
     acc4 = TencentCloudAuthInfo(
         auth_id="tc-id-fghij",
         vendor="tencentcloud",
+        title="ambiguous-title",
         account=TencentCloudAccountInfo(
-            title="ambiguous-title",
             app_id=4, uin="4", owner_uin="4",
         ),
         credential=TencentCloudAKSKCredential(
@@ -94,8 +94,8 @@ def mock_tencent_auth(request):
     """
     mock_account = TencentCloudAuthInfo(
         vendor="tencentcloud",
+        title="default-mock",
         account=TencentCloudAccountInfo(
-            title="default-mock",
             app_id=999, uin="999", owner_uin="999",
         ),
         credential=TencentCloudAKSKCredential(

@@ -29,7 +29,7 @@ def test_auth_login_tencentcloud_mock(mock_applab: Applab, runner, monkeypatch):
     assert len(auths) == 1
     acc = auths[0]
     assert acc.vendor == "tencentcloud"
-    assert acc.account.title == "default"
+    assert acc.title == "default"
 
 
 def test_auth_list(mock_applab, runner):

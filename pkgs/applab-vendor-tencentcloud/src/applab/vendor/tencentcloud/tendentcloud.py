@@ -2,15 +2,14 @@ from typing import Annotated, Type
 
 from applab.core import (
     APPLAB,
-    AccountInfo,
     AuthInfo,
     AuthInfoList,
     AuthManager,
     Authenticator,
-    Credential,
     CredentialParam,
     Vendor,
 )
+from applab.core._model import AppLabBase
 from applab.core.storage import JsonStorage
 from pydantic import Field
 from pydantic.types import SecretStr
@@ -44,13 +43,13 @@ class TencentCloudAKSKCredentialParam(CredentialParam):
     secret_key: Annotated[SecretStr, Field(title="SecretKey", description="Tencent Cloud API SecretKey")]
 
 
-class TencentCloudAccountInfo(AccountInfo):
+class TencentCloudAccountInfo(AppLabBase):
     app_id: int
     uin: str
     owner_uin: str
 
 
-class TencentCloudAKSKCredential(Credential):
+class TencentCloudAKSKCredential(AppLabBase):
     # XXX(P2): 加密secret_key
     secret_id: str
     secret_key: SecretStr
@@ -81,7 +80,6 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         resp = client.GetUserAppId(req)
 
         account = TencentCloudAccountInfo(
-            title=credential_param.title,
             app_id=resp.AppId,
             uin=resp.Uin,
             owner_uin=resp.OwnerUin,
@@ -93,6 +91,7 @@ class TencentCloudAKSKAuthenticator(Authenticator):
         )
 
         return TencentCloudAuthInfo(
+            title=credential_param.title,
             account=account,
             credential=credential_obj,
         )

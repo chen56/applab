@@ -27,7 +27,7 @@ class CredentialParam(BaseParamModel):
 class AuthInfo(AppLabBase):
     # todo 如果手工删除 json里的auth_id字段，load后又会自动补一个，这是要的效果吗？
     auth_id: Annotated[str, Field(init=False, default_factory=_new_auth_id_)]
-    vendor: str
+    vendor: Annotated[str, Field(frozen=True)]
     title: str
     is_default: bool = False
     created_at: Annotated[
@@ -46,6 +46,7 @@ class Authenticator(ABC):
     @abstractmethod
     def authenticate(self, credential_param: CredentialParam) -> AuthInfo:
         pass
+
 
 # todo refactor 能否消除此类？
 class AuthInfoList[T: AuthInfo](AppLabBase):

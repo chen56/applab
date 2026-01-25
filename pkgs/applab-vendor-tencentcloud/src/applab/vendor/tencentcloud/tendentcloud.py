@@ -1,5 +1,8 @@
 from typing import Annotated, Literal, Type
 
+from pydantic import Field
+from pydantic.types import SecretStr
+
 from applab.core import (
     APPLAB,
     AuthInfo,
@@ -11,8 +14,6 @@ from applab.core import (
 )
 from applab.core._model import AppLabBase
 from applab.core.storage import JsonStorage
-from pydantic import Field
-from pydantic.types import SecretStr
 
 
 class TencentCloudVendor(Vendor):
@@ -57,6 +58,7 @@ class TencentCloudAKSKCredential(AppLabBase):
 
 class TencentCloudAuthInfo(AuthInfo):
     vendor: Literal["tencentcloud"] = "tencentcloud"
+    title: str
     account: TencentCloudAccountInfo
     credential_aksk: TencentCloudAKSKCredential
 

@@ -75,6 +75,10 @@ gemini() {
   env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command gemini -s "$@"
 }
 
+qwen() {
+  qwen -s "$@"
+}
+
 update() {
   pnpm update @google/gemini-cli -g
   _install_sha

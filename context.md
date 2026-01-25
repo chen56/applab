@@ -1,9 +1,4 @@
-# Applab Project Context
-
-
-**注意** 不要编辑context.md, 它是quarto自动生成, 请编辑context.qmd
-
-update date: 2026-01-25 14:18:15
+# Applab Project Context (for ai)
 
 ## Overview
 

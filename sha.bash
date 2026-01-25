@@ -76,7 +76,7 @@ gemini() {
 }
 
 qwen() {
-  qwen -s "$@"
+  command qwen -s "$@"
 }
 
 update() {

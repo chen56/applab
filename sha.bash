@@ -36,7 +36,8 @@ publish() {
 }
 
 sync() (
-  ln -fs ../ai/skills .gemini/skills
+  _run ln -fs ../ai/skills .gemini/skills
+  _run ln -fs ../ai/skills .qwen/skills
 
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete ai build/
@@ -77,6 +78,14 @@ gemini() {
 update() {
   pnpm update @google/gemini-cli -g
   _install_sha
+}
+
+update() {
+  _run pnpm install -g @google/gemini-cli@latest
+  _run pnpm install -g @qwen-code/qwen-code@latest
+
+  _install_sha
+
 }
 
 ##########################################

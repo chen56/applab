@@ -21,8 +21,7 @@
     "fileName": [
       "context.md"
     ],
-    "includeDirectories": ["build/ai"]
-
+    "includeDirectories": ["ai"]
   },
   "advanced": {
     "excludedEnvVars": [

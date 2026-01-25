@@ -1,0 +1,21 @@
+{
+  "tools": {
+    "approvalMode": "default"
+  },
+  "$version": 2,
+  "context": {
+    "fileName": [
+      "context.md"
+    ],
+    "includeDirectories": [
+      "ai"
+    ],
+    "loadFromIncludeDirectories": true,
+    "fileFiltering": {
+      "respectGitIgnore": false
+    }
+  },
+  "experimental": {
+    "skills": true
+  }
+}

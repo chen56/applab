@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import SecretStr
 
-from applab.core import Applab, AuthManager, JsonStorage
+from applab.core import Applab, AuthRepo, JsonStorage
 from applab.core import AuthInfoList
 from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, \
     TencentCloudAuthInfo, TencentCloudAKSKAuthenticator
@@ -22,8 +22,8 @@ def fixture(tmp_path: Path):
     applab = Applab()
     # TODO 范型检查问题，需调查解决
     storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AuthInfoList[TencentCloudAuthInfo])
-    auth_manager = AuthManager(storage=storage)
-    vendor = TencentCloudVendor(version="0.0.1", auth_manager=auth_manager)
+    auth_repo = AuthRepo(storage=storage)
+    vendor = TencentCloudVendor(version="0.0.1", auth_repo=auth_repo)
     return Fixture(applab=applab, vendor=vendor)
 
 
@@ -48,7 +48,7 @@ def test_login_success(fixture: Fixture):
 
         a = authenticator.authenticate(credential_param)
         # TODO 范型检查问题，需调查解决
-        fixture.vendor.auth_manager.add(a)
+        fixture.vendor.auth_repo.add(a)
 
         assert isinstance(a, TencentCloudAuthInfo)
         assert a.title == "test_account"
@@ -57,7 +57,7 @@ def test_login_success(fixture: Fixture):
         assert a.account.owner_uin == "1000001"
         assert a.vendor == "tencentcloud"
 
-        loaded_accounts = fixture.vendor.auth_manager._storage.load()
+        loaded_accounts = fixture.vendor.auth_repo._storage.load()
         assert len(loaded_accounts.auths) == 1
         assert loaded_accounts.auths[0].title == "test_account"
 
@@ -80,5 +80,5 @@ def test_login_failure(fixture: Fixture):
         with pytest.raises(TencentCloudSDKException):
             authenticator.authenticate(credential_param)
 
-        loaded_accounts = fixture.vendor.auth_manager._storage.load()
+        loaded_accounts = fixture.vendor.auth_repo._storage.load()
         assert len(loaded_accounts.auths) == 0

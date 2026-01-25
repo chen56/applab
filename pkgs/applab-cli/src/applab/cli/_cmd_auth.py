@@ -25,7 +25,7 @@ class AuthApp:
     def _find_auth(self, auth_id: str) -> Optional[tuple[Vendor, AuthInfo]]:
         found_auths = []
         for vendor in self.applab.vendors.values():
-            for acc in vendor.auth_manager.auths:
+            for acc in vendor.auth_repo.auths:
                 if acc.auth_id == auth_id or acc.title == auth_id:
                     found_auths.append((vendor, acc))
         if not found_auths:
@@ -51,7 +51,7 @@ class AuthApp:
         table.add_column("Default")
         table.add_column("Created At")
         for vendor in self.applab.vendors.values():
-            for acc in vendor.auth_manager._auths.auths:
+            for acc in vendor.auth_repo._auths.auths:
                 table.add_row(
                     acc.vendor,
                     acc.title,
@@ -89,7 +89,7 @@ class AuthApp:
             console.info("操作已取消。")
             return 0
 
-        removed = vendor.auth_manager.remove(acc.auth_id)
+        removed = vendor.auth_repo.remove(acc.auth_id)
         if removed:
             console.success(f"已成功删除认证信息 '{removed.title}' (ID: {removed.auth_id})。")
         else:
@@ -132,8 +132,8 @@ class AuthLoginApp:
 
                     auth_info = authenticator.authenticate(credential_param)
                     console.success(f"已成功登录 {vendor.name}")
-                    vendor.auth_manager.add(auth_info)
-                    console.info(f"已保存认证信息到 {vendor.auth_manager._storage.path}")
+                    vendor.auth_repo.add(auth_info)
+                    console.info(f"已保存认证信息到 {vendor.auth_repo._storage.path}")
                     return 0
                 except Exception as e:
                     # todo console 失败一次，会发现颜色字符里有很多乱七八糟的颜色，不知道啥原因?

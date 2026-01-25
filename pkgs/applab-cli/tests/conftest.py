@@ -7,7 +7,7 @@ from pydantic.types import SecretStr
 
 from applab.cli import _console
 from applab.cli.main import ApplabCli
-from applab.core import Applab, AuthManager, JsonStorage
+from applab.core import Applab, AuthRepo, JsonStorage
 from applab.core._auth import AuthInfoList
 from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAuthInfo, TencentCloudAccountInfo, \
     TencentCloudAKSKCredential
@@ -18,8 +18,8 @@ def tencent_vendor(tmp_path: Path) -> TencentCloudVendor:
     """Provides a TencentCloudVendor instance with isolated storage."""
     storage_path = tmp_path / "tencentcloud.json"
     storage = JsonStorage(path=storage_path, model=AuthInfoList[TencentCloudAuthInfo])
-    auth_manager = AuthManager(storage=storage)
-    vendor = TencentCloudVendor(version="0.0.1", auth_manager=auth_manager)
+    auth_repo = AuthRepo(storage=storage)
+    vendor = TencentCloudVendor(version="0.0.1", auth_repo=auth_repo)
     return vendor
 
 
@@ -34,7 +34,7 @@ def mock_applab(tencent_vendor: TencentCloudVendor) -> Applab:
 @pytest.fixture
 def prefilled_applab(mock_applab: Applab) -> Applab:
     """Provides an Applab instance with pre-filled auth data."""
-    manager = mock_applab.vendors["tencentcloud"].auth_manager
+    manager = mock_applab.vendors["tencentcloud"].auth_repo
     acc1 = TencentCloudAuthInfo(
         auth_id="tc-id-12345",
         vendor="tencentcloud",

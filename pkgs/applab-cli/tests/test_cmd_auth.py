@@ -15,7 +15,7 @@ class TestLogin:
 
         assert exit_code == 0
         assert "已成功登录 tencentcloud" in out
-        storage_path = mock_applab.vendors["tencentcloud"].auth_manager._storage.path
+        storage_path = mock_applab.vendors["tencentcloud"].auth_repo._storage.path
         assert "已保存认证信息到" in out
         assert "tencentcloud.json" in out
 
@@ -47,7 +47,7 @@ class TestLogin:
 
         assert exit_code == 0
         assert "已成功登录 tencentcloud" in out
-        storage_path = mock_applab.vendors["tencentcloud"].auth_manager._storage.path
+        storage_path = mock_applab.vendors["tencentcloud"].auth_repo._storage.path
         assert "已保存认证信息到" in out
         assert "tencentcloud.json" in out
 
@@ -121,7 +121,7 @@ class TestInfo:
 class TestLogout:
     @patch("rich.prompt.Confirm.ask", return_value=True)
     def test_logout_by_id_confirmed(self, mock_ask, runner, prefilled_applab: Applab):
-        manager = prefilled_applab.vendors["tencentcloud"].auth_manager
+        manager = prefilled_applab.vendors["tencentcloud"].auth_repo
         assert manager.find_by_id("tc-id-12345") is not None
 
         exit_code, out, err = runner(prefilled_applab, "auth logout tc-id-12345")
@@ -131,7 +131,7 @@ class TestLogout:
 
     @patch("rich.prompt.Confirm.ask", return_value=False)
     def test_logout_by_title_cancelled(self, mock_ask, runner, prefilled_applab: Applab):
-        manager = prefilled_applab.vendors["tencentcloud"].auth_manager
+        manager = prefilled_applab.vendors["tencentcloud"].auth_repo
         assert manager.find_by_id("tc-id-67890") is not None
 
         exit_code, out, err = runner(prefilled_applab, "auth logout test-account-2")

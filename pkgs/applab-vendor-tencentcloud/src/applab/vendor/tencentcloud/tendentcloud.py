@@ -4,7 +4,7 @@ from applab.core import (
     APPLAB,
     AuthInfo,
     AuthInfoList,
-    AuthManager,
+    AuthRepo,
     Authenticator,
     CredentialParam,
     Vendor,
@@ -19,11 +19,11 @@ class TencentCloudVendor(Vendor):
     def __init__(
         self,
         version: str,
-        auth_manager: AuthManager["TencentCloudAuthInfo"] | None = None,
+        auth_repo: AuthRepo["TencentCloudAuthInfo"] | None = None,
     ):
-        # todo 没必要提供 可选的auth_manager,test时可以mock改APPLAB.CONFIG_DIR
-        if auth_manager is None:
-            auth_manager = AuthManager(
+        # todo 没必要提供 可选的auth_repo,test时可以mock改APPLAB.CONFIG_DIR
+        if auth_repo is None:
+            auth_repo = AuthRepo(
                 storage=JsonStorage(
                     path=APPLAB.CONFIG_DIR / "tencentcloud.json",
                     model=AuthInfoList[TencentCloudAuthInfo],
@@ -34,7 +34,7 @@ class TencentCloudVendor(Vendor):
             display_name="腾讯云",
             version=version,
             authenticator=TencentCloudAKSKAuthenticator(),
-            auth_manager=auth_manager,
+            auth_repo=auth_repo,
         )
 
 

@@ -2,7 +2,7 @@ import json
 from abc import ABC
 from collections.abc import Mapping
 
-from ._auth import Authenticator, AuthManager
+from ._auth import Authenticator, AuthRepo
 
 
 class Vendor(ABC):
@@ -11,7 +11,7 @@ class Vendor(ABC):
             name: str,
             display_name: str,
             authenticator: Authenticator,
-            auth_manager: AuthManager,
+            auth_repo: AuthRepo,
             version: str = "0.0.1",
     ):
         # 实例属性（可变字段）
@@ -19,7 +19,7 @@ class Vendor(ABC):
         self.display_name = display_name
         self.version = version
         self.authenticator = authenticator
-        self.auth_manager = auth_manager
+        self.auth_repo = auth_repo
 
     def info(self) -> dict:
         """返回 vendor 信息字典."""

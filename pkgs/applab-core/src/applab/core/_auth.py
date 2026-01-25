@@ -52,9 +52,10 @@ class AuthInfoList[T: AuthInfo](AppLabBase):
     auths: list[T] = []
 
 
-class AuthManager[T: AuthInfo]:
+class AuthRepo[T: AuthInfo]:
     def __init__(self, storage: JsonStorage[AuthInfoList[T]]):
         self._storage = storage
+        # TODO private field被外部使用
         self._auths: AuthInfoList[T] = self._storage.load()
 
     @property

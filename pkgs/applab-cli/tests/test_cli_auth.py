@@ -25,7 +25,7 @@ def test_auth_login_tencentcloud_mock(mock_applab: Applab, runner, monkeypatch):
 
     vendor: TencentCloudVendor = cast(TencentCloudVendor, mock_applab.vendors["tencentcloud"])
 
-    auths = vendor.auth_manager._auths.auths
+    auths = vendor.auth_repo._auths.auths
     assert len(auths) == 1
     acc = auths[0]
     assert acc.vendor == "tencentcloud"

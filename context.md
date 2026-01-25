@@ -70,3 +70,9 @@ applab/
 
 - **GitHub Rules**: [See Rules](build/ai/rules/github.md) (Load via `read_file`
   if needed).
+
+## 禁止的/危险的操作 (Forbidden/Dangerous Operations)
+
+- `sha.bash publish`: 此命令会发布软件包，除非用户在提示中明确指示，否则**禁止**执行。
+- `git push`: **禁止**执行此命令。
+- 任何删除多个文件的操作 (`rm -rf`) 都需要用户在提示中明确说明。

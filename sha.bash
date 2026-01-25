@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+# shellcheck disable=SC2329  # 忽略函数未被使用的警告
 
 set -o errtrace  # -E trap inherited in sub script
 set -o errexit   # -e
@@ -36,6 +36,9 @@ publish() {
 }
 
 sync() (
+  _run ln -fs ../ai/skills .gemini/skills
+  _run ln -fs ../ai/skills .qwen/skills
+
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete ai build/
   _run repomix
@@ -70,6 +73,14 @@ info() {
 gemini() {
   # export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
   env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
+}
+
+update() {
+  _run pnpm install -g @google/gemini-cli@latest
+  _run pnpm install -g @qwen-code/qwen-code@latest
+
+  _install_sha
+
 }
 
 ##########################################

@@ -1,10 +1,5 @@
 # Applab Project Context
 
-
-**注意** 不要编辑context.md, 它是quarto自动生成, 请编辑context.qmd
-
-update date: 2026-01-25 14:18:15
-
 ## Overview
 
 Applab is a cloud application deployment tool designed with a plugin
@@ -54,8 +49,7 @@ applab/
 
 ### Standards
 
-- **Commits**: [Conventional
-  Commits](https://www.conventionalcommits.org/).
+- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/).
 - **Code Style**: Ruff, NumPy docstrings, 120 line length.
 - **Git Operations**: Do NOT perform `git add`, `commit`, `push` or
   other state-changing git commands unless explicitly instructed by the

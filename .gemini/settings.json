@@ -21,7 +21,7 @@
     "fileName": [
       "context.md"
     ],
-    "includeDirectories": ["ai"]
+    "includeDirectories": [".agent"]
   },
   "advanced": {
     "excludedEnvVars": [

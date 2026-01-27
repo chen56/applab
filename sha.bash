@@ -36,16 +36,21 @@ publish() {
 }
 
 sync() (
-  _run ln -fs ../ai/skills .gemini/skills
-  _run ln -fs ../ai/skills .qwen/skills
+  _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
+  _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
 
   _run uv sync --all-extras --all-groups
-  _run rsync -av --delete ai build/
+  _run rsync -av --delete .agent build/
   _run repomix
-  _run uv run quarto render ai/context.qmd
+  _run quarto render ai/context.qmd
 
 )
 
+# 太慢了，还有输入选项，单独安装吧
+sync_skills() {
+  _run npx skills add https://github.com/anthropics/skills --skill skill-creator --agent gemini-cli
+
+}
 
 format() {
   # _run uv run ruff check --fix
@@ -72,16 +77,7 @@ info() {
 
 gemini() {
   # export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) 
-  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command gemini -s "$@"
-}
-
-qwen() {
-  command qwen -s "$@"
-}
-
-update() {
-  pnpm update @google/gemini-cli -g
-  _install_sha
+  env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
 }
 
 update() {

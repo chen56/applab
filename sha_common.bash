@@ -110,7 +110,6 @@ self() {
 
 clean() (
   _run rm -rf .venv
-  _run rm -rf .quarto
   _run rm -rf .ruff_cache
   _run rm -rf ./**/build
   _run rm -rf ./**/__pycache__

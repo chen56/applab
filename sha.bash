@@ -36,16 +36,19 @@ publish() {
 }
 
 sync() (
-  _run ln -fs ../ai/skills .gemini/skills
-  _run ln -fs ../ai/skills .qwen/skills
+  _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
+  _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
 
   _run uv sync --all-extras --all-groups
-  _run rsync -av --delete ai build/
+  _run rsync -av --delete .agent build/
   _run repomix
-  _run quarto render ai/context.qmd
-
 )
 
+# 太慢了，还有输入选项，单独安装吧
+sync_skills() {
+  _run npx skills add https://github.com/anthropics/skills --skill skill-creator --agent gemini-cli
+
+}
 
 format() {
   # _run uv run ruff check --fix
@@ -82,6 +85,10 @@ update() {
   _install_sha
 
 }
+
+
+
+
 
 ##########################################
 # app 入口

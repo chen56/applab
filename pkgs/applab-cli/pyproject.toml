@@ -23,7 +23,7 @@ dependencies = [
 dev = [
     "deepdiff>=8.6.1",
     "keyring>=25.7.0",
-    "pytest>=9.0.1",
+    "pytest>=9.0.2",
 ]
 
 

@@ -47,6 +47,7 @@ sync() (
 # 太慢了，还有输入选项，单独安装吧
 sync_skills() {
   _run npx skills add https://github.com/anthropics/skills --skill skill-creator --agent gemini-cli
+  _run npx skills add https://github.com/vercel-labs/skills --skill find-skills  --agent gemini-cli
 
 }
 

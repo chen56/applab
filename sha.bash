@@ -36,8 +36,6 @@ publish() {
 }
 
 sync() (
-  _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
-  _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
 
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete .agent build/
@@ -46,7 +44,14 @@ sync() (
 
 # 太慢了，还有输入选项，单独安装吧
 sync_skills() {
-  _run npx skills add https://github.com/anthropics/skills --skill skill-creator --agent gemini-cli
+  # 查找所有不要的目录，skills add 若不指定--agent则增加一堆目录
+  # find ~ -maxdepth 1 -type d -name '.*' -not -path '*/.Trash' -not -path './.Trash/*' -not -path './.gemini/*' -not -path './.qwen/*' -not -path './.agent/*' -not -path './.agents/*' -exec find {}  -type d -name 'skills' -maxdepth 1 \; | xargs -I {} dirname '{}'
+  _run npx skills add --agent gemini-cli -y https://github.com/anthropics/skills --skill skill-creator
+  _run npx skills add --agent gemini-cli -y https://github.com/vercel-labs/skills --skill find-skills
+  _run npx skills add --agent gemini-cli -y https://github.com/othmanadi/planning-with-files --skill planning-with-files
+
+  _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
+  _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
 
 }
 

@@ -41,8 +41,8 @@ sync() (
 
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete .agent build/
-  _run repomix
-  _run quarto render ai/context.qmd
+  # _run repomix
+  # _run quarto render ai/context.qmd
 
 )
 

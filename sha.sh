@@ -38,6 +38,7 @@ publish() {
 sync() (
   _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
   _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
+  _run rm -rf .trae/skills   && ln -fs ../.agent/skills .trae/skills
 
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete .agent build/

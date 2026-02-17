@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2329  # 忽略 xxx 函数未被使用的警告
+# shellcheck disable=SC2329  # 忽略函数未被使用的警告
 
 ## 开启globstar模式，允许使用**匹配所有子目录,bash4特性，默认是关闭的
 shopt -s globstar
 
 # On Mac OS, readlink -f doesn't work, so use._real_path get the real path of the file
-ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-
+ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/" && pwd)
 
 _print_info() {
   echo -e "\e[44;37m$1\e[0m"
@@ -17,15 +16,15 @@ _print_error() {
 
 
 # color text : ref: https://m3.material.io/styles/color
-#_text "success"   "Cloud resource created successfully."
-#_text "error"     "Failed to connect to AWS instance."
-#_text "warning"   "High cost alert: Instance is running on high-spec."
-#_text "info"      "Deploying AI model to cluster..."
-#_text "primary"   "AppHub is ready for configuration."
-#_text "secondary" "Processing background tasks..."
-#_text "tertiary"   "current workspace: $ROOT_DIR"
-#_text "neutral"   "Help to email support@applab."
-_text() {
+#_print "success"   "Cloud resource created successfully."
+#_print "error"     "Failed to connect to AWS instance."
+#_print "warning"   "High cost alert: Instance is running on high-spec."
+#_print "info"      "Deploying AI model to cluster..."
+#_print "primary"   "AppHub is ready for configuration."
+#_print "secondary" "Processing background tasks..."
+#_print "tertiary"   "current workspace: $ROOT_DIR"
+#_print "neutral"   "Help to email support@applab."
+_print() {
     local type="$1"
     shift
     local text="$*"
@@ -76,16 +75,37 @@ _run() {
   # 使用 @ 作为分隔符，避免与路径中的 / 冲突
   # shellcheck disable=SC2001
   local show_pwd=$(echo "$PWD" | sed "s@^$HOME@~@" )
-  local color_caller=$(_text secondary "$caller_script:$caller_line ${FUNCNAME[1]}() ")
-  local color_pwd=$(_text info "$show_pwd$ " )
-  local color_cmd=$(_text primary "$*")
+  local color_caller=$(_print secondary "$caller_script:$caller_line ${FUNCNAME[1]}() ")
+  local color_pwd=$(_print info "$show_pwd$ " )
+  local color_cmd=$(_print primary "$*")
   echo "$color_caller$color_pwd$color_cmd" >&2
   "$@"
 }
 
 _install_sha() {
-  _run mkdir -p "$ROOT_DIR/vendor"
-  _run curl -L -o "$ROOT_DIR/vendor/sha.bash" https://github.com/chen56/sha/raw/main/sha.bash
+  local sha_url="https://github.com/chen56/sha/raw/main/sha.bash"
+  local vendor_dir="$ROOT_DIR/vendor"
+  local target_file="$vendor_dir/sha.bash"
+  local temp_file
+
+  _run mkdir -p "$vendor_dir"
+
+  # Create a temporary file in the system's temporary directory
+  temp_file=$(mktemp)
+  _run curl -L -o "$temp_file" "$sha_url"
+
+  # Check if the downloaded file is a valid bash script
+  if ! head -n 1 "$temp_file" | grep -q '#!/usr/bin/env bash'; then
+    _print error "Error: Downloaded file does not appear to be a bash script (missing shebang)." >&2
+    _print error "Content of downloaded file (first 10 lines):" >&2
+    head -n 10 "$temp_file" >&2
+    rm "$temp_file"
+    exit 1
+  fi
+
+  # If checks pass, move the temporary file to the target location
+  _run mv "$temp_file" "$target_file"
+  _print success "sha.bash installed successfully to $target_file"
 }
 
 if ! [[ -f "$ROOT_DIR/vendor/sha.bash" ]]; then
@@ -98,15 +118,6 @@ source "$ROOT_DIR/vendor/sha.bash"
 ##################################################
 # 每个项目的公共命令集
 ##################################################
-
-self() {
-  info() {
-    echo "本项目使用的命令框架：https://github.com/chen56/sha"
-  }
-  upgrade() {
-    _install_sha
-  }
-}
 
 clean() (
   _run rm -rf .venv

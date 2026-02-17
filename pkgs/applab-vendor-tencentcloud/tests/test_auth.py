@@ -1,11 +1,13 @@
-from unittest.mock import MagicMock, patch
-import pytest
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
-from applab.core import Applab, AccountManager, JsonStorage
-from applab.core._account import AccountList
+import pytest
+from pydantic import SecretStr
+
+from applab.core import Applab, AuthRepo, JsonStorage
+from applab.core import AuthInfoList
 from applab.vendor.tencentcloud.tendentcloud import TencentCloudVendor, TencentCloudAKSKCredentialParam, \
-    TencentCloudAccount, TencentCloudAKSKAuthenticator
+    TencentCloudAuthInfo, TencentCloudAKSKAuthenticator
 
 
 class Fixture:
@@ -18,10 +20,10 @@ class Fixture:
 @pytest.fixture
 def fixture(tmp_path: Path):
     applab = Applab()
-    storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AccountList[TencentCloudAccount])
-    account_manager = AccountManager(storage=storage)
-    vendor = TencentCloudVendor(version="0.0.1")
-    vendor.account_manager = account_manager
+    # TODO 范型检查问题，需调查解决
+    storage = JsonStorage(path=tmp_path / "tencentcloud.json", model=AuthInfoList[TencentCloudAuthInfo])
+    auth_repo = AuthRepo(storage=storage)
+    vendor = TencentCloudVendor(version="0.0.1", auth_repo=auth_repo)
     return Fixture(applab=applab, vendor=vendor)
 
 
@@ -41,22 +43,23 @@ def test_login_success(fixture: Fixture):
         credential_param = TencentCloudAKSKCredentialParam(
             title="test_account",
             secret_id="AKIDtest",
-            secret_key="secret"
+            secret_key=SecretStr("secret")
         )
 
-        account = authenticator.authenticate(credential_param)
-        fixture.vendor.account_manager.add(account)
+        a = authenticator.authenticate(credential_param)
+        # TODO 范型检查问题，需调查解决
+        fixture.vendor.auth_repo.add(a)
 
-        assert isinstance(account, TencentCloudAccount)
-        assert account.title == "test_account"
-        assert account.app_id == 12345
-        assert account.uin == "1000001"
-        assert account.owner_uin == "1000001"
-        assert account.vendor == "tencentcloud"
+        assert isinstance(a, TencentCloudAuthInfo)
+        assert a.title == "test_account"
+        assert a.account.app_id == 12345
+        assert a.account.uin == "1000001"
+        assert a.account.owner_uin == "1000001"
+        assert a.vendor == "tencentcloud"
 
-        loaded_accounts = fixture.vendor.account_manager.storage.load()
-        assert len(loaded_accounts.accounts) == 1
-        assert loaded_accounts.accounts[0].title == "test_account"
+        loaded_accounts = fixture.vendor.auth_repo._storage.load()
+        assert len(loaded_accounts.auths) == 1
+        assert loaded_accounts.auths[0].title == "test_account"
 
 
 def test_login_failure(fixture: Fixture):
@@ -71,11 +74,11 @@ def test_login_failure(fixture: Fixture):
         credential_param = TencentCloudAKSKCredentialParam(
             title="test_account",
             secret_id="wrong_id",
-            secret_key="wrong_key"
+            secret_key=SecretStr("wrong_key"),
         )
 
         with pytest.raises(TencentCloudSDKException):
             authenticator.authenticate(credential_param)
 
-        loaded_accounts = fixture.vendor.account_manager.storage.load()
-        assert len(loaded_accounts.accounts) == 0
+        loaded_accounts = fixture.vendor.auth_repo._storage.load()
+        assert len(loaded_accounts.auths) == 0

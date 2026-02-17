@@ -1,7 +1,6 @@
 [project]
 name = "applab"
 version = "0.0.2dev20251230153900"
-# dynamic = ["version"] # todo 后面用 dynamic 替换掉 version 字段
 license = { text = "MIT" }
 
 description = "Aggregator package for all applab subpackages"
@@ -86,7 +85,7 @@ url = "https://mirrors.aliyun.com/pypi/simple/"
 cache-dir = "build/.ruff_cache"
 src = ["."]
 exclude = [".git", "__pycache__", "build", "dist", ".venv"]
-line-length = 120
+line-length = 150
 
 [tool.ruff.lint]
 ignore = [

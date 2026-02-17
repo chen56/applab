@@ -36,10 +36,15 @@ publish() {
 }
 
 sync() (
+  _run rm -rf .gemini/skills && ln -fs ../.agent/skills .gemini/skills
+  _run rm -rf .qwen/skills   && ln -fs ../.agent/skills .qwen/skills
+  _run rm -rf .trae/skills   && ln -fs ../.agent/skills .trae/skills
 
   _run uv sync --all-extras --all-groups
   _run rsync -av --delete .agent build/
-  _run repomix
+  # _run repomix
+  # _run quarto render ai/context.qmd
+
 )
 
 # 太慢了，还有输入选项，单独安装吧
@@ -83,6 +88,10 @@ gemini() {
   env GOOGLE_CLOUD_PROJECT="$(gcloud config get-value project)" command  gemini "$@"
 }
 
+qwen() {
+  command  qwen -s "$@"
+}
+
 update() {
   _run pnpm install -g @google/gemini-cli@latest
   _run pnpm install -g @qwen-code/qwen-code@latest
@@ -90,10 +99,6 @@ update() {
   _install_sha
 
 }
-
-
-
-
 
 ##########################################
 # app 入口

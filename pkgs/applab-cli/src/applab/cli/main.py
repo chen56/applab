@@ -7,7 +7,7 @@ from rich.logging import RichHandler
 
 from applab.core import Applab
 from applab.vendor import tencentcloud
-from ._cmd_account import AccountApp
+from ._cmd_auth import AuthApp
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class ApplabCli:
         app["--help"].group = "Cli info options"
         app["--version"].group = "Cli info options"
         app.default(self._root_cmd)
-        app.command(AccountApp(applab).app, name="account")
+        app.command(AuthApp(applab).app, name="auth")
 
         self.app = app
         self.applab = applab

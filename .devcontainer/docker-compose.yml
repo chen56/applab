@@ -5,6 +5,14 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - ..:/workspace:cached
+      # 挂载配置信息（OAuth）
+      - ~/.qwen:/home/vscode/.qwen
+      - ~/.gemini:/home/vscode/.gemini
+      # 挂载 AI 技能库（Skills）
+      - ~/.agents:/home/vscode/.agents
+      # 新增：挂载 Git 配置和 SSH 密钥以支持容器内提交
+      - ~/.gitconfig:/home/vscode/.gitconfig
+      - ~/.ssh:/home/vscode/.ssh
     env_file:
       - ../.env
     environment:

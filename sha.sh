@@ -48,27 +48,17 @@ sync() (
 )
 
 dev() {
-    
   up() {
     if [[ ! -f .env ]]; then
       _run cp .env.template .env
       _print warning "Created .env from .env.template. Please edit it with your secrets."
     fi
 
-    if command -v devcontainer >/dev/null 2>&1; then
-      _print info "Using devcontainer CLI..."
-      _run devcontainer up --workspace-folder .
-    else
-      _print warning "devcontainer CLI not found, falling back to docker compose..."
-      _run docker compose -f .devcontainer/docker-compose.yml up -d --build
-      _print info "Remember to run 'uv sync' inside the container."
-    fi
+    DOCKER_BUILDKIT=0 _run devcontainer up --workspace-folder . 
   }
-  # down
-  down() {
-    _run docker compose -f .devcontainer/docker-compose.yml down
+  up_new() {
+    DOCKER_BUILDKIT=0 _run devcontainer up --remove-existing-container --workspace-folder . 
   }
-
 }
 
 # 太慢了，还有输入选项，单独安装吧

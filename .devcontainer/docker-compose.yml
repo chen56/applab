@@ -1,0 +1,46 @@
+services:
+  applab-dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      # 挂载配置信息（OAuth）
+      - ~/.qwen:/home/vscode/.qwen
+      - ~/.gemini:/home/vscode/.gemini
+      # 挂载 AI 技能库（Skills）
+      - ~/.agents:/home/vscode/.agents
+      # 新增：挂载 Git 配置和 SSH 密钥以支持容器内提交
+      - ~/.gitconfig:/home/vscode/.gitconfig
+      - ~/.ssh:/home/vscode/.ssh
+    env_file:
+      - ../.env
+    environment:
+      # Tencent Cloud Credentials
+      - TENCENTCLOUD_SECRET_ID=${TENCENTCLOUD_SECRET_ID:-}
+      - TENCENTCLOUD_SECRET_KEY=${TENCENTCLOUD_SECRET_KEY:-}
+
+      # AWS Credentials
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_REGION=${AWS_REGION:-}
+
+      # Aliyun Credentials
+      - ALIYUN_ACCESS_KEY_ID=${ALIYUN_ACCESS_KEY_ID:-}
+      - ALIYUN_ACCESS_KEY_SECRET=${ALIYUN_ACCESS_KEY_SECRET:-}
+
+      # Azure Credentials
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID:-}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET:-}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID:-}
+      - AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID:-}
+
+      # GCP Credentials
+      - GCP_CLIENT_EMAIL=${GCP_CLIENT_EMAIL:-}
+      - GCP_PRIVATE_KEY=${GCP_PRIVATE_KEY:-}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID:-}
+
+    # Use host network for easier development
+    network_mode: host
+    # Standard devcontainer command to keep container alive
+    command: /bin/sh -c "while sleep 1000; do :; done"

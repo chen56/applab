@@ -47,6 +47,20 @@ sync() (
 
 )
 
+dev() {
+  up() {
+    if [[ ! -f .env ]]; then
+      _run cp .env.template .env
+      _print warning "Created .env from .env.template. Please edit it with your secrets."
+    fi
+
+    DOCKER_BUILDKIT=0 _run devcontainer up --workspace-folder . 
+  }
+  up_new() {
+    DOCKER_BUILDKIT=0 _run devcontainer up --remove-existing-container --workspace-folder . 
+  }
+}
+
 # 太慢了，还有输入选项，单独安装吧
 sync_skills() {
   # 查找所有不要的目录，skills add 若不指定--agent则增加一堆目录

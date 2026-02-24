@@ -1,4 +1,4 @@
-# Applab Project Context (for ai)
+# Applab
 
 ## Overview
 
